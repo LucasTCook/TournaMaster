@@ -1,0 +1,52 @@
+:root {
+    --primary-color: #8e9cd9;
+    --primary-hover: #6573c3;
+    --white: #ffffff;
+    --background-gradient: linear-gradient(145deg, #f0f3fa, #ffffff);
+    --input-border: #ccc;
+    --input-focus: #8e9cd9;
+    --button-green: #28a745;
+    --button-green-hover: #218838;
+    --box-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Set Poppins as the default font for the entire site */
+* {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1, h2, h3 {
+    font-weight: 600; /* Semi-bold for headings */
+}
+
+p, input, button {
+    font-weight: 400; /* Regular weight for text, inputs, and buttons */
+}
+
+/* Notification styles */
+.notification {
+    display: none; /* Hidden by default */
+    padding: 15px;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    font-size: 16px;
+}
+
+/* Success message (green) */
+.notification.success {
+    background-color: #28a745; /* Green for success */
+    color: white;
+}
+
+/* Error message (red) */
+.notification.error {
+    background-color: #dc3545; /* Red for error */
+    color: white;
+}

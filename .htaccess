@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# Redirect /login to backend/login/login.php
+RewriteRule ^login$ /backend/login/login.php [L]
+
+# Redirect /dashboard to dashboard.php
+RewriteRule ^dashboard$ /backend/dashboard/dashboard.php [L]
+
+# Redirect /logout to backend/logout.php
+RewriteRule ^logout$ /backend/login/logout.php [L]
