@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('#signin-btn').click(function(event) {
+    $('#login-btn').click(function(event) {
         event.preventDefault(); // Prevent the form from submitting normally
 
         var username = $('#username').val();
@@ -7,8 +7,8 @@ $(document).ready(function() {
 
         // Simulate sign-in success (Replace this with your actual authentication logic)
         if (username && password) {
-            // Simulate a successful login and redirect to the dashboard
-            window.location.href = '/dashboard';
+            // Simulate a successful login and redirect to the profile
+            window.location.href = '/profile';
         } else {
             alert('Please enter both username and password');
         }
@@ -20,7 +20,7 @@ $(document).ready(function() {
         var username = $('#username').val();
         var password = $('#password').val();
         
-        // Simulate backend response
+        // Simulate php response
         var accountExists = (username === 'existinguser');
         
         if (accountExists) {

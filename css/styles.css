@@ -1,13 +1,33 @@
 :root {
-    --primary-color: #8e9cd9;
-    --primary-hover: #6573c3;
-    --white: #ffffff;
-    --background-gradient: linear-gradient(145deg, #f0f3fa, #ffffff);
-    --input-border: #ccc;
-    --input-focus: #8e9cd9;
-    --button-green: #28a745;
-    --button-green-hover: #218838;
-    --box-shadow: rgba(0, 0, 0, 0.1);
+    --primary-color: #F25F5C;   /* Bittersweet for primary actions and active state */
+    --primary-hover: #E44A4A;   /* Darker Bittersweet for hover effects */
+    --secondary-color: #247BA0; /* Cerulean for secondary actions */
+    --background-color: #70C1B3; /* Verdigris for background */
+    --highlight-color: #FFE066; /* Naples Yellow for highlighted sections and buttons */
+    --neutral-color: #50514F;   /* Davy's gray for text, borders, and input borders */
+    --white: #ffffff;           /* White for backgrounds */
+    --box-shadow: rgba(0, 0, 0, 0.1); /* Box shadow color */
+    --gold: #FFE066;
+    --silver: #C0C0C0;
+    --bronze: #CD7F32;
+    --gold-hover: #d4a017;      /* Slightly darker gold for hover */
+    --silver-hover: #aaaaaa;    /* Slightly darker silver for hover */
+    --bronze-hover: #a86024;    /* Slightly darker bronze for hover */
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;  /* Ensure the body fills the viewport */
+    font-family: 'Poppins', sans-serif; /* Default font */
+}
+
+body {
+    background: linear-gradient(145deg, #70C1B3, #ffffff); /* Verdigris to White gradient */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;  /* Ensure the content fills the whole page vertically */
 }
 
 /* Set Poppins as the default font for the entire site */

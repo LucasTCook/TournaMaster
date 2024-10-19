@@ -1,0 +1,74 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: var(--background-color); /* Updated to Verdigris background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    max-width: 350px;
+    background: var(--white); /* Use white for the container background */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px var(--box-shadow); /* Global shadow */
+    text-align: center;
+}
+
+.logo img {
+    max-width: 120px;
+    margin-bottom: 30px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--neutral-color); /* Input border uses neutral gray */
+    border-radius: 25px;
+    outline: none;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    margin-bottom:10px;
+}
+
+.form-group input:focus {
+    border-color: var(--input-focus); /* Focus uses Cerulean */
+}
+
+.submit-buttons-container {
+    margin-top:20px;
+}
+
+button#login-btn {
+    width: 60%;
+    padding: 7px;
+    background: var(--primary-color); /* Primary color (Bittersweet) for the button */
+    color: var(--white);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-bottom: 7px;
+}
+
+button#login-btn:hover {
+    background: var(--primary-hover); /* Darker Bittersweet on hover */
+}
+
+button#create-account-btn {
+    width: 60%;
+    padding: 7px;
+    background: var(--highlight-color); /* Highlight color (Naples Yellow) for the "Create Account" button */
+    color: var(--neutral-color);       /* Neutral gray for button text */
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button#create-account-btn:hover {
+    background: var(--primary-hover); /* Same hover as primary */
+}

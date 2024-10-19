@@ -1,10 +1,19 @@
 RewriteEngine On
 
-# Redirect /login to backend/login/login.php
-RewriteRule ^login$ /backend/login/login.php [L]
+# Redirect /profile to php/profile/profile.php
+RewriteRule ^profile$ php/profile/profile.php [L]
 
-# Redirect /dashboard to dashboard.php
-RewriteRule ^dashboard$ /backend/dashboard/dashboard.php [L]
+# Redirect /tournaments to php/tournaments/tournaments.php
+RewriteRule ^tournaments$ php/tournaments/tournaments.php [L]
 
-# Redirect /logout to backend/logout.php
-RewriteRule ^logout$ /backend/login/logout.php [L]
+# Redirect /tournaments to php/tournaments/tournaments.php
+RewriteRule ^trophies$ php/trophies/trophies.php [L]
+
+# Redirect /manage to php/manage/manage.php (for admins)
+RewriteRule ^manage$ php/manage/manage.php [L]
+
+# Redirect /login to php/login/login.php
+RewriteRule ^login$ php/login/login.php [L]
+
+# Redirect /logout to php/login/logout.php
+RewriteRule ^logout$ php/login/logout.php [L]
