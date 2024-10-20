@@ -6,6 +6,7 @@
     --highlight-color: #FFE066; /* Naples Yellow for highlighted sections and buttons */
     --neutral-color: #50514F;   /* Davy's gray for text, borders, and input borders */
     --white: #ffffff;           /* White for backgrounds */
+    --white-hover: #f7f7f7; 
     --box-shadow: rgba(0, 0, 0, 0.1); /* Box shadow color */
     --gold: #FFE066;
     --silver: #C0C0C0;
