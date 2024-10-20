@@ -6,6 +6,9 @@ RewriteRule ^profile$ php/profile/profile.php [L]
 # Redirect /tournaments to php/tournaments/tournaments.php
 RewriteRule ^tournaments$ php/tournaments/tournaments.php [L]
 
+# Redirect /tournament/{id} to tournament-details.php?tournament_id={id}
+RewriteRule ^tournament/([0-9]+)$ php/tournaments/tournament.php?tournament_id=$1 [L]
+
 # Redirect /tournaments to php/tournaments/tournaments.php
 RewriteRule ^trophies$ php/trophies/trophies.php [L]
 

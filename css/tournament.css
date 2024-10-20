@@ -1,4 +1,4 @@
-.tournaments-header-container {
+.tournament-header-container {
     position: fixed;
     top: 0;
     padding: 20px;
@@ -9,19 +9,19 @@
     z-index: 1000;
 }
 
-.tournaments-header-buttons {
+.tournament-header-buttons {
     display: flex;
     justify-content: center;
     gap: 15px;
     margin-top: 20px;
 }
 
-.tournaments-header {
+.tournament-header {
     font-size: 24px;
     text-align: center;
 }
 
-.tournaments-selection {
+.tournament-selection {
     padding: 10px 15px;
     border-radius: 10px;
     font-size: 12px;
@@ -30,50 +30,36 @@
     background-color: var(--primary-color);
 }
 
-.tournaments-selection-title {
+.tournament-selection-title {
     vertical-align: middle;
 }
 
 .tournament-list-container {
     position: fixed;
     width: 95%;
-    top: 136px;
+    top: 150px;
     overflow-y: scroll;
     height: calc(100vh - 230px);
-    padding-top: 10px;
 }
 
 .tournament-card {
-    padding: 15px 20px;
-    text-align: left; /* Align the text to the left */
-    border-radius: 10px;
     background-color: var(--white);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background: linear-gradient(145deg, var(--white), #f7f7f7); /* Soft gradient */
-    margin-bottom: 10px;
+    border-radius: 10px;
+    padding: 10px;
+    width: 95%;
+    margin: auto;
+    margin-bottom: 15px;
 }
-
 
 .tournament-card:hover {
-    transform: translateY(-5px); /* Slight lift */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* More pronounced shadow */
+    background-color: var(--white-hover);
 }
 
-
 .tournament-name {
-    font-size: 16px;
     font-weight: bold;
-    color: var(--default-color);
-    margin-bottom: 5px;
+    font-size: 14px;
 }
 
 .tournament-info {
-    font-size: 14px;
-    color: var(--neutral-color);
-}
-
-.tournament-info.date {
-    color: var(--primary-color);
-    font-weight: bold;
+    font-size: 12px;
 }

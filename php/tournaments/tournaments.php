@@ -17,13 +17,14 @@ include '../../includes/header.php';
     </div>
 </div>
 <div class="tournament-list-container">
-    <div class="tournament-card" onclick="openTournament()">
+    <div class="tournament-card" onclick="window.location.href='./tournament/1'">
         <span class="tournament-name">Somewhat Bi-annual Gaming Tournament</span>
         <br>
         <span class="tournament-info">Los Brolos Gaming</span>
         -
-        <span class="tournament-info">10/02/2024</span>
+        <span class="tournament-info date">10/02/2024</span>
     </div>
+
 </div>
 
 <?php include '../../includes/footer.php'; ?>
