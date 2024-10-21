@@ -14,6 +14,7 @@
     --gold-hover: #d4a017;      /* Slightly darker gold for hover */
     --silver-hover: #aaaaaa;    /* Slightly darker silver for hover */
     --bronze-hover: #a86024;    /* Slightly darker bronze for hover */
+    --grey: #636363;
 }
 
 html, body {
