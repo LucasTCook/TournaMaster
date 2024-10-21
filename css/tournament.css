@@ -30,6 +30,10 @@
     background-color: var(--primary-color);
 }
 
+.tournament-selection.active {
+    background-color: var(--primary-hover);
+}
+
 .tournament-selection-title {
     vertical-align: middle;
 }
