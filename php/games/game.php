@@ -11,7 +11,7 @@ include '../../includes/header.php';
     <img src="../../images/game-placeholder.jpg" alt="game Picture" class="game-pic">
     <h2 class="game-name">Mario Kart 64: Electric Boogaloo</h2>
     <div class="games-header-buttons">
-        <div id="game-bracket-button" class="games-selection">
+        <div id="game-bracket-button" class="games-selection active">
             <span class="games-selection-title">View Bracket</span>
         </div>
         <div id="game-leaderboard-button" class="games-selection">
@@ -24,7 +24,7 @@ include '../../includes/header.php';
 
 </div>
 
-<div id="leaderboard" class="leaderboard-container">
+<div id="leaderboard" class="leaderboard-container hidden">
     <div class="leaderboard-card first-place">
         <div>
             <i class="fas fa-trophy gold-trophy"></i>

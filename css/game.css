@@ -90,10 +90,6 @@
     background-color: var(--primary-hover);
 }
 
-.bracket-container {
-    display: none;
-}
-
 /* Leaderboard Container */
 .leaderboard-container {
     text-align: left;
@@ -177,4 +173,8 @@
     font-size: 24px;
     font-weight: bold;
     color: var(--default-color);
+}
+
+.hidden {
+    display: none;
 }

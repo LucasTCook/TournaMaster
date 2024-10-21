@@ -1,11 +1,15 @@
 $(document).ready(function() {
     $('#game-leaderboard-button').click(function(event) {
-        $('#bracket').hide();
-        $('#leaderboard').show();
+        $('#game-bracket-button').removeClass('active');
+        $('#bracket').addClass('hidden');
+        $('#game-leaderboard-button').addClass('active');
+        $('#leaderboard').removeClass('hidden');
     });
 
     $('#game-bracket-button').click(function(event) {
-        $('#bracket').show();
-        $('#leaderboard').hide();
+        $('#game-bracket-button').addClass('active');
+        $('#bracket').removeClass('hidden');
+        $('#game-leaderboard-button').removeClass('active');
+        $('#leaderboard').addClass('hidden');
     });
 });

@@ -180,16 +180,3 @@
 .hidden {
     display: none;
 }
-
-/* Hover styles for each button */
-.trophies-selection.gold:hover {
-    background-color: var(--gold-hover); /* Hover color for Gold */
-}
-
-.trophies-selection.silver:hover {
-    background-color: var(--silver-hover); /* Hover color for Silver */
-}
-
-.trophies-selection.bronze:hover {
-    background-color: var(--bronze-hover); /* Hover color for Bronze */
-}
