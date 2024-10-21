@@ -1,3 +1,49 @@
+.leaderboard-header-container {
+    position: fixed;
+    top: 0;
+    padding: 20px;
+    background-color: var(--white); /* White background for profile container */
+    box-shadow: 0 4px 8px var(--box-shadow); /* Global shadow */
+    text-align: center;
+    width: 100%;
+    z-index: 1000;
+}
+
+.leaderboard-header-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.leaderboard-header {
+    font-size: 24px;
+    text-align: center;
+}
+
+.leaderboard-header-tournament-name {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.leaderboard-selection {
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--white);
+    background-color: var(--primary-color);
+}
+
+.leaderboard-selection.active {
+    background-color: var(--primary-hover);
+}
+
+.leaderboard-selection-title {
+    vertical-align: middle;
+}
+
 .game-header-container {
     margin: 0 auto;
     padding: 20px;
@@ -54,6 +100,20 @@
     height: calc(100vh - 330px);
     padding: 30px;
 }
+
+.leaderboard-container-tournament {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    position: fixed;
+    top: 169px;
+    overflow-y: scroll;
+    height: calc(100vh - 249px);
+    padding: 30px;
+}
+
 
 /* Leaderboard Card Styling */
 .leaderboard-card {

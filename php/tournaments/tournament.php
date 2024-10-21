@@ -12,7 +12,7 @@ include '../../includes/header.php';
         <div class="tournament-selection" onclick="window.location.href='../games'">
             <span class="tournament-selection-title">View Games</span>
         </div>
-        <div class="tournament-selection">
+        <div class="tournament-selection" onclick="window.location.href='../leaderboard'">
             <span class="tournament-selection-title">Leaderboard</span>
         </div>
     </div>

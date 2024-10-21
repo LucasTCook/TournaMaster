@@ -14,7 +14,7 @@ include '../../includes/header.php';
         <div class="games-selection active">
             <span class="games-selection-title">View Games</span>
         </div>
-        <div class="games-selection">
+        <div class="games-selection" onclick="window.location.href='../leaderboard'">
             <span class="games-selection-title">Leaderboard</span>
         </div>
     </div>
