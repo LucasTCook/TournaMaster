@@ -14,7 +14,7 @@ include '../../includes/header.php';
         <div class="games-selection active">
             <span class="games-selection-title">View Games</span>
         </div>
-        <div class="games-selection">
+        <div class="games-selection" onclick="window.location.href='../leaderboard'">
             <span class="games-selection-title">Leaderboard</span>
         </div>
     </div>
@@ -31,6 +31,137 @@ include '../../includes/header.php';
             </div>
         </div>
     </div>
+    <div class="game-card" onclick="window.location.href='./game/1/1'">
+        <img src="images\game-placeholder.jpg" alt="Game Image" class="game-image">
+        <div class="game-info">
+            <span class="game-name">Super Mario Bros</span>
+            <div class="winner-info">
+                <span class="winner-name">John Doe</span>
+                <i class="fas fa-trophy winner-trophy"></i>
+            </div>
+        </div>
+    </div>
+    <div class="game-card" onclick="window.location.href='./game/1/1'">
+        <img src="images\game-placeholder.jpg" alt="Game Image" class="game-image">
+        <div class="game-info">
+            <span class="game-name">Super Mario Bros</span>
+            <div class="winner-info">
+                <span class="winner-name">John Doe</span>
+                <i class="fas fa-trophy winner-trophy"></i>
+            </div>
+        </div>
+    </div>
+    <div class="game-card" onclick="window.location.href='./game/1/1'">
+        <img src="images\game-placeholder.jpg" alt="Game Image" class="game-image">
+        <div class="game-info">
+            <span class="game-name">Super Mario Bros</span>
+            <div class="winner-info">
+                <span class="winner-name">John Doe</span>
+                <i class="fas fa-trophy winner-trophy"></i>
+            </div>
+        </div>
+    </div>
+    <div class="game-card" onclick="window.location.href='./game/1/1'">
+        <img src="images\game-placeholder.jpg" alt="Game Image" class="game-image">
+        <div class="game-info">
+            <span class="game-name">Super Mario Bros</span>
+            <div class="winner-info">
+                <span class="winner-name">John Doe</span>
+                <i class="fas fa-trophy winner-trophy"></i>
+            </div>
+        </div>
+    </div>
+    <div class="game-card" onclick="window.location.href='./game/1/1'">
+        <img src="images\game-placeholder.jpg" alt="Game Image" class="game-image">
+        <div class="game-info">
+            <span class="game-name">Super Mario Bros</span>
+            <div class="winner-info">
+                <span class="winner-name">John Doe</span>
+                <i class="fas fa-trophy winner-trophy"></i>
+            </div>
+        </div>
+    </div>
+    <div class="game-card" onclick="window.location.href='./game/1/1'">
+        <img src="images\game-placeholder.jpg" alt="Game Image" class="game-image">
+        <div class="game-info">
+            <span class="game-name">Super Mario Bros</span>
+            <div class="winner-info">
+                <span class="winner-name">John Doe</span>
+                <i class="fas fa-trophy winner-trophy"></i>
+            </div>
+        </div>
+    </div>
+    <div class="game-card" onclick="window.location.href='./game/1/1'">
+        <img src="images\game-placeholder.jpg" alt="Game Image" class="game-image">
+        <div class="game-info">
+            <span class="game-name">Super Mario Bros</span>
+            <div class="winner-info">
+                <span class="winner-name">John Doe</span>
+                <i class="fas fa-trophy winner-trophy"></i>
+            </div>
+        </div>
+    </div>
+    <div class="game-card" onclick="window.location.href='./game/1/1'">
+        <img src="images\game-placeholder.jpg" alt="Game Image" class="game-image">
+        <div class="game-info">
+            <span class="game-name">Super Mario Bros</span>
+            <div class="winner-info">
+                <span class="winner-name">John Doe</span>
+                <i class="fas fa-trophy winner-trophy"></i>
+            </div>
+        </div>
+    </div>
+    <div class="game-card" onclick="window.location.href='./game/1/1'">
+        <img src="images\game-placeholder.jpg" alt="Game Image" class="game-image">
+        <div class="game-info">
+            <span class="game-name">Super Mario Bros</span>
+            <div class="winner-info">
+                <span class="winner-name">John Doe</span>
+                <i class="fas fa-trophy winner-trophy"></i>
+            </div>
+        </div>
+    </div>
+    <div class="game-card" onclick="window.location.href='./game/1/1'">
+        <img src="images\game-placeholder.jpg" alt="Game Image" class="game-image">
+        <div class="game-info">
+            <span class="game-name">Super Mario Bros</span>
+            <div class="winner-info">
+                <span class="winner-name">John Doe</span>
+                <i class="fas fa-trophy winner-trophy"></i>
+            </div>
+        </div>
+    </div>
+    <div class="game-card" onclick="window.location.href='./game/1/1'">
+        <img src="images\game-placeholder.jpg" alt="Game Image" class="game-image">
+        <div class="game-info">
+            <span class="game-name">Super Mario Bros</span>
+            <div class="winner-info">
+                <span class="winner-name">John Doe</span>
+                <i class="fas fa-trophy winner-trophy"></i>
+            </div>
+        </div>
+    </div>
+    <div class="game-card" onclick="window.location.href='./game/1/1'">
+        <img src="images\game-placeholder.jpg" alt="Game Image" class="game-image">
+        <div class="game-info">
+            <span class="game-name">Super Mario Bros</span>
+            <div class="winner-info">
+                <span class="winner-name">John Doe</span>
+                <i class="fas fa-trophy winner-trophy"></i>
+            </div>
+        </div>
+    </div>
+    <div class="game-card" onclick="window.location.href='./game/1/1'">
+        <img src="images\game-placeholder.jpg" alt="Game Image" class="game-image">
+        <div class="game-info">
+            <span class="game-name">Super Mario Bros</span>
+            <div class="winner-info">
+                <span class="winner-name">John Doe</span>
+                <i class="fas fa-trophy winner-trophy"></i>
+            </div>
+        </div>
+    </div>
+    
 </div>
 
 <?php include '../../includes/footer.php'; ?>

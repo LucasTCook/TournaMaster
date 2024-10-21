@@ -7,6 +7,7 @@
     text-align: center;
     width: 100%;
     z-index: 1000;
+    height: 175px;
 }
 
 .leaderboard-header-buttons {
@@ -102,9 +103,9 @@
     gap: 15px;
     width: 100%;
     position: fixed;
-    top: 250px;
+    top: 175px;
     overflow-y: scroll;
-    height: calc(100vh - 330px);
+    height: calc(100vh - 255px);
     padding: 30px;
 }
 
