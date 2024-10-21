@@ -9,7 +9,7 @@ include '../../includes/header.php';
 <div class="tournament-header-container">
     <h3 class="tournament-header">Tournament Name</h3>
     <div class="tournament-header-buttons">
-        <div class="tournament-selection">
+        <div class="tournament-selection" onclick="window.location.href='../games'">
             <span class="tournament-selection-title">View Games</span>
         </div>
         <div class="tournament-selection">

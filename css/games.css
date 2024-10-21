@@ -1,0 +1,118 @@
+.games-header-container {
+    position: fixed;
+    top: 0;
+    padding: 20px;
+    background-color: var(--white); /* White background for profile container */
+    box-shadow: 0 4px 8px var(--box-shadow); /* Global shadow */
+    text-align: center;
+    width: 100%;
+    z-index: 1000;
+}
+
+.games-header-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.games-header {
+    font-size: 24px;
+    text-align: center;
+}
+
+.games-header-tournament-name {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.games-selection {
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--white);
+    background-color: var(--primary-color);
+}
+
+.games-selection.active {
+    background-color: var(--primary-hover);
+}
+
+.games-selection-title {
+    vertical-align: middle;
+}
+
+.games-container {
+    position: fixed;
+    top: 169px;
+    padding-top: 15px;
+    overflow-y: scroll;
+    height: calc(100vh - 250px);
+    width: 100%;
+}
+
+.game-card {
+    display: flex;
+    align-items: center;
+    background-color: var(--white); /* Use white background for the card */
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 80%;
+    margin: auto;
+    margin-bottom: 15px;
+}
+
+.game-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px var(--box-shadow);
+}
+
+.game-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.game-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.game-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--default-color);
+}
+
+.winner-info {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: var(--neutral-color);
+}
+
+.winner-trophy {
+    color: var(--gold);
+    margin-left: 5px;
+    font-size: 16px;
+}
+@media (min-width: 768px) {
+    .game-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .game-name {
+        font-size: 22px;
+    }
+
+    .winner-info {
+        font-size: 16px;
+    }
+}
