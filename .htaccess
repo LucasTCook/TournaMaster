@@ -9,6 +9,12 @@ RewriteRule ^tournaments$ php/tournaments/tournaments.php [L]
 # Redirect /tournament/{id} to tournament-details.php?tournament_id={id}
 RewriteRule ^tournament/([0-9]+)$ php/tournaments/tournament.php?tournament_id=$1 [L]
 
+# Redirect /current-tournaments$ php/tournaments/current-tournaments-list
+RewriteRule ^current-tournaments$ php/tournaments/current-tournaments-list.php [L]
+
+# Redirect /past-tournaments$ php/tournaments/past-tournaments-list
+RewriteRule ^past-tournaments$ php/tournaments/past-tournaments-list.php [L]
+
 # Redirect /tournaments to php/tournaments/tournaments.php
 RewriteRule ^trophies$ php/trophies/trophies.php [L]
 
