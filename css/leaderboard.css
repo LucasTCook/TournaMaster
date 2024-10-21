@@ -1,0 +1,195 @@
+.leaderboard-header-container {
+    position: fixed;
+    top: 0;
+    padding: 20px;
+    background-color: var(--white); /* White background for profile container */
+    box-shadow: 0 4px 8px var(--box-shadow); /* Global shadow */
+    text-align: center;
+    width: 100%;
+    z-index: 1000;
+    height: 175px;
+}
+
+.leaderboard-header-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.leaderboard-header {
+    font-size: 24px;
+    text-align: center;
+}
+
+.leaderboard-header-tournament-name {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.leaderboard-selection {
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--white);
+    background-color: var(--primary-color);
+}
+
+.leaderboard-selection.active {
+    background-color: var(--primary-hover);
+}
+
+.leaderboard-selection-title {
+    vertical-align: middle;
+}
+
+.game-header-container {
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--white); /* White background for profile container */
+    box-shadow: 0 4px 8px var(--box-shadow); /* Global shadow */
+    /* border-radius: 0px 0px 65px 65px; */
+    text-align: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 250px;
+}
+
+.game-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--default-color);
+}
+
+.game-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.games-header-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.games-selection {
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--white);
+    background-color: var(--primary-color);
+}
+
+.games-selection.active {
+    background-color: var(--primary-hover);
+}
+
+.bracket-container {
+    display: none;
+}
+
+/* Leaderboard Container */
+.leaderboard-container {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    position: fixed;
+    top: 175px;
+    overflow-y: scroll;
+    height: calc(100vh - 255px);
+    padding: 30px;
+}
+
+.leaderboard-container-tournament {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    position: fixed;
+    top: 169px;
+    overflow-y: scroll;
+    height: calc(100vh - 249px);
+    padding: 30px;
+}
+
+
+/* Leaderboard Card Styling */
+.leaderboard-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--white);
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+    transition: transform 0.3s ease;
+}
+
+.leaderboard-card:hover {
+    transform: scale(1.03); /* Slight zoom on hover */
+}
+
+/* Player Name Styling */
+.player-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--default-color);
+}
+
+/* Player Points Styling */
+.player-points {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--grey);
+}
+
+/* Trophy Icons */
+.gold-trophy {
+    color: var(--gold);
+    font-size: 24px;
+}
+
+.silver-trophy {
+    color: var(--silver);
+    font-size: 24px;
+}
+
+.bronze-trophy {
+    color: var(--bronze);
+    font-size: 24px;
+}
+
+/* Special Classes for Top 3 */
+.first-place .player-points {
+    color: var(--gold);
+}
+
+.second-place .player-points {
+    color: var(--silver);
+}
+
+.third-place .player-points {
+    color: var(--bronze);
+}
+
+/* Header Styling */
+.leaderboard-header {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.leaderboard-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--default-color);
+}

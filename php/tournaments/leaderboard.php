@@ -4,7 +4,7 @@ $activePage = 'tournaments';
 include '../../includes/header.php'; 
 ?>
 
-<link rel="stylesheet" href="../../css/game.css">
+<link rel="stylesheet" href="../../css/leaderboard.css">
 
 <div class="leaderboard-header-container">
     <span class="leaderboard-header-tournament-name">Tournament Name</span>

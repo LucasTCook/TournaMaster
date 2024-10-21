@@ -7,6 +7,7 @@
     text-align: center;
     width: 100%;
     z-index: 1000;
+    height: 175px;
 }
 
 .games-header-buttons {
@@ -46,8 +47,8 @@
 
 .games-container {
     position: fixed;
-    top: 169px;
-    padding-top: 30px;
+    top: 175px;
+    padding: 30px;
     overflow-y: scroll;
     height: calc(100vh - 250px);
     width: 100%;
@@ -61,7 +62,6 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px var(--box-shadow);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 80%;
     margin: auto;
     margin-bottom: 15px;
 }
