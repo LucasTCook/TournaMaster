@@ -72,7 +72,3 @@ p, input, button {
     background-color: #dc3545; /* Red for error */
     color: white;
 }
-
-.hidden {
-    display: none !important;
-}
