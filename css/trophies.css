@@ -48,14 +48,13 @@
 
 /* Grid Container */
 .trophies-grid-container {
-    margin-top: 80px;
     padding: 20px;
     text-align: center;
-    overflow-y: auto;
-    overflow-x: hidden;
-    position: relative;
     width: 100%;
-    height: calc(100vh - 200px); /* Adjust height to fill the space under the header */
+    height: calc(100vh - 225px);
+    position: fixed;
+    top: 145px;/* Adjust height to fill the space under the header */
+    overflow-y: scroll;
 }
 
 .trophies-grid {

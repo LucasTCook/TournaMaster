@@ -41,10 +41,10 @@
 
 .tournament-list-container {
     position: fixed;
-    width: 95%;
-    top: 150px;
+    top: 145px;
     overflow-y: scroll;
-    height: calc(100vh - 230px);
+    height: var(--height-wo-bottom-nav);
+    padding-top: 30px;
 }
 
 .tournament-card {

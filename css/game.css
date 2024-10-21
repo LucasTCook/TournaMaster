@@ -108,20 +108,6 @@
     padding: 30px;
 }
 
-.leaderboard-container-tournament {
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
-    position: fixed;
-    top: 169px;
-    overflow-y: scroll;
-    height: calc(100vh - 249px);
-    padding: 30px;
-}
-
-
 /* Leaderboard Card Styling */
 .leaderboard-card {
     display: flex;

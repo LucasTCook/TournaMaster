@@ -50,7 +50,7 @@
     top: 145px;
     padding: 30px;
     overflow-y: scroll;
-    height: calc(100vh - 225px);
+    height: var(--height-wo-bottom-nav);
     width: 100%;
 }
 
@@ -61,13 +61,12 @@
     padding: 15px 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px var(--box-shadow);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: box-shadow 0.3s ease;
     margin: auto;
     margin-bottom: 15px;
 }
 
 .game-card:hover {
-    transform: translateY(-3px);
     box-shadow: 0 8px 16px var(--box-shadow);
 }
 

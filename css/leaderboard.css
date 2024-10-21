@@ -7,7 +7,7 @@
     position: fixed;
     top: 145px;
     overflow-y: scroll;
-    height: calc(100vh - 225px);
+    height: var(--height-wo-bottom-nav);
     padding: 30px;
 }
 

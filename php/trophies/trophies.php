@@ -46,6 +46,50 @@
             <!-- <div class="top-bar">Jan 2022</div> -->
             <div class="bottom-bar">Feb 2024 - Atari Bowling</div>
         </div>
+        <div class="trophy gold-border">
+            <!-- <div class="top-bar">Jan 2022</div> -->
+            <div class="bottom-bar">Feb 2024 - Atari Bowling</div>
+        </div>
+        <div class="trophy gold-border">
+            <!-- <div class="top-bar">Jan 2022</div> -->
+            <div class="bottom-bar">Feb 2024 - Atari Bowling</div>
+        </div>
+        <div class="trophy gold-border">
+            <!-- <div class="top-bar">Jan 2022</div> -->
+            <div class="bottom-bar">Feb 2024 - Atari Bowling</div>
+        </div>
+        <div class="trophy gold-border">
+            <!-- <div class="top-bar">Jan 2022</div> -->
+            <div class="bottom-bar">Feb 2024 - Atari Bowling</div>
+        </div>
+        <div class="trophy gold-border">
+            <!-- <div class="top-bar">Jan 2022</div> -->
+            <div class="bottom-bar">Feb 2024 - Atari Bowling</div>
+        </div>
+        <div class="trophy gold-border">
+            <!-- <div class="top-bar">Jan 2022</div> -->
+            <div class="bottom-bar">Feb 2024 - Atari Bowling</div>
+        </div>
+        <div class="trophy gold-border">
+            <!-- <div class="top-bar">Jan 2022</div> -->
+            <div class="bottom-bar">Feb 2024 - Atari Bowling</div>
+        </div>
+        <div class="trophy gold-border">
+            <!-- <div class="top-bar">Jan 2022</div> -->
+            <div class="bottom-bar">Feb 2024 - Atari Bowling</div>
+        </div>
+        <div class="trophy gold-border">
+            <!-- <div class="top-bar">Jan 2022</div> -->
+            <div class="bottom-bar">Feb 2024 - Atari Bowling</div>
+        </div>
+        <div class="trophy gold-border">
+            <!-- <div class="top-bar">Jan 2022</div> -->
+            <div class="bottom-bar">Feb 2024 - Atari Bowling</div>
+        </div>
+        <div class="trophy gold-border">
+            <!-- <div class="top-bar">Jan 2022</div> -->
+            <div class="bottom-bar">Feb 2024 - Atari Bowling</div>
+        </div>
         
     </div>
 
