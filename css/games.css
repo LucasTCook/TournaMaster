@@ -47,7 +47,7 @@
 .games-container {
     position: fixed;
     top: 169px;
-    padding-top: 15px;
+    padding-top: 30px;
     overflow-y: scroll;
     height: calc(100vh - 250px);
     width: 100%;
@@ -85,7 +85,7 @@
 }
 
 .game-name {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: bold;
     color: var(--default-color);
 }
