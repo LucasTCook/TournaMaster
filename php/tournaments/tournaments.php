@@ -8,12 +8,28 @@ include '../../includes/header.php';
 <div class="tournaments-header-container">
     <h3 class="tournaments-header">Tournaments</h3>
     <div class="tournaments-header-buttons">
-        <div class="tournaments-selection" onclick="window.location.href='./current-tournaments'">
+        <div class="tournaments-selection">
             <span class="tournaments-selection-title">Current Tournaments</span>
         </div>
-        <div class="tournaments-selection" onclick="window.location.href='./past-tournaments'">
+        <div class="tournaments-selection">
             <span class="tournaments-selection-title">Past Tournaments</span>
         </div>
+    </div>
+</div>
+<div class="tournament-list-container">
+    <div class="tournament-card" onclick="window.location.href='./tournament/1'">
+        <span class="tournament-name">Somewhat Bi-annual Gaming Tournament</span>
+        <br>
+        <span class="tournament-info">Los Brolos Gaming</span>
+        -
+        <span class="tournament-info date">10/02/2023</span>
+    </div>
+    <div class="tournament-card" onclick="window.location.href='./tournament/1'">
+        <span class="tournament-name">Somewhat Bi-annual Gaming Tournament</span>
+        <br>
+        <span class="tournament-info">Los Brolos Gaming</span>
+        -
+        <span class="tournament-info date">10/02/2022</span>
     </div>
 </div>
 
