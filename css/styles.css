@@ -15,6 +15,8 @@
     --silver-hover: #aaaaaa;    /* Slightly darker silver for hover */
     --bronze-hover: #a86024;    /* Slightly darker bronze for hover */
     --grey: #636363;
+    --black: #000000;
+    --success: #5cb85c;
 
     --height-wo-bottom-nav: calc(100vh - 225px);
 }
