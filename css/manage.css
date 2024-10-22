@@ -47,3 +47,134 @@
 .manage-selection-title {
     vertical-align: middle;
 }
+
+.tournament-info-form {
+    display: none;
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+    width: 80%;
+}
+
+.add-tournament-form {
+    display: none;
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+    width: 80%;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    color: var(--default-color);
+    margin-bottom: 10px;
+    display: block;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--input-border);
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    background-color: var(--white);
+    box-shadow: 0 2px 4px var(--box-shadow);
+}
+
+.form-input:focus {
+    border-color: var(--primary-hover);
+}
+
+.save-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--success);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.add-tournament-form-buttons {
+    .save-btn {
+        margin-top: 0px;
+    }
+    .cancel-btn {
+        margin-top: 0px;
+    }
+}
+
+.cancel-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.save-banner {
+    position: fixed;
+    bottom: 109px;
+    left: 0;
+    right: 0;
+    background-color: var(--success);
+    color: var(--white);
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+    margin: 0 20px;
+    z-index: 1005;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.save-banner.error {
+    background-color: var(--active-color); /* Error red */
+}
+
+.save-banner.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.add-tournament-form .show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.add-tournament-form-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .tournament-info-form {
+        position: fixed;
+        top: 175px;
+    }
+
+    .add-tournament-form {
+        position: fixed;
+        top: 175px;
+    }
+}

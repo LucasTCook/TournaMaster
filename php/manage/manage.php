@@ -5,7 +5,7 @@ include '../../includes/header.php';
 ?>
 <link rel="stylesheet" href="/css/manage.css">
 <link rel="stylesheet" href="/css/tournaments.css">
-<!-- <script src="../../js/tournaments.js"></script> -->
+<script src="../../js/manage.js"></script>
 
 <div class="manage-header-container">
     <h3 class="manage-header">Manage Tournaments</h3>
@@ -36,5 +36,27 @@ include '../../includes/header.php';
         <span class="tournament-info">13 Games</span>
     </div>
 </div>
+
+<div id="add-tournament" class="add-tournament-form">
+    <div class="form-group">
+        <label for="tournament-name">Tournament Name</label>
+        <input type="text" id="tournament-name" class="form-input" placeholder="Enter Tournament Name">
+    </div>
+    <div class="form-group">
+        <label for="tournament-date">Tournament Date</label>
+        <input type="date" id="tournament-date" class="form-input">
+    </div>
+    <div class="form-group">
+        <label for="tournament-logo">Tournament Logo</label>
+        <input type="file" id="tournament-logo" name="form-input" accept="image/*">
+    </div>
+    <div class="add-tournament-form-buttons">
+        <button id="create-tournament-button" class="save-btn">Create</button>
+        <button class="cancel-btn" onclick="cancelTournamentCreation()">Cancel</button>
+    </div>
+</div>
+
+<div id="save-banner" class="save-banner">Tournament Created</div>
+<div id="save-error-banner" class="save-banner error">Tournament Creation Cancelled</div>
 
 <?php include '../../includes/footer.php'; ?>
