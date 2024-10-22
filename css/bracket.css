@@ -1,0 +1,101 @@
+.bracket-container {
+    text-align: left;
+    width: 100%;
+    position: fixed;
+    top: 250px;
+    overflow-y: scroll;
+    height: calc(100vh - 330px);
+    padding: 30px;
+}
+
+.bracket-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 40px
+}
+
+.bracket-card-single {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--white);
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+    transition: transform 0.3s ease;
+    /* width: 90%; */
+    position: relative;
+}
+
+.bracket-card-single::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 50%;
+    background-color: var(--neutral-color);
+    top: -25px; /* Half of the gap between cards */
+    z-index: -1;
+}
+
+.bracket-card-single:first-child::before {
+    display: none; /* Remove the line for the first card */
+}
+
+.bracket-group:last-child {
+   margin-bottom: 20px;
+}
+
+.bracket-button-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: auto;
+    margin-bottom: 40px;
+}
+
+.bracket-button {
+    background-color: var(--secondary-color);
+    width: 130px;
+    border-radius: 10px;
+    text-align: center;
+    color: var(--white);
+    font-weight: bold;
+    font-size: 15px;
+    padding: 10px;
+}
+.hidden {
+    display: none;
+}
+
+.eliminated {
+    color: var(--grey); /* Make the text grey */
+    text-decoration: line-through; /* Add a strikethrough */
+}
+
+.points {
+    color: var(--grey); /* Same grey color for the points */
+    text-align: right; /* Right justify the points */
+    font-weight: bold;
+}
+
+.winner-checkmark {
+    color: var(--success); /* Green color */
+    font-size: 18px; /* Adjust as necessary */
+    position: absolute;
+    right: 15px; /* Position inside the card */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.bracket-winner-trophey {
+    color: var(--gold);
+    font-size: 18px; /* Adjust as necessary */
+    position: absolute;
+    right: 15px; /* Position inside the card */
+    top: 50%;
+    transform: translateY(-50%);
+}
