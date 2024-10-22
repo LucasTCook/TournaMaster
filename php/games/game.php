@@ -34,91 +34,28 @@ include '../../includes/header.php';
     </div>
     <div id="bracket-page-0" class="bracket-page">
         <div class="bracket-group">
-            <div class="bracket-card-single with-line">
-                <div>
-                    <span class="player-name">John Doe</span>
+            <div class="bracket-card with-line">
+                <div class="double-player-container">
+                    <span class="player-name-double eliminated">Francisco Juarez-Martinez</span>
+                    <span class="player-name-double">Alexander Fahrenholz</span>
                 </div>
                 <i class="fas fa-check winner-checkmark"></i>
             </div>
-            <div class="bracket-card-single">
-                <div>
-                    <span class="player-name eliminated">John Doe</span>
-                </div>
+            <div class="bracket-card">
+                <span class="player-name eliminated">John Doe</span>
                 <div class="points">0</div>
-            </div>
-        </div>
-        <div class="bracket-group">
-            <div class="bracket-card-single with-line">
-                <div>
-                    <span class="player-name">John Doe</span>
-                </div>
-            </div>
-            <div class="bracket-card-single">
-                <div>
-                    <span class="player-name">John Doe</span>
-                </div>
-            </div>
-        </div>
-        <div class="bracket-group">
-            <div class="bracket-card-single with-line">
-                <div>
-                    <span class="player-name">John Doe</span>
-                </div>
-            </div>
-            <div class="bracket-card-single">
-                <div>
-                    <span class="player-name">John Doe</span>
-                </div>
-            </div>
-        </div>
-        <div class="bracket-group">
-            <div class="bracket-card-single with-line">
-                <div>
-                    <span class="player-name">John Doe</span>
-                </div>
-            </div>
-            <div class="bracket-card-single">
-                <div>
-                    <span class="player-name">John Doe</span>
-                </div>
             </div>
         </div>
     </div>
     <div id="bracket-page-1" class="bracket-page">
         <div class="bracket-group">
-            <div class="bracket-card-single with-line">
-                <div>
-                    <span class="player-name">TBD</span>
-                </div>
-            </div>
-            <div class="bracket-card-single">
-                <div>
-                    <span class="player-name">TBD</span>
-                </div>
-            </div>
-        </div>
-        <div class="bracket-group">
-            <div class="bracket-card-single with-line">
-                <div>
-                    <span class="player-name">TBD</span>
-                </div>
-            </div>
-            <div class="bracket-card-single">
-                <div>
-                    <span class="player-name">TBD</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="bracket-page-2" class="bracket-page">
-        <div class="bracket-group">
-            <div class="bracket-card-single with-line">
+            <div class="bracket-card with-line">
                 <div>
                     <span class="player-name">TBD</span>
                     <i class="fas fa-trophy gold-trophy bracket-winner-trophey"></i>
                 </div>
             </div>
-            <div class="bracket-card-single">
+            <div class="bracket-card">
                 <div>
                     <span class="player-name">TBD</span>
                 </div>
