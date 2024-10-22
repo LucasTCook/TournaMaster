@@ -1,0 +1,49 @@
+.manage-header-container {
+    position: fixed;
+    top: 0;
+    padding: 20px;
+    background-color: var(--white); /* White background for profile container */
+    box-shadow: 0 4px 8px var(--box-shadow); /* Global shadow */
+    text-align: center;
+    width: 100%;
+    z-index: 1000;
+    height: 145px;
+}
+
+.manage-header-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.manage-header {
+    font-size: 24px;
+    text-align: center;
+}
+
+.manage-selection {
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--white);
+    background-color: var(--primary-color);
+}
+
+.manage-selection-success {
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--white);
+    background-color: var(--success);
+}
+
+.manage-selection.active {
+    background-color: var(--primary-hover);
+}
+
+.manage-selection-title {
+    vertical-align: middle;
+}
