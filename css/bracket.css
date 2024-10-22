@@ -99,3 +99,17 @@
     top: 50%;
     transform: translateY(-50%);
 }
+
+@media (min-width: 768px) {
+    .bracket-card-single {
+        width: 60%;
+        margin: auto;
+    }
+}
+
+@media (min-width: 1024px) {
+    .bracket-card-single {
+        width: 30%;
+        margin: auto;
+    }
+}
