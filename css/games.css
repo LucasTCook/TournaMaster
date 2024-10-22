@@ -101,6 +101,19 @@
     margin-left: 5px;
     font-size: 16px;
 }
+
+.in-progress {
+    color: var(--secondary-color);
+    margin-left: 5px;
+    font-size: 16px;
+}
+
+.not-started {
+    color: var(--neutral-color);
+    margin-left: 5px;
+    font-size: 16px;
+}
+
 @media (min-width: 768px) {
     .game-image {
         width: 80px;
