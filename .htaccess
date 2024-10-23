@@ -13,7 +13,7 @@ RewriteRule ^games$ php/games/games.php [L]
 RewriteRule ^game/([0-9]+)/([0-9]+)$ php/games/game.php?tournament_id=$1&game_id=$2 [L]
 
 # Redirect /leaderboard to php/leaderboard/leaderboard.php
-RewriteRule ^leaderboard$ php/tournaments/leaderboard.php [L]
+RewriteRule ^leaderboard$ php/manage/leaderboard.php [L]
 
 # Redirect /tournament/{id} to tournament.php?tournament_id={id}
 RewriteRule ^tournament/([0-9]+)$ php/tournaments/tournament.php?tournament_id=$1 [L]
