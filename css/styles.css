@@ -76,3 +76,11 @@ p, input, button {
     background-color: #dc3545; /* Red for error */
     color: white;
 }
+
+.bold {
+    font-weight: bold;
+}
+
+.center {
+    text-align: center;
+}

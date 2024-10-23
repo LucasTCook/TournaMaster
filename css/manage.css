@@ -47,3 +47,284 @@
 .manage-selection-title {
     vertical-align: middle;
 }
+
+.tournament-info-display {
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+    /* width: 80%; */
+    text-align: center;
+}
+
+.tournament-info-form {
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+    /* width: 80%; */
+}
+
+.add-tournament-form {
+    display: none;
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+    /* width: 80%; */
+}
+
+.tournament-panel {
+    display: none;
+    position: fixed;
+    top: 145px;
+    overflow-y: scroll;
+    height: calc(var(--height-wo-bottom-nav));
+    padding: 20px;
+    width: 100%;
+}
+
+.tournament-info-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-tournament-logo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.info-tournament-name {
+    font-weight: bold;
+    font-size:16px
+}
+
+.info-tournament-date {
+    font-weight: bold;
+    font-size:16px;
+    margin-top:20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    color: var(--default-color);
+    margin-bottom: 10px;
+    display: block;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--input-border);
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    background-color: var(--white);
+    box-shadow: 0 2px 4px var(--box-shadow);
+}
+
+.form-input:focus {
+    border-color: var(--primary-hover);
+}
+
+.success-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--success);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.edit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--secondary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.add-tournament-form-buttons {
+    .success-btn {
+        margin-top: 0px;
+    }
+    .cancel-btn {
+        margin-top: 0px;
+    }
+}
+
+.cancel-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.save-banner {
+    position: fixed;
+    bottom: 109px;
+    left: 0;
+    right: 0;
+    background-color: var(--success);
+    color: var(--white);
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+    margin: 0 20px;
+    z-index: 1005;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.save-banner.error {
+    background-color: var(--active-color); /* Error red */
+}
+
+.save-banner.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.add-tournament-form .show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.add-tournament-form-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.add-game-button {
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+
+.players-container {
+    margin-top: 20px;
+}
+
+.player-card {
+    background-color: var(--white);
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.qr-window {
+    margin: auto;
+}
+
+#QR-preview {
+    width: 300px;
+    height: 300px;
+    border-radius: 15px;
+    border: 8px solid var(--black);
+    object-fit: cover;
+}
+
+.search-container {
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+    margin-bottom: 20px;
+}
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px; /* Space for search icon */
+    border: 1px solid var(--input-border);
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: var(--primary-color);
+}
+
+.add-game-info {
+    margin-top: 20px;
+    background-color: var(--white);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+}
+
+.add-game-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    object-fit: cover;
+}
+
+.add-game-form-btn {
+    width: 40%;
+    padding: 10px;
+    background-color: var(--success);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+}
+
+.add-game-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+
+@media (max-width: 768px) {
+    .add-tournament-form {
+        position: fixed;
+        top: 175px;
+    }
+
+    .leaderboard {
+        display: none
+    }
+}
