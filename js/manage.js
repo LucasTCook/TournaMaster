@@ -57,6 +57,37 @@ $(document).ready(function() {
         }
     });
 
+    $('#start-game-button').on('click', function() {
+        // Simulate a save process
+        let saveSuccess = true; // Change this based on actual save outcome
+
+        if (saveSuccess) {
+            $('#start-game-confirm').hide();
+            $('#tournament-games').show();
+            showBanner('#game-started-banner');
+        } else {
+            // showBanner('#save-error-banner');
+        }
+    });
+
+    $('#game-type').on('change', function() {
+        if ($(this).val() === 'bracket') {
+            $('#bracket-fields').removeClass('hidden');
+        } else {
+            $('#bracket-fields').addClass('hidden');
+        }
+    });
+    
+    $('.edit-game-button').on('click', function() {
+        $('#tournament-games').hide();
+        $('#configure-game').show();
+    });
+
+    $('.save-configuration').on('click', function() {
+        showBanner('#game-configured-banner');
+        $('#configure-game').hide();
+        $('#tournament-games').show();
+    });
 });
 
 function cancelTournamentCreation() {
@@ -103,4 +134,55 @@ function scanQRCode() {
 function addGame() {
     $('#tournament-games').hide();
     $('#tournament-game-form').show();
+}
+
+function confirmStartGame() {
+    $('#start-game-confirm').show();
+    $('#tournament-games').hide();
+}
+
+function cancelStartGame() {
+    $('#start-game-confirm').hide();
+    $('#tournament-games').show();
+}
+
+function openAddWinners() {
+    $('#tournament-games').hide();
+    $('#add-winners').show();
+}
+
+function openBracketGroup(groupNumber) {
+    $('.winning-group').removeClass('winning-group');
+
+    $('#add-winners').hide();
+    $('#add-winners-bracket-group').show();
+    $('#confirm-winner').hide();
+}
+
+function selectWinner(winningGroup) {
+    $('.winning-group').removeClass('winning-group');
+    $(winningGroup).addClass('winning-group');
+
+    $('#confirm-winner').show();
+}
+
+function confirmWinner() {
+    $('#add-winners').show();
+    $('#add-winners-bracket-group').hide();
+}
+
+function openAddPoints() {
+    $('#tournament-games').hide();
+    $('#add-points').show();
+}
+
+function addPoints() {
+    $('#add-points').hide();
+    $('#add-points-player').show();
+}
+
+function confirmPoints() {
+    $('#points-input').val('');
+    $('#add-points').show();
+    $('#add-points-player').hide();
 }
