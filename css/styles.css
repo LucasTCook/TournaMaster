@@ -84,3 +84,19 @@ p, input, button {
 .center {
     text-align: center;
 }
+
+.small-font {
+    font-size: 10px;
+}
+
+.auto-width {
+    width: auto !important;
+}
+
+.auto-margin {
+    margin: auto !important;
+}
+
+.margin-top {
+    margin-top: 20px;
+}

@@ -124,3 +124,18 @@
     flex-direction: column; /* Stacks the spans vertically */
     align-items: flex-start; /* Aligns the text to the left */
 }
+
+.bracket-group-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.winning-group {
+    background: var(--success);
+    color: var(--white);
+}
+
+.leaderboard-card {
+    margin-top: 10px;
+}
