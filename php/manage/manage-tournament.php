@@ -24,7 +24,7 @@ include '../../includes/header.php';
         <div id="tournament-players-button" class="manage-selection" onclick="changePage(this.id, 'tournament-players')">
             <span class="manage-selection-title">Players</span>
         </div>
-        <div id="tournament-leaderbaord-button" class="manage-selection leaderboard" onclick="changePage(this.id, 'tournament-leaderboard')">
+        <div id="tournament-leaderbaord-button" class="manage-selection leaderboard" onclick="window.location.href='/leaderboard'">
             <span class="manage-selection-title">Leaderboard</span>
         </div>
     </div>
@@ -382,10 +382,6 @@ include '../../includes/header.php';
 
 <div id="tournament-players-form" class="tournament-panel center">
     <video id="QR-preview"></video>
-</div>
-
-<div id="tournament-leaderboard" class="tournament-panel">
-    leaderboard
 </div>
 
 <div id="save-banner" class="save-banner">Tournament Info Saved</div>
