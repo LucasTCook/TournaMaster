@@ -11,7 +11,8 @@
     <!-- Profile Picture and Name -->
     <div class="profile-header">
         <img src="../../images/profile-placeholder.jpg" alt="Profile Picture" class="profile-pic">
-        <h2 class="profile-name">John Doe</h2>
+        <h2 id="username-display" class="profile-name"></h2>
+        <input type="hidden" id="username" value="<?php echo htmlspecialchars($_SESSION['username']); ?>">
     </div>
 
     <!-- QR Code Button and Display -->
