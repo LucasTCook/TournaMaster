@@ -25,6 +25,9 @@
     <!-- Fontawesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+    <!-- QR Code Generating -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
     <!-- QR Code Scanning -->
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
 
