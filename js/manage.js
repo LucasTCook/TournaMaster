@@ -1,16 +1,47 @@
 $(document).ready(function() {
     $('#tournament-info').show();
-    $('#create-tournament-button').on('click', function() {
-        // Simulate a save process
-        let saveSuccess = true; // Change this based on actual save outcome
-
-        if (saveSuccess) {
-            $('#add-tournament').hide();
-            $('#current-tournaments').show();
-            showBanner('#save-banner');
-        } else {
-            showBanner('#save-error-banner');
+    $('#create-tournament-button').on('click', function (e) {
+        e.preventDefault();
+    
+        const tournamentName = $('#tournament-name').val();
+        const tournamentDate = $('#tournament-date').val();
+        const tournamentLogo = $('#tournament-logo')[0].files[0];
+    
+        // Basic validation
+        if (!tournamentName || !tournamentDate) {
+            alert('Please fill out name and date.');
+            return;
         }
+    
+        // Create FormData object to handle file uploads
+        const formData = new FormData();
+        formData.append('tournamentName', tournamentName);
+        formData.append('tournamentDate', tournamentDate);
+        formData.append('tournamentLogo', tournamentLogo);
+    
+        $.ajax({
+            url: '/scripts/create_tournament.php',
+            method: 'POST',
+            dataType: 'json',
+            data: formData, // Use FormData object
+            processData: false, // Prevent jQuery from converting the data
+            contentType: false, // Prevent jQuery from setting contentType
+            success: function (response) {
+                if (response.status === 'success') {
+                    $('#add-tournament').hide();
+                    $('#current-tournaments').fadeIn();
+                    showBanner('#save-banner');
+                    $('#tournament-name').val('');
+                    $('#tournament-date').val('');
+                    $('#tournament-logo').val('');
+                } else {
+                    showBanner('#save-error-banner');
+                }
+            },
+            error: function () {
+                showBanner('#save-error-banner');
+            }
+        });
     });
 
     function showBanner(selector) {

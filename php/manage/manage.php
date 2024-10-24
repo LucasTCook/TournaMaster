@@ -51,12 +51,12 @@ include '../../includes/header.php';
         <input type="file" id="tournament-logo" name="form-input" accept="image/*">
     </div>
     <div class="add-tournament-form-buttons">
-        <button id="create-tournament-button" class="success-btn">Create</button>
+        <button type="submit" id="create-tournament-button" class="success-btn">Create</button>
         <button class="cancel-btn" onclick="cancelTournamentCreation()">Cancel</button>
     </div>
 </div>
 
 <div id="save-banner" class="save-banner">Tournament Created</div>
-<div id="save-error-banner" class="save-banner error">Tournament Creation Cancelled</div>
+<div id="save-error-banner" class="save-banner error">Tournament Creation Failed</div>
 
 <?php include '../../includes/footer.php'; ?>

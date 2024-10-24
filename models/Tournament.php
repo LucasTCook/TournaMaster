@@ -8,9 +8,12 @@ class Tournament extends Model
     public $id;
     public $name;
     public $date;
+    public $logo;
     public $completed_date;
-    public $creator_id;
+    public $creator_user_id;
     public $is_active;
+    public $created_at;
+    public $updated_at;
 
     public function __construct($id = null)
     {
@@ -35,11 +38,24 @@ class Tournament extends Model
                 $this->id = $tournament['id'];
                 $this->name = $tournament['name'];
                 $this->date = $tournament['date'];
+                $this->logo = $tournament['logo'];
                 $this->completed_date = $tournament['completed_date'];
-                $this->creator_id = $tournament['creator_id'];
+                $this->creator_user_id = $tournament['creator_user_id'];
                 $this->is_active = $tournament['is_active'];
             }
             $stmt->close();
+        } else {
+            throw new Exception('Failed to prepare statement: ' . $this->db->error);
+        }
+    }
+
+    public function save()
+    {
+        $stmt = $this->db->prepare("INSERT INTO tournaments (name, date, logo, creator_user_id, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())");
+
+        if ($stmt) {
+            $stmt->bind_param("sssi", $this->name, $this->date, $this->logo, $this->creator_user_id);
+            return $stmt->execute();
         } else {
             throw new Exception('Failed to prepare statement: ' . $this->db->error);
         }

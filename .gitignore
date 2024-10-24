@@ -21,3 +21,7 @@ Thumbs.db
 test_db.php
 create_admin.php
 setup.txt
+
+# Ignore uploads
+images/uploads/*
+!images/uploads/.gitkeep
