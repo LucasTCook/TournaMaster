@@ -217,7 +217,7 @@ include '../../includes/header.php';
 </div>
 
 <div id="add-points" class="tournament-panel">
-    <div class="leaderboard-card first-place">
+    <div class="leaderboard-card first-place margin-bottom-sm" onclick="addPoints()">
         <div>
             <i class="fas fa-trophy gold-trophy"></i>
             <span class="player-name">John Doe</span>
@@ -225,7 +225,7 @@ include '../../includes/header.php';
         <span class="player-points">1200</span>
     </div>
 
-    <div class="leaderboard-card second-place">
+    <div class="leaderboard-card second-place margin-bottom-sm" onclick="addPoints()">
         <div>
             <i class="fas fa-trophy silver-trophy"></i>
             <span class="player-name">Jane Smith</span>
@@ -233,7 +233,7 @@ include '../../includes/header.php';
         <span class="player-points">1100</span>
     </div>
 
-    <div class="leaderboard-card third-place">
+    <div class="leaderboard-card third-place margin-bottom-sm" onclick="addPoints()">
         <div>
             <i class="fas fa-trophy bronze-trophy"></i>
             <span class="player-name">Alex Roe</span>
@@ -241,16 +241,16 @@ include '../../includes/header.php';
         <span class="player-points">1000</span>
     </div>
 
-    <div class="leaderboard-card">
+    <div class="leaderboard-card margin-bottom-sm" onclick="addPoints()">
         <span class="player-name">Alex Roe</span>
         <span class="player-points">900</span>
     </div>
 
-    <div class="leaderboard-card" onclick="addPoints()">
+    <div class="leaderboard-card margin-bottom-sm" onclick="addPoints()">
         <span class="player-name">New Player</span>
         <span class="player-points">--</span>
     </div>
-    <div class="leaderboard-card" onclick="addPoints()">
+    <div class="leaderboard-card margin-bottom-sm" onclick="addPoints()">
         <span class="player-name">New Player</span>
         <span class="player-points">--</span>
     </div>

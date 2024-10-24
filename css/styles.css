@@ -101,6 +101,10 @@ p, input, button {
     margin-top: 20px;
 }
 
+.margin-bottom-sm {
+    margin-bottom: 10px;
+}
+
 .text-wrap {
     text-wrap: pretty !important;
 }
