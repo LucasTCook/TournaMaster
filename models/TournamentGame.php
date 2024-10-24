@@ -15,12 +15,12 @@ class TournamentGame extends Model
     public function __construct($id = null) {
         parent::__construct();
         if ($id) {
-            $this->loadById($id);
+            $this->getById($id);
         }
     }
 
     // Load a record by ID
-    public function loadById($id) {
+    public function getById($id) {
         $stmt = $this->db->prepare("SELECT * FROM $this->table WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
