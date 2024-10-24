@@ -11,12 +11,6 @@ composer.phar
 .idea/
 .vscode/
 
-# Ignore node_modules if you're using Node.js (add if necessary)
-/node_modules/
-
-# Ignore images and other media that shouldn’t be tracked
-/images/
-
 # Ignore caches and logs
 /cache/
 logs/
@@ -26,4 +20,4 @@ logs/
 Thumbs.db
 test_db.php
 create_admin.php
-db-tables.txt
+setup.txt
