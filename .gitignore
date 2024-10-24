@@ -1,0 +1,27 @@
+# Ignore environment and configuration files
+.env
+config.php
+
+# Ignore Composer dependencies
+/vendor/
+composer.lock
+composer.phar
+
+# Ignore PHPStorm and VSCode settings
+.idea/
+.vscode/
+
+# Ignore node_modules if you're using Node.js (add if necessary)
+/node_modules/
+
+# Ignore images and other media that shouldn’t be tracked
+/images/
+
+# Ignore caches and logs
+/cache/
+logs/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+test_db.php
