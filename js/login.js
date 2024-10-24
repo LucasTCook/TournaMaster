@@ -5,6 +5,27 @@ $(document).ready(function() {
         $('#create-account-panel').fadeIn();
     });
 
+    $('#login-form').on('submit', function(e) {
+        e.preventDefault();
+        const username = $('#username').val();
+        const password = $('#password').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/scripts/login.php',
+            data: { username: username, password: password},
+            success: function(response) {
+                if (response.trim() === 'success') {
+                    // Redirect on successful login
+                    window.location.href = '/profile';
+                } else {
+                    // Show error banner on login failure
+                    $('#login-error-banner').show().delay(3000).fadeOut();
+                }
+            }
+        });
+    });
+
     // Handle Create Account form submission
     $('#create-account-form').on('submit', function(e) {
         e.preventDefault();
