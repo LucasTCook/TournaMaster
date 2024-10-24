@@ -85,11 +85,11 @@ body {
     z-index: 1010;
 }
 
-#account-create-success-banner {
+.success {
     background-color: var(--success);
 }
 
-#account-create-error-banner {
+.error {
     background-color: var(--error);
 }
 

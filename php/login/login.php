@@ -1,38 +1,16 @@
 <?php
 include '../../includes/header.php';
 @session_start();
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    // Validate user credentials (this is just an example; you should replace this with your validation logic)
-    if ($username === 'admin' && $password === 'password') {
-        // Set session variable to indicate user is logged in
-        $_SESSION['user_logged_in'] = true;
-
-        // Redirect to profile
-        header("Location: profile");
-        exit();
-    } else {
-        // Handle invalid login attempt
-        echo "Invalid username or password.";
-    }
-}
 ?>
-<script src="../../js/login.js"></script>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In</title>
-    <link rel="stylesheet" href="../../css/login.css">
-</head>
-<body>
+<script src="/js/login.js"></script>
+
+<link rel="stylesheet" href="/css/login.css">
+
     <div id="notification" class="notification"></div>
     <div class="login-container">
         <div class="logo">
-            <img src="../../images/logo.png" alt="App Logo">
+            <img src="/images/logo.png" alt="App Logo">
         </div>
 
         <form class="login-form" id="login-form">
@@ -73,7 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     <!-- Notification banners -->
-    <div id="account-create-success-banner" class="notification-banner">Account Created Successfully</div>
-    <div id="account-create-error-banner" class="notification-banner">Account Already Exists</div>
+    <div id="account-create-success-banner" class="notification-banner success">Account Created Successfully</div>
+    <div id="account-create-error-banner" class="notification-banner error">Account Already Exists</div>
+    <div id="login-error-banner" class="notification-banner error">Username or Password is invalid</div>
 
-<?php include '../../includes/footer.php'; ?>
+    </body>
+</html>

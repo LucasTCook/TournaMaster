@@ -14,13 +14,13 @@
     
     <!-- Conditionally display Manage option if the user is an admin -->
     <?php 
-        // if ($isAdmin): 
+        if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): 
     ?>
         <a href="/manage" class="nav-item <?= $activePage == 'manage' ? 'active' : '' ?>">
             <i class="fas fa-cogs"></i> <!-- Manage icon (gear) -->
             <span>Manage</span>
         </a>
     <?php 
-        // endif; 
+        endif; 
     ?>
 </div>
