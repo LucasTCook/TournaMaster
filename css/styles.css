@@ -4,6 +4,7 @@
     --secondary-color: #247BA0; /* Cerulean for secondary actions */
     --background-color: #70C1B3; /* Verdigris for background */
     --highlight-color: #FFE066; /* Naples Yellow for highlighted sections and buttons */
+    --highlight-hover: #e9c435;
     --neutral-color: #50514F;   /* Davy's gray for text, borders, and input borders */
     --white: #ffffff;           /* White for backgrounds */
     --white-hover: #f7f7f7; 
@@ -17,6 +18,8 @@
     --grey: #636363;
     --black: #000000;
     --success: #5cb85c;
+    --success-hover: #429742;
+    --error: #F25F5C;
 
     --height-wo-bottom-nav: calc(100vh - 225px);
 }
@@ -67,13 +70,13 @@ p, input, button {
 
 /* Success message (green) */
 .notification.success {
-    background-color: #28a745; /* Green for success */
+    background-color: var(--success); /* Green for success */
     color: white;
 }
 
 /* Error message (red) */
 .notification.error {
-    background-color: #dc3545; /* Red for error */
+    background-color: var(--primary-color); /* Red for error */
     color: white;
 }
 
@@ -107,4 +110,30 @@ p, input, button {
 
 .text-wrap {
     text-wrap: pretty !important;
+}
+
+.success-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--success);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.edit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--secondary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
 }
