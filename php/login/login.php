@@ -46,6 +46,7 @@ include '../../includes/header.php';
                 </div>
                 <div class="form-group">
                     <button type="submit" id="create-account-submit-btn" class="success-btn" disabled>Create Account</button>
+                    <button type="button" id="back-to-login-btn" class="error-btn">Back</button>
                 </div>
             </form>
         </div>

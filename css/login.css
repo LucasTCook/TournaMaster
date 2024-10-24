@@ -64,6 +64,11 @@ body {
     .edit-btn {
         margin-top: 10px;
     }
+
+}
+
+.error-btn {
+    margin-top: 10px;
 }
 
 .create-account-form {

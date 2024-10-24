@@ -60,6 +60,11 @@ $(document).ready(function() {
         });
     });
 
+    $('#back-to-login-btn').on('click', function(e){
+        $('#create-account-panel').hide();
+        $('.login-container').fadeIn();
+    });
+
     $('#new-username').on('keyup', function() {
         const input = $(this).val();
         const maskedInput = input.replace(/[^a-zA-Z0-9_-]/g, ''); // Remove invalid characters
