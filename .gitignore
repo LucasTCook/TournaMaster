@@ -25,3 +25,5 @@ logs/
 .DS_Store
 Thumbs.db
 test_db.php
+create_admin.php
+db-tables.txt
