@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tournament->name = $tournamentName;
     $tournament->date = $tournamentDate;
     $tournament->logo = $logoUrl;
-    $tournament->creator_user_id = $_SESSION['user_id'];  // Assuming the user is logged in
+    $tournament->creator_id = $_SESSION['user_id'];  // Assuming the user is logged in
 
     // Save the tournament
     if ($tournament->save()) {

@@ -419,6 +419,13 @@ tbody td:empty::before {
     color: var(--neutral-color);
 }
 
+.tournament-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover; /* Ensures the image covers the entire area without stretching */
+}
+
 @media (max-width: 768px) {
     .add-tournament-form {
         position: fixed;
