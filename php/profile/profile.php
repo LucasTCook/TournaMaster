@@ -14,18 +14,10 @@
         <h2 id="username-display" class="profile-name"></h2>
         <input type="hidden" id="username" value="<?php echo htmlspecialchars($_SESSION['username']); ?>">
     </div>
-
-    <!-- QR Code Button and Display -->
-    <div class="qr-section">
-        <button id="show-qr-btn">Show QR Code</button>
+</div>
+<div class="qr-code-container">
+    <div class="qr-content">
+        <div id="qrcode" class="qr-code"></div>
     </div>
 </div>
-
-<div id="qr-modal" class="qr-modal hidden">
-    <div class="qr-modal-content">
-        <!-- Placeholder for QR code (black box for now) -->
-        <div class="qr-code"></div>
-    </div>
-</div>
-
 <?php include '../../includes/footer.php'; ?>
