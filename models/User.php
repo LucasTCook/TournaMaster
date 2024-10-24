@@ -2,6 +2,7 @@
 require_once 'Model.php';
 
 class User extends Model {
+    protected $table = 'users';
     public $id;
     public $username;
     public $email;
@@ -24,7 +25,7 @@ class User extends Model {
 
     // Fetch user details by ID and populate the object properties
     public function getById($user_id) {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt = $this->db->prepare("SELECT * FROM $this->table WHERE id = ?");
         if (!$stmt) {
             die('Prepare failed: ' . $this->db->error);
         }
@@ -45,7 +46,7 @@ class User extends Model {
 
     // Fetch user by username
     public function getByUsername($username) {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt = $this->db->prepare("SELECT * FROM $this->table WHERE username = ?");
         if (!$stmt) {
             die('Prepare failed: ' . $this->db->error);
         }
@@ -66,7 +67,7 @@ class User extends Model {
 
     // Check if a user exists by username or email
     public function userExists($username, $email) {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
+        $stmt = $this->db->prepare("SELECT * FROM $this->table WHERE username = ? OR email = ?");
         if (!$stmt) {
             die('Prepare failed: ' . $this->db->error);
         }
@@ -80,7 +81,7 @@ class User extends Model {
     // Create a new user
     public function createUser($username, $password, $email) {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $this->db->prepare("INSERT INTO users (username, password, email) VALUES (?, ?, ?)");
+        $stmt = $this->db->prepare("INSERT INTO $this->table (username, password, email) VALUES (?, ?, ?)");
 
         if (!$stmt) {
             die('Prepare failed: ' . $this->db->error);
