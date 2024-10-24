@@ -12,4 +12,10 @@ document.addEventListener("DOMContentLoaded", function() {
             qrModal.classList.remove("show");  // Hide the modal when clicking outside of the QR code box
         }
     });
+
+});
+
+$(document).ready(function() {
+    const username = $('#username').val();
+    $('#username-display').html(username);
 });
