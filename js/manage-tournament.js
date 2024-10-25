@@ -146,7 +146,8 @@ function searchGame(query) {
                     description: game.description_raw || 'No description available',
                     year: game.released ? new Date(game.released).getFullYear() : 'Unknown',
                     platforms: game.platforms.map(p => p.platform.name),
-                    image: game.background_image
+                    image: game.background_image,
+                    slug: game.slug
                 }));
 
                 // Clear the container first
@@ -159,7 +160,7 @@ function searchGame(query) {
                         <div class="add-game-info">
                             <div class="add-game-header">
                                 <img class="add-game-image" src="${game.image || '/images/game-placeholder.jpg'}" alt="Game Image">
-                                <button class="add-game-form-btn" onclick="addGame('${game.name}')">
+                                <button class="add-game-form-btn" onclick="addGameToTournament('${game.slug}')">
                                     <i class="fas fa-add"></i> Add Game
                                 </button>
                             </div>
@@ -213,6 +214,11 @@ function scanQRCode() {
 function addGame() {
     $('#tournament-games').hide();
     $('#tournament-game-form').show();
+}
+
+function addGameToTournament() {
+    $('#tournament-games').show();
+    $('#tournament-game-form').hide();
 }
 
 function confirmStartGame() {
