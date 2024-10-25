@@ -83,7 +83,7 @@ function loadTounamentInfo() {
         data: {id: tournamentId},
         success: function(response) {
             $('#tournament-name').html(response.data.name);
-            $('#tournament-date').html(response.data.date);
+            $('#tournament-date').html(moment(response.data.date).format('MM/DD/YYYY'));
             $('#tournament-name-edit').val(response.data.name);
             $('#tournament-date-edit').val(response.data.date);
             if (response.data.logo !== ''){
