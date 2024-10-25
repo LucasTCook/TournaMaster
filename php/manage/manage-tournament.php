@@ -191,29 +191,15 @@ include '../../includes/header.php';
 </div>
 
 <div id="tournament-game-form" class="tournament-panel">
-    <div>
-        <div class="search-container">
-            <label for="search-game">Search Game</label>
-            <div class="input-wrapper">
-                <input type="text" id="search-game" placeholder="Search game">
-                <i class="fas fa-search search-icon"></i>
-            </div>
-        </div>
-
-        <!-- <div id="add-game-info" class="add-game-info hidden"> -->
-        <div id="add-game-info" class="add-game-info">
-            <div class="add-game-header">
-                <img id="add-game-image" class="add-game-image" src="/images/game-placeholder.jpg" alt="Game Image">
-                <button id="add-game-confirm" class="add-game-form-btn" onclick="addGame()">
-                    <i class="fas fa-add"></i> Add Game
-                </button>
-            </div>
-            <p><strong>Name:</strong> <span id="game-name">Super Mario Brothers</span></p>
-            <p><strong>Description:</strong> <span id="game-description">Description of the game. This can be long and will likely wrap. word vomit asdfasdf asdf as df asd f as df a sdf a sdf a sd f asd f as df a sdfasdfasdf asd fa sdfasdf asdfasdfasdf asdfasdf asdfasdf asdfasdf.</span></p>
-            <p><strong>Release Year:</strong> <span id="game-release-year">1995</span></p>
-            <p><strong>Platforms:</strong> <span id="game-platforms">Sega Genesis</span></p>
+    <div class="search-container">
+        <label for="search-game">Search Game</label>
+        <div class="input-wrapper">
+            <input type="text" id="search-game" placeholder="Search game">
+            <i class="fas fa-search search-icon"></i>
         </div>
     </div>
+    
+    <div id="add-games-container"></div>
 </div>
 
 <div id="add-points" class="tournament-panel">

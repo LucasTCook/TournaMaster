@@ -71,6 +71,14 @@ $(document).ready(function() {
         $('#configure-game').hide();
         $('#tournament-games').show();
     });
+
+    $('#search-game').on('keyup', function() {
+        const query = $(this).val().trim();
+        
+        if (query.length > 2) {  // Only start searching if there are 3+ characters
+            searchGame(query);
+        }
+    });
 });
 
 function loadTounamentInfo() {
@@ -121,6 +129,56 @@ function updateTournamentInfo() {
             loadTounamentInfo();
             $('#tournament-info').show();
             $('#tournament-info-form').hide();
+        }
+    });
+}
+
+function searchGame(query) {
+    $.ajax({
+        url: '/scripts/search_game.php',
+        method: 'GET',
+        data: { query: query },
+        dataType: 'json',
+        success: function(response) {
+            if (response.results) {
+                const filteredResults = response.results.map(game => ({
+                    name: game.name,
+                    description: game.description_raw || 'No description available',
+                    year: game.released ? new Date(game.released).getFullYear() : 'Unknown',
+                    platforms: game.platforms.map(p => p.platform.name),
+                    image: game.background_image
+                }));
+
+                // Clear the container first
+                $('#add-games-container').empty();
+    
+                // Loop through each game result and create the card
+                filteredResults.forEach(function(game) {
+                    console.log(game);
+                    let gameCard = `
+                        <div class="add-game-info">
+                            <div class="add-game-header">
+                                <img class="add-game-image" src="${game.image || '/images/game-placeholder.jpg'}" alt="Game Image">
+                                <button class="add-game-form-btn" onclick="addGame('${game.name}')">
+                                    <i class="fas fa-add"></i> Add Game
+                                </button>
+                            </div>
+                            <p><strong>Name:</strong> <span>${game.name}</span></p>
+                            <p><strong>Release Year:</strong> <span>${game.year}</span></p>
+                            <p><strong>Platforms:</strong> <span>${game.platforms.join(', ')}</span></p>
+                        </div>
+                    `;
+    
+                    // Append the card to the container
+                    $('#add-games-container').append(gameCard);
+                });
+            } else {
+                // Handle no results
+                $('#add-games-container').html('<p>No games found.</p>');
+            }
+        },
+        error: function() {
+            console.error('Error with the request');
         }
     });
 }
