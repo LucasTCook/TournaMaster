@@ -5,9 +5,13 @@ session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    
+    // Use the Tournament model to insert the tournament
+    $tournament = new Tournament($_POST['id']);
+
     // Handle logo upload
     if(isset($_FILES['tournamentLogo'])) {
-        $targetDir = "../images/uploads/tournament_logos";
+        $targetDir = "../images/uploads/tournament_logos/";
         $targetFile = $targetDir . basename($_FILES["tournamentLogo"]["name"]);
         if (move_uploaded_file($_FILES["tournamentLogo"]["tmp_name"], $targetFile)) {
             $logo = basename($_FILES["tournamentLogo"]["name"]);
@@ -15,13 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['status' => 'error', 'message' => 'Error uploading logo.']);
             exit();
         }
-    } else {
-        $logo = '';
+        $tournament->logo = $logo;
     }
 
-    // Use the Tournament model to insert the tournament
-    $tournament = new Tournament($_POST['id']);
-    $tournament->logo = $logo;
     $tournament->name = $_POST['tournamentName'];
     $tournament->date = $_POST['tournamentDate'];
 

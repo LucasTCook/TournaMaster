@@ -5,7 +5,7 @@ require_once 'TournamentGamesRepository.php';
 
 class TournamentRepository extends Model {
     public function getTournamentsByCreatorId($creatorId) {
-        $stmt = $this->db->prepare("SELECT id, name, date, creator_id,logo FROM tournaments WHERE creator_id = ?");
+        $stmt = $this->db->prepare("SELECT id, name, date, creator_id,logo FROM tournaments WHERE creator_id = ? ORDER BY date DESC");
         
         if (!$stmt) {
             throw new Exception('Prepare failed: ' . $this->db->error);

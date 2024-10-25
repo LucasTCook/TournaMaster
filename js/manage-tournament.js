@@ -3,11 +3,6 @@ $(document).ready(function() {
     loadTounamentInfo();
     $('#tournament-info').show();
 
-    $('#add-tournament-button').on('click', function() {
-        $('#add-tournament').show();
-        $('#current-tournaments').hide();
-    });
-
     $('#number-of-players').html($('.player-card').length);
 
     let scanner = new Instascan.Scanner({ video: document.getElementById('QR-preview') });

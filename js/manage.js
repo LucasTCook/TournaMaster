@@ -1,5 +1,11 @@
 $(document).ready(function() {
     loadTournaments();
+
+    $('#add-tournament-button').on('click', function() {
+        $('#add-tournament').show();
+        $('#current-tournaments').hide();
+    });
+
     $('#create-tournament-button').on('click', function (e) {
         e.preventDefault();
     
