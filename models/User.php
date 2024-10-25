@@ -39,6 +39,11 @@ class User extends Model {
             $this->username = $user['username'];
             $this->email = $user['email'];
             $this->role = $user['role'];
+            $this->password = $user['password'];
+            $this->first_name = $user['first_name'];
+            $this->last_name = $user['last_name'];
+            $this->profile_image_url = $user['profile_image_url'];
+            $this->bio = $user['bio'];
         }
 
         $stmt->close();
@@ -89,5 +94,50 @@ class User extends Model {
 
         $stmt->bind_param("sss", $username, $hashedPassword, $email);
         return $stmt->execute();  // Return true if successful
+    }
+    
+    public function update() {
+        // Prepare the SQL statement
+        $query = "
+            UPDATE {$this->table} 
+            SET 
+                username = ?, 
+                email = ?, 
+                password = ?, 
+                first_name = ?, 
+                last_name = ?, 
+                profile_image_url = ?, 
+                bio = ?, 
+                role = ?, 
+                updated_at = NOW()
+            WHERE id = ?
+        ";
+
+        $stmt = $this->db->prepare($query);
+
+        if ($stmt) {
+            // Bind the parameters to the prepared statement
+            $stmt->bind_param(
+                "ssssssssi", 
+                $this->username, 
+                $this->email, 
+                $this->password, 
+                $this->first_name, 
+                $this->last_name, 
+                $this->profile_image_url, 
+                $this->bio, 
+                $this->role, 
+                $this->id
+            );
+
+            // Execute the statement and check for success
+            if ($stmt->execute()) {
+                return $stmt->affected_rows > 0; // Return true if a row was updated
+            } else {
+                throw new Exception('Failed to execute statement: ' . $stmt->error);
+            }
+        } else {
+            throw new Exception('Failed to prepare statement: ' . $this->db->error);
+        }
     }
 }

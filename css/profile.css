@@ -10,13 +10,21 @@
     width: 100%;
 }
 
+/* Profile Picture Wrapper */
+.profile-pic-wrapper {
+    position: relative;
+    display: inline-block; /* Keeps the image centered */
+}
+
+/* Profile Picture */
 .profile-pic {
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    margin-bottom: 10px;
+    object-fit: cover;
+    background-color: #e0e0e0;
+    cursor: pointer; /* Clickable */
 }
-
 .profile-name {
     font-size: 24px;
     color: var(--neutral-color); /* Neutral gray for name text */

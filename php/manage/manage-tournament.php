@@ -32,7 +32,7 @@ include '../../includes/header.php';
 
 <div id="tournament-info" class="tournament-panel">
     <div class="tournament-info-display">
-        <img src="../../images/profile-placeholder.jpg" alt="Profile Picture" class="info-tournament-logo">
+        <img src="../../images/profile-placeholder.png" alt="Profile Picture" class="info-tournament-logo">
         <div class="tournament-info-container">
             <span class="info-tournament-name"><b>Tournament Name:</b></span>
             <span>Los Brolos Gaming Tournament</span>

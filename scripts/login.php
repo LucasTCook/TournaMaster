@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_logged_in'] = true;
             $_SESSION['user_id'] = $user['id'];  // Save user ID for future queries
             $_SESSION['username'] = $user['username'];  // Save username for display
+            $_SESSION['profile_photo'] = $user['profile_image_url'];
             $_SESSION['role'] = $user['role'];  // Save role for access control
 
             echo 'success';  // Respond with success for JavaScript
