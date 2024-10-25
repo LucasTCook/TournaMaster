@@ -212,6 +212,8 @@ function scanQRCode() {
 }
 
 function addGame() {
+    $('#add-games-container').empty();
+    $('#search-game').val('');
     $('#tournament-games').hide();
     $('#tournament-game-form').show();
 }
