@@ -10,7 +10,7 @@ include '../../includes/header.php';
 <link rel="stylesheet" href="/css/bracket.css">
 
 <script src="/js/bracket.js"></script>
-<script src="../../js/manage.js"></script>
+<script src="../../js/manage-tournament.js"></script>
 
 <div class="manage-header-container">
     <h3 class="manage-header">Tournament Name</h3>
@@ -32,12 +32,12 @@ include '../../includes/header.php';
 
 <div id="tournament-info" class="tournament-panel">
     <div class="tournament-info-display">
-        <img src="../../images/profile-placeholder.png" alt="Profile Picture" class="info-tournament-logo">
+        <img id="info-tournament-logo" src="../../images/game-placeholder.jpg" alt="Profile Picture" class="info-tournament-logo">
         <div class="tournament-info-container">
             <span class="info-tournament-name"><b>Tournament Name:</b></span>
-            <span>Los Brolos Gaming Tournament</span>
+            <span id="tournament-name"></span>
             <span class="info-tournament-date"><b>Tournament Date: </b></span>
-            <span>11/9/2024</span>
+            <span id="tournament-date"></span>
             <button class="edit-btn" onclick="editTournamentInfo()">Edit Tournament Info</button>
         </div>
     </div>
@@ -46,18 +46,18 @@ include '../../includes/header.php';
 <div id="tournament-info-form" class="tournament-panel">
     <div class="tournament-info-form">
         <div class="form-group">
-            <label for="tournament-name">Tournament Name</label>
-            <input type="text" id="tournament-name" class="form-input" placeholder="Enter Tournament Name">
+            <label for="tournament-name-edit">Tournament Name</label>
+            <input type="text" id="tournament-name-edit" class="form-input" placeholder="Enter Tournament Name">
         </div>
         <div class="form-group">
-            <label for="tournament-date">Tournament Date</label>
-            <input type="date" id="tournament-date" class="form-input">
+            <label for="tournament-date-edit">Tournament Date</label>
+            <input type="date" id="tournament-date-edit" class="form-input">
         </div>
         <div class="form-group">
             <label for="tournament-logo">Tournament Logo</label>
-            <input type="file" id="tournament-logo" name="form-input" accept="image/*">
+            <input type="file" id="tournament-logo-edit" name="form-input" accept="image/*">
         </div>
-        <button class="success-btn" onclick="saveTournamentInfo()">Save</button>
+        <button class="success-btn" onclick="updateTournamentInfo()">Save</button>
     </div>
 </div>
 

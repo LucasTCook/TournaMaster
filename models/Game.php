@@ -1,4 +1,6 @@
 <?php
+require_once 'Model.php';
+
 class Game extends Model {
     protected $table = 'games';
     protected $id;
