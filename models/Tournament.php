@@ -9,9 +9,9 @@ class Tournament extends Model
     public $name;
     public $date;
     public $logo;
-    public $completed_date;
+    public $completed_at;
     public $creator_id;
-    public $is_active;
+    public $active;
     public $created_at;
     public $updated_at;
 
@@ -39,9 +39,11 @@ class Tournament extends Model
                 $this->name = $tournament['name'];
                 $this->date = $tournament['date'];
                 $this->logo = $tournament['logo'];
-                $this->completed_date = $tournament['completed_date'];
+                $this->completed_at = $tournament['completed_at'];
                 $this->creator_id = $tournament['creator_id'];
-                $this->is_active = $tournament['is_active'];
+                $this->active = $tournament['active'];
+                $this->created_at = $tournament['created_at'];
+                $this->updated_at = $tournament['updated_at'];
             }
             $stmt->close();
         } else {
@@ -56,6 +58,49 @@ class Tournament extends Model
         if ($stmt) {
             $stmt->bind_param("sssi", $this->name, $this->date, $this->logo, $this->creator_id);
             return $stmt->execute();
+        } else {
+            throw new Exception('Failed to prepare statement: ' . $this->db->error);
+        }
+    }
+
+    public function update() {
+        // Prepare the SQL statement
+        $query = "
+            UPDATE {$this->table} 
+            SET 
+                name = ?, 
+                date = ?, 
+                logo = ?, 
+                completed_at = ?, 
+                creator_id = ?, 
+                active = ?, 
+                created_at = ?, 
+                updated_at = NOW()
+            WHERE id = ?
+        ";
+
+        $stmt = $this->db->prepare($query);
+
+        if ($stmt) {
+            // Bind the parameters to the prepared statement
+            $stmt->bind_param(
+                "sssssssi", 
+                $this->name, 
+                $this->date, 
+                $this->logo, 
+                $this->completed_at, 
+                $this->creator_id, 
+                $this->active, 
+                $this->created_at, 
+                $this->id
+            );
+
+            // Execute the statement and check for success
+            if ($stmt->execute()) {
+                return $stmt->affected_rows > 0; // Return true if a row was updated
+            } else {
+                throw new Exception('Failed to execute statement: ' . $stmt->error);
+            }
         } else {
             throw new Exception('Failed to prepare statement: ' . $this->db->error);
         }

@@ -31,5 +31,8 @@
     <!-- QR Code Scanning -->
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
 
+    <!-- Moment js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
 </head>
 <body>
