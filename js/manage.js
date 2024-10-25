@@ -87,7 +87,7 @@ function renderTournaments(tournaments) {
                         <br>
                         <span class="tournament-info">${tournament.creator_name}</span>
                         <br>
-                        <span class="tournament-info date">${tournament.date}</span>
+                        <span class="tournament-info date">${moment(tournament.date).format('MM/DD/YYYY')}</span>
                         <br>
                         <span class="tournament-info">${tournament.games_count} Games</span>
                     </div>
