@@ -77,7 +77,6 @@ $(document).ready(function() {
                     const code = jsQR(imageData.data, imageData.width, imageData.height);
 
                     if (code && !qrProcessed) {
-                        console.log("Scanned QR code:", code.data);
                         qrProcessed = true;  // Set flag to prevent further processing
                         
                         // AJAX request
