@@ -315,6 +315,7 @@ include '../../includes/header.php';
 <div id="duplicate-player-banner" class="save-banner error">Player Already Added</div>
 <div id="player-added-banner" class="save-banner">Player Successfully Added</div>
 <div id="player-removed-banner" class="save-banner error">Player Removed From Tournament</div>
+<div id="player-reinstated-banner" class="save-banner">Player Reinstated</div>
 
 
 

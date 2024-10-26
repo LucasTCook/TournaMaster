@@ -119,6 +119,29 @@ $(document).ready(function() {
 
 });
 
+function reinstatePlayerInTournament(userId) {
+    const tournamentId = window.location.pathname.split('/').pop();
+    const formData = new FormData();
+    formData.append('userId', userId);
+    formData.append('tournamentId', tournamentId);
+
+    $.ajax({
+        url: '/scripts/reinstate_tournament_player.php',
+        method: 'POST',
+        dataType: 'json',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (response.success) {
+                // Reload players to reflect changes
+                loadTournamentPlayers();
+                showBanner('#player-reinstated-banner');
+            }
+        }
+    });
+}
+
 function deletePlayerFromTournament(userId) {
     const tournamentId = window.location.pathname.split('/').pop();
 
@@ -182,13 +205,17 @@ function loadTournamentPlayers() {
                     const playerCard = $(`
                         <div class="player-card ${!player.active ? 'inactive' : ''}" data-user-id="${player.id}">
                             <span class="player-name">${player.username}</span>
-                            ${!player.active ? '' : '<i class="fas fa-times-circle delete-icon"></i>'}
+                            ${!player.active ? '<i class="fas fa-plus add-icon"></i>' : '<i class="fas fa-times-circle delete-icon"></i>'}
                         </div>
                     `);
 
                     // Add click event for the delete icon
                     playerCard.find('.delete-icon').on('click', function() {
                         deletePlayerFromTournament(player.id);
+                    });
+
+                    playerCard.find('.add-icon').on('click', function() {
+                        reinstatePlayerInTournament(player.id);
                     });
 
                     $('#players-container').append(playerCard);

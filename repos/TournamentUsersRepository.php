@@ -56,5 +56,13 @@ class TournamentUsersRepository extends Model {
         $stmt->bind_param("ii", $tournamentId, $userId);
         return $stmt->execute();
     }
+
+    public function reinstatePlayer($userId, $tournamentId) {
+        $stmt = $this->db->prepare("UPDATE $this->table SET active = 1 WHERE user_id = ? AND tournament_id = ?");
+        $stmt->bind_param("ii", $userId, $tournamentId);
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
+    }
 }
 ?>
