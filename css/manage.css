@@ -473,6 +473,10 @@ tbody td:empty::before {
     }
 }
 
+#invalid-configuration-banner{
+    font-size: 10px;
+}
+
 @media (max-width: 768px) {
     .add-tournament-form {
         position: fixed;

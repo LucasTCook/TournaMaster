@@ -1,5 +1,8 @@
 <?php
 
+require_once '../models/Model.php';
+require_once '../models/TournamentGame.php';
+
 class TournamentGamesRepository extends Model {
 
     protected $table = 'tournament_games';
@@ -65,6 +68,12 @@ class TournamentGamesRepository extends Model {
         $stmt->bind_param("i", $gameId);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function updateStatus($gameId, $status) {
+        $tournamentGame = new TournamentGame($gameId);
+        $tournamentGame->setStatus($status);
+        $tournamentGame->update();
     }
     
 }

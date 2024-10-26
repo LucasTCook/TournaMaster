@@ -19,19 +19,6 @@ $(document).ready(function() {
         }
     });
 
-    $('#start-game-button').on('click', function() {
-        // Simulate a save process
-        let saveSuccess = true; // Change this based on actual save outcome
-
-        if (saveSuccess) {
-            $('#start-game-confirm').hide();
-            $('#tournament-games').show();
-            showBanner('#game-started-banner');
-        } else {
-            // showBanner('#save-error-banner');
-        }
-    });
-
     $('#configure-game-type').on('change', function() {
         if ($(this).val() === 'bracket') {
             $('#bracket-fields').removeClass('hidden');
@@ -461,7 +448,7 @@ function renderGameCard(game) {
                         </div>
                         <div class="manage-game-buttons">
                             <button class="edit-btn small-font auto-width edit-game-button" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="configureGame(this)">Edit Game</button>
-                            <button class="success-btn small-font auto-width" onclick="confirmStartGame()">START GAME</button>
+                            <button class="success-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="confirmStartGame(this)">START GAME</button>
                         </div>
                     </div>
                 </div>`;
@@ -514,7 +501,7 @@ function saveGameConfiguration(button) {
     const tournamentGameId = JSON.parse(button.getAttribute('data-game-id'));
     const gameName = $('#configure-game-name').val();
     const gameType = $('#configure-game-type').val();
-    console.log([gameName,gameType]);
+
     if (gameName === '' || gameType === '') {
         showBanner('#invalid-configuration-banner');
         return;
@@ -525,9 +512,11 @@ function saveGameConfiguration(button) {
         const teamsPerMatch = $('#configure-teams-per-match').val();
         const winnersPerMatch = $('#configure-winners-per-match').val();
 
-        if (sizeOfTeams <= 0 || teamsPerMatch <= 0 || winnersPerMatch <= 0) {
+        if (
+            !isValidConfiguration(sizeOfTeams, teamsPerMatch, winnersPerMatch)
+        ) {
             showBanner('#invalid-configuration-banner');
-            return;
+            return false;
         }
 
         formData.append('sizeOfTeams', sizeOfTeams);
@@ -557,6 +546,42 @@ function saveGameConfiguration(button) {
 
 
 };
+
+function isValidConfiguration(teamSize, teamsPerMatch, winnersPerMatch) {
+    let isValid = true;
+
+    if (teamSize <= 0) {
+        $('#invalid-configuration-banner').html("'teamSize' must be greater than 0.");
+        console.log("Invalid configuration: 'teamSize' must be greater than 0.");
+        isValid = false;
+    }
+
+    if (teamsPerMatch <= 1) {
+        $('#invalid-configuration-banner').html("'teamsPerMatch' must be greater than 1.");
+        console.log("Invalid configuration: 'teamsPerMatch' must be greater than 1.");
+        isValid = false;
+    }
+
+    if (winnersPerMatch <= 0) {
+        $('#invalid-configuration-banner').html("'winnersPerMatch' must be greater than 0.");
+        console.log("Invalid configuration: 'winnersPerMatch' must be greater than 0.");
+        isValid = false;
+    }
+
+    if (winnersPerMatch >= teamsPerMatch) {
+        $('#invalid-configuration-banner').html("'winnersPerMatch' must be less than 'teamsPerMatch'");
+        console.log("Invalid configuration: 'winnersPerMatch' must be less than 'teamsPerMatch'.");
+        isValid = false;
+    }
+
+    if (teamsPerMatch % winnersPerMatch !== 0) {
+        $('#invalid-configuration-banner').html("'teamsPerMatch' must be divisible by 'winnersPerMatch'");
+        console.log("Invalid configuration: 'teamsPerMatch' must be divisible by 'winnersPerMatch' to ensure consistent bracket advancement.");
+        isValid = false;
+    }
+
+    return isValid;
+}
 
 function resetConfigFields() {
     $('#configure-game-name').val('');
@@ -606,9 +631,78 @@ function deleteGame(button) {
     });
 }
 
-function confirmStartGame() {
+function confirmStartGame(button) {
+    const tournamentGame = JSON.parse(button.getAttribute('data-game'));
+    $('#confirm-start-game-name').html(tournamentGame.game_name);
+
+    $('#start-game-button').attr('data-game', JSON.stringify(tournamentGame));
     $('#start-game-confirm').show();
     $('#tournament-games').hide();
+}
+
+function startGame(button) {
+    const tournamentGame = JSON.parse(button.getAttribute('data-game'));
+    console.log(tournamentGame);
+
+    if (tournamentGame.type === 'bracket') {
+        const formData = new FormData();
+        formData.append('id', tournamentGame.id);
+        $.ajax({
+            url: '/scripts/generate_bracket.php',
+            method: 'POST',
+            dataType: 'json',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $.ajax({
+                    url: '/scripts/generate_points.php',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log(response)
+                    }
+                });
+            }
+        });
+    } else {
+        const formData = new FormData();
+        formData.append('id', tournamentGame.id);
+        $.ajax({
+            url: '/scripts/generate_points.php',
+            method: 'POST',
+            dataType: 'json',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log(response)
+            }
+        });
+    }
+
+    const formData = new FormData();
+    formData.append('id', tournamentGame.id);
+    formData.append('status', 1);
+    $.ajax({
+        url: '/scripts/update_tournament_game_status.php',
+        method: 'POST',
+        dataType: 'json',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (response.success) {
+                loadTournamentGames();
+                $('#start-game-confirm').hide();
+                $('#tournament-games').show();
+                showBanner('#game-started-banner');
+            }
+        }
+    });
 }
 
 function cancelStartGame() {

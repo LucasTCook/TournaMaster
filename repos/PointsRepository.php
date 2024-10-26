@@ -32,5 +32,14 @@ class PointsRepository extends Model {
         }
     }
 
+    public function getPointsByTournamentAndUser($tournamentGameId, $userId) {
+        $stmt = $this->db->prepare("SELECT * FROM $this->table WHERE tournament_game_id = ? AND user_id = ? AND points IS NULL AND tournament_points IS NULL");
+        $stmt->bind_param("ii", $tournamentGameId, $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc(); // Returns the record if found, or null if not
+    }
+    
+
     
 }
