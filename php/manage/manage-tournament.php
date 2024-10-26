@@ -66,6 +66,7 @@ include '../../includes/header.php';
         <i class="fas fa-add"></i>
         Add Game
     </button>
+    <div id="tournament-games-list"></div>
     <div class="game-card">
         <img src="\images\game-placeholder.jpg" alt="Game Image" class="game-image">
         <div class="game-info">
