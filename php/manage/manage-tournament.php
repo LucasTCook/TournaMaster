@@ -298,11 +298,7 @@ include '../../includes/header.php';
         Add Player
     </button>
     <span class="bold">Number of players: </span><span id="number-of-players"></span>
-    <div class="players-container">
-        <div class="player-card">
-            <span class="player-name">Alex Roe</span>
-        </div>
-    </div>
+    <div id="players-container" class="players-container"></div>
 </div>
 
 <div id="tournament-players-form" class="tournament-panel center">
@@ -318,6 +314,7 @@ include '../../includes/header.php';
 <div id="game-deleted-banner" class="save-banner error">Game Deleted</div>
 <div id="duplicate-player-banner" class="save-banner error">Player Already Added</div>
 <div id="player-added-banner" class="save-banner">Player Successfully Added</div>
+<div id="player-removed-banner" class="save-banner error">Player Removed From Tournament</div>
 
 
 
