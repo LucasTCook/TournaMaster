@@ -1,6 +1,7 @@
 
 $(document).ready(function() {
     loadTounamentInfo();
+    loadTournamentGames();
     $('#tournament-info').show();
 
     $('#number-of-players').html($('.player-card').length);
@@ -231,6 +232,7 @@ function addGameToTournament(game_slug) {
         }),
         success: function(response) {
             if (response.success) {
+                loadTournamentGames();
                 $('#tournament-games').show();
                 $('#tournament-game-form').hide();
             } else {
@@ -243,6 +245,113 @@ function addGameToTournament(game_slug) {
     });
 }
 
+function loadTournamentGames() {
+    const urlPath = window.location.pathname.split('/');
+    const tournamentId = urlPath[urlPath.length - 1];
+
+    $.ajax({
+        url: '/scripts/get_tournament_games.php',
+        method: 'GET',
+        dataType: 'json',
+        data: { tournamentId: tournamentId },
+        success: function(response) {
+            if (response.success) {
+                $('#tournament-games-list').empty();  // Clear previous games
+                response.games.forEach(game => renderGameCard(game));  // Render each game
+            } else {
+                console.error('Failed to load games:', response.error);
+            }
+        },
+        error: function() {
+            console.error('Error fetching tournament games');
+        }
+    });
+}
+
+function renderGameCard(game) {
+    let gameCardHtml = '';
+    const gameImage = game.game_image_url || '\\images\\game-placeholder.jpg';
+
+    if (game.status === 2) {  // Completed game
+        gameCardHtml = `
+            <div class="game-card">
+                <img src="${gameImage}" alt="Game Image" class="game-image">
+                <div class="game-info">
+                    <span class="game-name">${game.game_name}</span>
+                    <div class="winner-info">
+                        <span>${game.winner_name}</span>
+                        <i class="fas fa-trophy winner-trophy"></i>
+                    </div>
+                </div>
+            </div>`;
+    } else if (game.status === 1) {  // In-progress game
+        if (game.type === 'points') {
+            gameCardHtml = `
+                <div class="game-card">
+                    <img src="${gameImage}" alt="Game Image" class="game-image">
+                    <div class="game-info">
+                        <span class="game-name">${game.game_name}</span>
+                        <div class="winner-info">
+                            <span>In Progress</span>
+                            <i class="fas fa-spinner in-progress"></i>
+                        </div>
+                        <div class="manage-game-buttons">
+                            <button class="success-btn small-font auto-width" onclick="openAddPoints()">Add Points</button>
+                        </div>
+                    </div>
+                </div>`;
+        } else if (game.type === 'bracket') {
+            gameCardHtml = `
+                <div class="game-card">
+                    <img src="${gameImage}" alt="Game Image" class="game-image">
+                    <div class="game-info">
+                        <span class="game-name">${game.game_name}</span>
+                        <div class="winner-info">
+                            <span>In Progress</span>
+                            <i class="fas fa-spinner in-progress"></i>
+                        </div>
+                        <div class="manage-game-buttons">
+                            <button class="success-btn small-font auto-width" onclick="openAddWinners()">Add Winners</button>
+                        </div>
+                    </div>
+                </div>`;
+        }
+    } else if (game.status === 0) {  // Not started
+        if (game.type && (game.type !== 'bracket' || (game.team_size && game.teams_per_match && game.winners_per_match))) {
+            gameCardHtml = `
+                <div class="game-card">
+                    <img src="${gameImage}" alt="Game Image" class="game-image">
+                    <div class="game-info">
+                        <span class="game-name">${game.game_name}</span>
+                        <div class="winner-info">
+                            <span>Not Yet Started</span>
+                        </div>
+                        <div class="manage-game-buttons">
+                            <button class="edit-btn small-font auto-width edit-game-button" onclick="">Edit Game</button>
+                            <button class="success-btn small-font auto-width" onclick="confirmStartGame()">START GAME</button>
+                        </div>
+                    </div>
+                </div>`;
+        } else {
+            gameCardHtml = `
+                <div class="game-card">
+                    <img src="${gameImage}" alt="Game Image" class="game-image">
+                    <div class="game-info">
+                        <span class="game-name">${game.game_name}</span>
+                        <div class="winner-info">
+                            <span>Not Yet Configured</span>
+                        </div>
+                        <div class="manage-game-buttons">
+                            <button class="edit-btn small-font auto-width edit-game-button" onclick="">Edit Game</button>
+                        </div>
+                    </div>
+                </div>`;
+        }
+    }
+
+    // Append to the tournament-games-list container
+    $('#tournament-games-list').append(gameCardHtml);
+}
 
 function confirmStartGame() {
     $('#start-game-confirm').show();

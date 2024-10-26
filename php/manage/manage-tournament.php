@@ -67,67 +67,6 @@ include '../../includes/header.php';
         Add Game
     </button>
     <div id="tournament-games-list"></div>
-    <div class="game-card">
-        <img src="\images\game-placeholder.jpg" alt="Game Image" class="game-image">
-        <div class="game-info">
-            <span class="game-name">Super Mario Bros</span>
-            <div class="winner-info">
-                <span>John Doe</span>
-                <i class="fas fa-trophy winner-trophy"></i>
-            </div>
-        </div>
-    </div>
-    <div class="game-card">
-        <img src="\images\game-placeholder.jpg" alt="Game Image" class="game-image">
-        <div class="game-info">
-            <span class="game-name">Super Mario Bros: Oh No DK</span>
-            <div class="winner-info">
-                <span>In Progress</span>
-                <i class="fas fa-spinner in-progress"></i>
-            </div>
-            <div class="manage-game-buttons">
-                <button class="success-btn small-font auto-width" onclick="openAddPoints()">Add Points</button>
-            </div>
-        </div>
-    </div>
-    <div class="game-card">
-        <img src="\images\game-placeholder.jpg" alt="Game Image" class="game-image">
-        <div class="game-info">
-            <span class="game-name">Super Mario Bros 2</span>
-            <div class="winner-info">
-                <span>In Progress</span>
-                <i class="fas fa-spinner in-progress"></i>
-            </div>
-            <div class="manage-game-buttons">
-                <button class="success-btn small-font auto-width" onclick="openAddWinners()">Add Winners</button>
-            </div>
-        </div>
-    </div>
-    <div class="game-card">
-        <img src="\images\game-placeholder.jpg" alt="Game Image" class="game-image">
-        <div class="game-info">
-            <span class="game-name">Super Mario Bros 3</span>
-            <div class="winner-info">
-                <span>Not Yet Started</span>
-            </div>
-            <div class="manage-game-buttons">
-                <button class="edit-btn small-font auto-width edit-game-button" onclick="">Edit Game</button>
-                <button class="success-btn small-font auto-width" onclick="confirmStartGame()">START GAME</button>
-            </div>
-        </div>
-    </div>
-    <div class="game-card">
-        <img src="\images\game-placeholder.jpg" alt="Game Image" class="game-image">
-        <div class="game-info">
-            <span class="game-name">Super Mario Bros 4</span>
-            <div class="winner-info">
-                <span>Not Yet Configured</span>
-            </div>
-            <div class="manage-game-buttons">
-                <button class="edit-btn small-font auto-width edit-game-button" onclick="">Edit Game</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div id="configure-game" class="tournament-panel">
