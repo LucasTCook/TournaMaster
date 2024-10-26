@@ -208,7 +208,7 @@ label {
 }
 
 .save-banner.error {
-    background-color: var(--active-color); /* Error red */
+    background-color: var(--error); /* Error red */
 }
 
 .save-banner.show {
@@ -431,6 +431,16 @@ tbody td:empty::before {
     height: 60px;
     border-radius: 50%;
     object-fit: cover; /* Ensures the image covers the entire area without stretching */
+}
+
+.delete-cancel-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+    .edit-btn {
+        margin-top: 10px;
+    }
 }
 
 @media (max-width: 768px) {

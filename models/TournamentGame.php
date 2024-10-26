@@ -30,12 +30,28 @@ class TournamentGame extends Model
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
+    
         if ($result->num_rows > 0) {
-            return $result->fetch_assoc();
+            $data = $result->fetch_assoc();
+    
+            // Populate the object properties
+            $this->id = $data['id'];
+            $this->tournament_id = $data['tournament_id'];
+            $this->game_id = $data['game_id'];
+            $this->type = $data['type'];
+            $this->team_size = $data['team_size'];
+            $this->teams_per_match = $data['teams_per_match'];
+            $this->winners_per_match = $data['winners_per_match'];
+            $this->status = $data['status'];
+            $this->created_at = $data['created_at'];
+            $this->updated_at = $data['updated_at'];
+    
+            return $this; // Return the populated object
         } else {
             return null;
         }
     }
+    
 
     // ID
     public function getId() {
@@ -147,6 +163,23 @@ class TournamentGame extends Model
         
         // Return false if save operation failed
         return false;
+    }
+
+    public function update() {
+        if ($this->id) {
+            $stmt = $this->db->prepare("UPDATE $this->table SET tournament_id = ?, game_id = ?, type = ?, team_size = ?, teams_per_match = ?, winners_per_match = ?, status = ?, updated_at = NOW() WHERE id = ?");
+            $stmt->bind_param("iisiiiis", $this->tournament_id, $this->game_id, $this->type, $this->team_size, $this->teams_per_match, $this->winners_per_match, $this->status, $this->id);
+
+            // Execute and return success status
+            return $stmt->execute();
+        }
+        return false;
+    }
+
+    public function delete() {
+        $stmt = $this->db->prepare("DELETE FROM tournament_games WHERE id = ?");
+        $stmt->bind_param("i", $this->id);
+        return $stmt->execute();
     }
     
 }

@@ -103,4 +103,22 @@ class Game extends Model {
         }
         return false;
     }
+
+    public function update() {
+        // Check if the game exists before updating
+        if ($this->id) {
+            $stmt = $this->db->prepare("UPDATE $this->table SET slug = ?, name = ?, image_url = ?, release_year = ?, platform = ?, updated_at = NOW() WHERE id = ?");
+            $stmt->bind_param("sssssi", $this->slug, $this->name, $this->image_url, $this->release_year, $this->platform, $this->id);
+
+            // Execute and return success status
+            return $stmt->execute();
+        }
+        return false;
+    }
+
+    public function delete() {
+        $stmt = $this->db->prepare("DELETE FROM games WHERE id = ?");
+        $stmt->bind_param("i", $this->id);
+        return $stmt->execute();
+    }
 }
