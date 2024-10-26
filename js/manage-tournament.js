@@ -6,23 +6,6 @@ $(document).ready(function() {
 
     $('#number-of-players').html($('.player-card').length);
 
-    let scanner = new Instascan.Scanner({ video: document.getElementById('QR-preview') });
-    scanner.addListener('scan', function (content) {
-        alert('QR Code Scanned: ' + content);
-    });
-
-    $('#add-player').on('click', function() {
-        Instascan.Camera.getCameras().then(function (cameras) {
-            if (cameras.length > 0) {
-                scanner.start(cameras[0]);
-            } else {
-                alert('No cameras found.');
-            }
-        }).catch(function (e) {
-            console.error(e);
-        });
-    });
-
     $('#add-game-confirm').on('click', function() {
         // Simulate a save process
         let saveSuccess = true; // Change this based on actual save outcome
@@ -69,6 +52,71 @@ $(document).ready(function() {
         $('#tournament-games').show();
         $('#configure-game').hide();
     });
+
+    const video = document.getElementById("qr-video");
+
+    $('#add-player').on('click', async function() {
+        $('#tournament-players').hide();
+        $('#tournament-players-form').show();
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        video.srcObject = stream;
+
+        let qrProcessed = false;  // Flag to prevent multiple AJAX calls
+
+        video.addEventListener("play", () => {
+            const captureFrame = () => {
+                if (video.readyState === video.HAVE_ENOUGH_DATA && !qrProcessed) {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    const context = canvas.getContext("2d");
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    // Process the frame with jsQR
+                    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                    const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                    if (code && !qrProcessed) {
+                        qrProcessed = true;  // Set flag to prevent further processing
+                        
+                        // AJAX request
+                        const formData = new FormData();
+                        formData.append('id', code.data);
+
+                        const urlPath = window.location.pathname.split('/');
+                        const tournamentId = urlPath[urlPath.length - 1];
+                        formData.append('tournamentId', tournamentId);
+
+                        $.ajax({
+                            url: '/scripts/add_player_to_tournament.php',
+                            method: 'POST',
+                            dataType: 'json',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function(response) {
+                                stream.getTracks().forEach(track => track.stop()); // Stop the video stream
+                                $('#tournament-players').show();
+                                $('#tournament-players-form').hide();
+                                
+                                // Check for success or error in the response to show the appropriate banner
+                                if (response.success) {
+                                    showBanner('#player-added-banner');
+                                } else if (response.error) {
+                                    showBanner('#duplicate-player-banner');
+                                }
+                            }
+                        });
+                    }
+                }
+                if (!qrProcessed) {
+                    requestAnimationFrame(captureFrame);  // Continue only if not yet processed
+                }
+            };
+            captureFrame();
+        });
+    });
+
 });
 
 function loadTounamentInfo() {

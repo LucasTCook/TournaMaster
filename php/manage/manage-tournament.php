@@ -293,7 +293,7 @@ include '../../includes/header.php';
 </div>
 
 <div id="tournament-players" class="tournament-panel">
-    <button id="add-player" class="success-btn add-game-button" onclick="scanQRCode()">
+    <button id="add-player" class="success-btn add-game-button">
         <i class="fas fa-qrcode"></i>
         Add Player
     </button>
@@ -306,7 +306,7 @@ include '../../includes/header.php';
 </div>
 
 <div id="tournament-players-form" class="tournament-panel center">
-    <video id="QR-preview"></video>
+    <video id="qr-video" width="300" height="300" autoplay></video>
 </div>
 
 <div id="save-banner" class="save-banner">Tournament Info Saved</div>
@@ -316,6 +316,8 @@ include '../../includes/header.php';
 <div id="game-configured-banner" class="save-banner">Game Successfully Configured</div>
 <div id="invalid-configuration-banner" class="save-banner error">Configuration Invalid</div>
 <div id="game-deleted-banner" class="save-banner error">Game Deleted</div>
+<div id="duplicate-player-banner" class="save-banner error">Player Already Added</div>
+<div id="player-added-banner" class="save-banner">Player Successfully Added</div>
 
 
 
