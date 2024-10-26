@@ -150,18 +150,17 @@ function searchGame(query) {
     
                 // Loop through each game result and create the card
                 filteredResults.forEach(function(game) {
-                    console.log(game);
                     let gameCard = `
                         <div class="add-game-info">
                             <div class="add-game-header">
-                                <img class="add-game-image" src="${game.image || '/images/game-placeholder.jpg'}" alt="Game Image">
+                                <img id="add-game-image-${game.slug}" class="add-game-image" src="${game.image || '/images/game-placeholder.jpg'}" alt="Game Image">
                                 <button class="add-game-form-btn" onclick="addGameToTournament('${game.slug}')">
                                     <i class="fas fa-add"></i> Add Game
                                 </button>
                             </div>
-                            <p><strong>Name:</strong> <span>${game.name}</span></p>
-                            <p><strong>Release Year:</strong> <span>${game.year}</span></p>
-                            <p><strong>Platforms:</strong> <span>${game.platforms.join(', ')}</span></p>
+                            <p><strong>Name:</strong> <span id="add-game-name-${game.slug}">${game.name}</span></p>
+                            <p><strong>Release Year:</strong> <span id="add-game-year-${game.slug}">${game.year}</span></p>
+                            <p><strong>Platforms:</strong> <span id="add-game-platforms-${game.slug}">${game.platforms.join(', ')}</span></p>
                         </div>
                     `;
     
@@ -213,10 +212,37 @@ function addGame() {
     $('#tournament-game-form').show();
 }
 
-function addGameToTournament() {
-    $('#tournament-games').show();
-    $('#tournament-game-form').hide();
+function addGameToTournament(game_slug) {
+    const urlPath = window.location.pathname.split('/');
+    const tournamentId = urlPath[urlPath.length - 1];
+
+    $.ajax({
+        url: '/scripts/add_game_to_tournament.php',
+        method: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',  // Set content type to JSON
+        data: JSON.stringify({
+            gameSlug: game_slug,
+            gameName: $(`#add-game-name-${game_slug}`).html(),
+            gameImage: $(`#add-game-image-${game_slug}`).attr('src'),
+            gameYear: $(`#add-game-year-${game_slug}`).html(),
+            gamePlatforms: $(`#add-game-platforms-${game_slug}`).html(),
+            tournamentId: tournamentId
+        }),
+        success: function(response) {
+            if (response.success) {
+                $('#tournament-games').show();
+                $('#tournament-game-form').hide();
+            } else {
+                console.error(response.error);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', error);
+        }
+    });
 }
+
 
 function confirmStartGame() {
     $('#start-game-confirm').show();
