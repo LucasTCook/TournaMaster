@@ -73,18 +73,12 @@ include '../../includes/header.php';
     <div class="game-card">
         <div class="configure-game-container">
             <div class="form-group">
-                <label for="game-name">Game Name</label>
-                <input type="text" id="game-name" name="game-name" placeholder="Enter game name" required>
+                <label for="configure-game-name">Game Name</label>
+                <input type="text" id="configure-game-name" name="configure-game-name" placeholder="Enter game name" required>
             </div>
-
             <div class="form-group">
-                <label for="game-description">Game Description</label>
-                <textarea id="game-description" name="game-description" placeholder="Enter game description"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="game-type">Game Type</label>
-                <select id="game-type" name="game-type">
+                <label for="configure-game-type">Game Type</label>
+                <select id="configure-game-type" name="configure-game-type">
                     <option value=""></option>
                     <option value="bracket">Bracket</option>
                     <option value="points">Points</option>
@@ -94,22 +88,27 @@ include '../../includes/header.php';
             <!-- Bracket specific fields -->
             <div id="bracket-fields" class="hidden">
                 <div class="form-group">
-                    <label for="team-size">Size of Teams</label>
-                    <input type="number" id="team-size" name="team-size" placeholder="Enter team size">
+                    <label for="configure-team-size">Size of Teams</label>
+                    <input type="number" id="configure-team-size" name="configure-team-size" placeholder="Enter team size">
                 </div>
 
                 <div class="form-group">
-                    <label for="teams-per-match">Teams per Match</label>
-                    <input type="number" id="teams-per-match" name="teams-per-match" placeholder="Enter number of teams per match">
+                    <label for="configure-teams-per-match">Teams per Match</label>
+                    <input type="number" id="configure-teams-per-match" name="configure-teams-per-match" placeholder="Enter number of teams per match">
                 </div>
 
                 <div class="form-group">
-                    <label for="winners-per-match">Number of Winners per Match</label>
-                    <input type="number" id="winners-per-match" name="winners-per-match" placeholder="Enter number of winners per match">
+                    <label for="configure-winners-per-match">Number of Winners per Match</label>
+                    <input type="number" id="configure-winners-per-match" name="configure-winners-per-match" placeholder="Enter number of winners per match">
                 </div>
             </div>
 
-            <button class="success-btn save-configuration" onclick="saveGameConfiguration()">Save Configuration</button>
+            <button id="submit-configure-game" class="success-btn save-configuration" onclick="saveGameConfiguration(this)">Save Configuration</button>
+            <div class="delete-cancel-container">
+                <button id="cancel-configure-game" class="edit-btn">Cancel</button>
+                <button id="delete-game" class="cancel-btn" onclick="deleteGame(this)">DELETE</button>
+            </div>
+
         </div>
     </div>
 </div>
@@ -315,6 +314,8 @@ include '../../includes/header.php';
 <div id="game-added-banner" class="save-banner">Game Added</div>
 <div id="game-started-banner" class="save-banner">Game Started!</div>
 <div id="game-configured-banner" class="save-banner">Game Successfully Configured</div>
+<div id="invalid-configuration-banner" class="save-banner error">Configuration Invalid</div>
+<div id="game-deleted-banner" class="save-banner error">Game Deleted</div>
 
 
 

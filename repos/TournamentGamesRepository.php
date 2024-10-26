@@ -1,8 +1,11 @@
 <?php
 
 class TournamentGamesRepository extends Model {
+
+    protected $table = 'tournament_games';
+
     public function countByTournamentId($tournamentId) {
-        $stmt = $this->db->prepare("SELECT COUNT(*) AS games_count FROM tournament_games WHERE tournament_id = ?");
+        $stmt = $this->db->prepare("SELECT COUNT(*) AS games_count FROM $this->table WHERE tournament_id = ?");
         
         if (!$stmt) {
             throw new Exception('Prepare failed: ' . $this->db->error);
@@ -30,7 +33,7 @@ class TournamentGamesRepository extends Model {
                 g.release_year AS game_release_year, 
                 g.platform AS game_platform 
             FROM 
-                tournament_games tg
+                $this->table as tg
             JOIN 
                 games g ON tg.game_id = g.id
             WHERE 
@@ -56,7 +59,12 @@ class TournamentGamesRepository extends Model {
         $stmt->close();
         return $games;
     }
-    
-    
+
+    public function getGamesByGameId($gameId) {
+        $stmt = $this->db->prepare("SELECT * FROM $this->table WHERE game_id = ?");
+        $stmt->bind_param("i", $gameId);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
     
 }

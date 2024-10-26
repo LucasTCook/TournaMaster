@@ -49,23 +49,12 @@ $(document).ready(function() {
         }
     });
 
-    $('#game-type').on('change', function() {
+    $('#configure-game-type').on('change', function() {
         if ($(this).val() === 'bracket') {
             $('#bracket-fields').removeClass('hidden');
         } else {
             $('#bracket-fields').addClass('hidden');
         }
-    });
-
-    $('.edit-game-button').on('click', function() {
-        $('#tournament-games').hide();
-        $('#configure-game').show();
-    });
-
-    $('.save-configuration').on('click', function() {
-        showBanner('#game-configured-banner');
-        $('#configure-game').hide();
-        $('#tournament-games').show();
     });
 
     $('#search-game').on('keyup', function() {
@@ -74,6 +63,11 @@ $(document).ready(function() {
         if (query.length > 2) {  // Only start searching if there are 3+ characters
             searchGame(query);
         }
+    });
+
+    $('#cancel-configure-game').on('click', function(e){
+        $('#tournament-games').show();
+        $('#configure-game').hide();
     });
 });
 
@@ -248,7 +242,7 @@ function addGameToTournament(game_slug) {
 function loadTournamentGames() {
     const urlPath = window.location.pathname.split('/');
     const tournamentId = urlPath[urlPath.length - 1];
-
+    $('#tournament-games-list').empty();
     $.ajax({
         url: '/scripts/get_tournament_games.php',
         method: 'GET',
@@ -256,7 +250,6 @@ function loadTournamentGames() {
         data: { tournamentId: tournamentId },
         success: function(response) {
             if (response.success) {
-                $('#tournament-games-list').empty();  // Clear previous games
                 response.games.forEach(game => renderGameCard(game));  // Render each game
             } else {
                 console.error('Failed to load games:', response.error);
@@ -327,7 +320,7 @@ function renderGameCard(game) {
                             <span>Not Yet Started</span>
                         </div>
                         <div class="manage-game-buttons">
-                            <button class="edit-btn small-font auto-width edit-game-button" onclick="">Edit Game</button>
+                            <button class="edit-btn small-font auto-width edit-game-button" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="configureGame(this)">Edit Game</button>
                             <button class="success-btn small-font auto-width" onclick="confirmStartGame()">START GAME</button>
                         </div>
                     </div>
@@ -342,7 +335,7 @@ function renderGameCard(game) {
                             <span>Not Yet Configured</span>
                         </div>
                         <div class="manage-game-buttons">
-                            <button class="edit-btn small-font auto-width edit-game-button" onclick="">Edit Game</button>
+                            <button class="edit-btn small-font auto-width edit-game-button" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="configureGame(this)">Edit Game</button>
                         </div>
                     </div>
                 </div>`;
@@ -351,6 +344,126 @@ function renderGameCard(game) {
 
     // Append to the tournament-games-list container
     $('#tournament-games-list').append(gameCardHtml);
+}
+
+function configureGame(button){
+    const tournamentGame = JSON.parse(button.getAttribute('data-game'));
+    const teamsSize = tournamentGame.team_size === 0 ? null : tournamentGame.team_size;
+    const teamsPerMatch = tournamentGame.teams_per_match === 0 ? null : tournamentGame.teams_per_match;
+    const winnersPerMatch = tournamentGame.winners_per_match === 0 ? null : tournamentGame.winners_per_match;
+
+    if (tournamentGame.type === 'bracket') {
+        $('#bracket-fields').removeClass('hidden');
+    }
+
+    $('#configure-game-name').val(tournamentGame.game_name);
+    $('#configure-game-type').val(tournamentGame.type);
+    $('#configure-winners-per-match').val(winnersPerMatch);
+    $('#configure-teams-per-match').val(teamsPerMatch)
+    $('#configure-team-size').val(teamsSize)
+
+    $('#submit-configure-game').attr({'data-game-id': tournamentGame.id});
+    $('#delete-game').attr({'data-game-id': tournamentGame.id});
+
+    $('#tournament-games').hide();
+    $('#configure-game').show();
+};
+
+function saveGameConfiguration(button) {
+    const formData = new FormData();
+    const tournamentGameId = JSON.parse(button.getAttribute('data-game-id'));
+    const gameName = $('#configure-game-name').val();
+    const gameType = $('#configure-game-type').val();
+    console.log([gameName,gameType]);
+    if (gameName === '' || gameType === '') {
+        showBanner('#invalid-configuration-banner');
+        return;
+    }
+
+    if (gameType === 'bracket') {
+        const sizeOfTeams = $('#configure-team-size').val();
+        const teamsPerMatch = $('#configure-teams-per-match').val();
+        const winnersPerMatch = $('#configure-winners-per-match').val();
+
+        if (sizeOfTeams <= 0 || teamsPerMatch <= 0 || winnersPerMatch <= 0) {
+            showBanner('#invalid-configuration-banner');
+            return;
+        }
+
+        formData.append('sizeOfTeams', sizeOfTeams);
+        formData.append('teamsPerMatch', teamsPerMatch);
+        formData.append('winnersPerMatch', winnersPerMatch);
+    }
+
+    formData.append('id', tournamentGameId);
+    formData.append('gameName', gameName);
+    formData.append('gameType', gameType);
+
+    $.ajax({
+        url: '/scripts/update_tournament_game.php',
+        method: 'POST',
+        dataType: 'json',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            showBanner('#game-configured-banner');
+            loadTournamentGames();
+            resetConfigFields();
+            $('#configure-game').hide();
+            $('#tournament-games').show();
+        }
+    });
+
+
+};
+
+function resetConfigFields() {
+    $('#configure-game-name').val('');
+    $('#configure-game-type').val('');
+    $('#configure-team-size').val('');
+    $('#configure-teams-per-match').val('');
+    $('#configure-winners-per-match').val('');
+    $('#bracket-fields').addClass('hidden');
+}
+
+function showBanner(bannerId) {
+    // Hide any currently visible banners
+    $('.notification-banner').hide();
+
+    // Show the specified banner and animate it
+    $(bannerId)
+        .css({ opacity: 0, visibility: 'visible' })
+        .show()
+        .animate({ opacity: 1 }, 300);
+
+    // Automatically hide the banner after a delay
+    setTimeout(function () {
+        $(bannerId).animate({ opacity: 0 }, 300, function () {
+            $(this).css('visibility', 'hidden').hide();
+        });
+    }, 3000); // Hide after 3 seconds
+}
+
+function deleteGame(button) {
+    const tournamentGameId = JSON.parse(button.getAttribute('data-game-id'));
+    const formData = new FormData();
+    formData.append('id', tournamentGameId);
+    $.ajax({
+        url: '/scripts/delete_tournament_game.php',
+        method: 'POST',
+        dataType: 'json',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            showBanner('#game-deleted-banner');
+            loadTournamentGames();
+            resetConfigFields();
+            $('#configure-game').hide();
+            $('#tournament-games').show();
+        }
+    });
 }
 
 function confirmStartGame() {
