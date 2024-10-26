@@ -202,10 +202,11 @@ include '../../includes/header.php';
             <span>< Previous</span>
         </div>
         <div class="bracket-button">
-            <span>Next ></Nex></span>
+            <span>Next ></span>
         </div>
     </div>
-    <div id="bracket-page-0" class="bracket-page">
+    <div id="add-winners-container"></div>
+    <!-- <div id="bracket-page-0" class="bracket-page">
         <div class="bracket-group" onclick="openBracketGroup(0)">
             <div class="bracket-card with-line">
                 <div class="double-player-container">
@@ -273,7 +274,7 @@ include '../../includes/header.php';
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
 <div id="add-winners-bracket-group" class="tournament-panel">
