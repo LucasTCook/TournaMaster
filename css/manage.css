@@ -244,7 +244,23 @@ label {
     box-shadow: 0 4px 8px var(--box-shadow);
     margin-bottom: 10px;
     font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ccc;
 }
+
+.delete-icon {
+    color: red;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.player-card.inactive .player-name {
+    color: grey;
+    text-decoration: line-through;
+}
+
 
 /* Player Name Styling */
 .player-name {

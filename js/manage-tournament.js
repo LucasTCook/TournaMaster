@@ -2,8 +2,8 @@
 $(document).ready(function() {
     loadTounamentInfo();
     loadTournamentGames();
+    loadTournamentPlayers();
     $('#tournament-info').show();
-
     $('#number-of-players').html($('.player-card').length);
 
     $('#add-game-confirm').on('click', function() {
@@ -98,7 +98,7 @@ $(document).ready(function() {
                                 stream.getTracks().forEach(track => track.stop()); // Stop the video stream
                                 $('#tournament-players').show();
                                 $('#tournament-players-form').hide();
-                                
+                                loadTournamentPlayers();
                                 // Check for success or error in the response to show the appropriate banner
                                 if (response.success) {
                                     showBanner('#player-added-banner');
@@ -119,6 +119,31 @@ $(document).ready(function() {
 
 });
 
+function deletePlayerFromTournament(userId) {
+    const tournamentId = window.location.pathname.split('/').pop();
+
+    const formData = new FormData();
+    formData.append('userId', userId);
+    formData.append('tournamentId', tournamentId);
+
+    $.ajax({
+        url: '/scripts/delete_tournament_player.php',
+        method: 'POST',
+        dataType: 'json',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (response.success) {
+                // Reload players to reflect changes
+                loadTournamentPlayers();
+                showBanner('#player-removed-banner');
+            }
+        }
+    });
+}
+
+
 function loadTounamentInfo() {
     const urlPath = window.location.pathname.split('/');
     const tournamentId = urlPath[urlPath.length - 1];
@@ -135,6 +160,46 @@ function loadTounamentInfo() {
             if (response.data.logo !== ''){
                 $('#info-tournament-logo').attr('src', '/images/uploads/tournament_logos/'+response.data.logo)
             }
+        }
+    });
+}
+
+function loadTournamentPlayers() {
+    const urlPath = window.location.pathname.split('/');
+    const tournamentId = urlPath[urlPath.length - 1];
+
+    $.ajax({
+        url: '/scripts/get_tournament_players.php',
+        method: 'POST',
+        dataType: 'json',
+        data: { tournamentId: tournamentId },
+        success: function(response) {
+            $('#players-container').empty();  // Clear existing players
+            if (response.success) {
+
+                // Iterate over each player and create a player card
+                response.players.forEach(player => {
+                    const playerCard = $(`
+                        <div class="player-card ${!player.active ? 'inactive' : ''}" data-user-id="${player.id}">
+                            <span class="player-name">${player.username}</span>
+                            ${!player.active ? '' : '<i class="fas fa-times-circle delete-icon"></i>'}
+                        </div>
+                    `);
+
+                    // Add click event for the delete icon
+                    playerCard.find('.delete-icon').on('click', function() {
+                        deletePlayerFromTournament(player.id);
+                    });
+
+                    $('#players-container').append(playerCard);
+                });
+                $('#number-of-players').html($('.player-card').length);
+            } else {
+                $('#number-of-players').html(0);
+            }
+        },
+        error: function() {
+            console.log('Error fetching players');
         }
     });
 }

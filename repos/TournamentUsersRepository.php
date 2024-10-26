@@ -32,5 +32,29 @@ class TournamentUsersRepository extends Model {
         $tournamentUser->setActive(1); // Set active status to true by default
         return $tournamentUser->save();
     }
+
+    public function getPlayersByTournamentId($tournamentId) {
+        $stmt = $this->db->prepare(
+            "SELECT u.username, u.id, tu.active
+             FROM tournament_users tu
+             JOIN users u ON tu.user_id = u.id
+             WHERE tu.tournament_id = ?"
+        );
+        $stmt->bind_param("i", $tournamentId);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function setUserInactive($tournamentId, $userId) {
+        $stmt = $this->db->prepare("UPDATE $this->table SET active = 0 WHERE tournament_id = ? AND user_id = ?");
+        $stmt->bind_param("ii", $tournamentId, $userId);
+        return $stmt->execute();
+    }
+    
+    public function deleteUserFromTournament($tournamentId, $userId) {
+        $stmt = $this->db->prepare("DELETE FROM $this->table WHERE tournament_id = ? AND user_id = ?");
+        $stmt->bind_param("ii", $tournamentId, $userId);
+        return $stmt->execute();
+    }
 }
 ?>
