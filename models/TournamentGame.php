@@ -12,6 +12,7 @@ class TournamentGame extends Model
     protected $team_size;
     protected $teams_per_match;
     protected $winners_per_match;
+    protected $status;
     public $created_at;
     public $updated_at;
 
@@ -97,6 +98,15 @@ class TournamentGame extends Model
 
     public function setWinnersPerMatch($winners_per_match) {
         $this->winners_per_match = $winners_per_match;
+    }
+
+    // Status
+    public function getStatus() {
+        return $this->status;
+    }
+
+    public function setStatus($status) {
+        $this->status = $status;
     }
 
     // Created At
