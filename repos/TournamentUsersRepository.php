@@ -64,5 +64,27 @@ class TournamentUsersRepository extends Model {
         $stmt->close();
         return $success;
     }
+
+    public function getActivePlayersByTournamentId($tournamentId) {
+        $stmt = $this->db->prepare("
+            SELECT u.id, u.username
+            FROM $this->table tu
+            JOIN users u ON tu.user_id = u.id
+            WHERE tu.tournament_id = ? AND tu.active = 1
+        ");
+        $stmt->bind_param("i", $tournamentId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        // Fetch all results as an associative array
+        $activePlayers = [];
+        while ($row = $result->fetch_assoc()) {
+            $activePlayers[] = $row;
+        }
+        
+        $stmt->close();
+        return $activePlayers;
+    }
+    
 }
 ?>

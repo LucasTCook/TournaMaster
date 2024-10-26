@@ -116,14 +116,16 @@ include '../../includes/header.php';
 <div id="start-game-confirm" class="tournament-panel">
     <div class="game-card">
         <div class="game-info">
-            <span class="bold">Super Mario Bros 3</span>
+            <span id="confirm-start-game-name" class="bold"></span>
             <span class="">Are you sure you want to start this game?
                 <br>
-                This will assemble a bracket (if applicable) with all the active players in your tournament.
+                <i>
+                    This cannot be undone.
+                </i>
             </span>
             <div class="manage-game-buttons margin-top">
                 <button class="cancel-btn small-font auto-width auto-margin" onclick="cancelStartGame()">Cancel</button>
-                <button id="start-game-button" class="success-btn small-font auto-width auto-margin" onclick="startGame()">START GAME</button>
+                <button id="start-game-button" class="success-btn small-font auto-width auto-margin" onclick="startGame(this)">START GAME</button>
             </div>
         </div>
     </div>
