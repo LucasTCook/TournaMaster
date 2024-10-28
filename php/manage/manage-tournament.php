@@ -114,7 +114,7 @@ include '../../includes/header.php';
 </div>
 
 <div id="start-game-confirm" class="tournament-panel">
-    <div class="game-card">
+    <div class="confirm-start">
         <div class="game-info">
             <span id="confirm-start-game-name" class="bold"></span>
             <span class="">Are you sure you want to start this game?
@@ -206,6 +206,8 @@ include '../../includes/header.php';
         </div>
     </div>
     <div id="add-winners-container"></div>
+    <input type="hidden" id="tournamentGameInfo">
+    <input type="hidden" id="round-number">
     <!-- <div id="bracket-page-0" class="bracket-page">
         <div class="bracket-group" onclick="openBracketGroup(0)">
             <div class="bracket-card with-line">
@@ -278,7 +280,17 @@ include '../../includes/header.php';
 </div>
 
 <div id="add-winners-bracket-group" class="tournament-panel">
-    <div class="bracket-group-container">
+    <div class="bracket-group-buttons">
+        <div id="bracket-group-back-button" class="error-btn">< Back</div>
+    </div>
+    <div id="add-winners-bracket-group">
+        <div class="bracket-group-container" id="bracket-group-container">
+            <!-- Bracket cards will be dynamically inserted here -->
+        </div>
+        <button id="confirm-winner" class="success-btn" onclick="confirmWinner()">Confirm Winner</button>
+    </div>
+
+    <!-- <div class="bracket-group-container">
         <div class="bracket-card" onclick="selectWinner(this)">
             <div class="double-player-container">
                 <span class="player-name-double">Francisco Juarez-Martinez</span>
@@ -292,7 +304,7 @@ include '../../includes/header.php';
             </div>
         </div>
         <button id="confirm-winner" class="success-btn" onclick="confirmWinner()">Confirm Winner</buttonid>
-    </div>
+    </div> -->
 </div>
 
 <div id="tournament-players" class="tournament-panel">

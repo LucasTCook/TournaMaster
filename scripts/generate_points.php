@@ -8,7 +8,7 @@ require '../repos/TournamentUsersRepository.php';
 header('Content-Type: application/json');
 
 // Get the tournament ID from the POST request
-$tournamentGameId = $_POST['id'] ?? null;
+$tournamentGameId = $_POST['tournament_game_id'] ?? null;
 
 if (!$tournamentGameId) {
     echo json_encode(['error' => 'Invalid request: tournament ID missing']);
