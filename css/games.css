@@ -66,6 +66,19 @@
     margin-bottom: 15px;
 }
 
+.confirm-start {
+    display: flex;
+    align-items: center;
+    background-color: var(--white); /* Use white background for the card */
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px var(--box-shadow);
+    transition: box-shadow 0.3s ease;
+    margin: auto;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
 .game-card:hover {
     box-shadow: 0 8px 16px var(--box-shadow);
 }

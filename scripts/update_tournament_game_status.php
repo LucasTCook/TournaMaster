@@ -5,7 +5,7 @@ require '../repos/TournamentGamesRepository.php';
 header('Content-Type: application/json');
 
 // Get the tournament ID from the POST request
-$tournamentGameId = $_POST['id'] ?? null;
+$tournamentGameId = $_POST['tournament_game_id'] ?? null;
 $tournamentGameStatus = $_POST['status'] ?? null;
 
 if (!$tournamentGameId) {

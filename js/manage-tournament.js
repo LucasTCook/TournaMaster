@@ -104,6 +104,10 @@ $(document).ready(function() {
         });
     });
 
+    $("#bracket-group-back-button").on('click', function(e){
+        $('#add-winners').show();
+        $('#add-winners-bracket-group').hide();
+    });
 });
 
 function reinstatePlayerInTournament(userId) {
@@ -430,6 +434,11 @@ function renderGameCard(game) {
                             <span>In Progress</span>
                             <i class="fas fa-spinner in-progress"></i>
                         </div>
+                        <div class="tournament-info-display-card">
+                            <span><b>Players per team:</b> ${game.team_size}</span>
+                            <span><b>Teams per match:</b> ${game.teams_per_match}</span>
+                            <span><b>Winners per match:</b> ${game.winners_per_match}</span>
+                        </div>
                         <div class="manage-game-buttons">
                             <button class="success-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="openBracket(this)">Add Winners</button>
                         </div>
@@ -644,69 +653,88 @@ function startGame(button) {
     const tournamentGame = JSON.parse(button.getAttribute('data-game'));
     console.log(tournamentGame);
 
-    if (tournamentGame.type === 'bracket') {
-        const formData = new FormData();
-        formData.append('id', tournamentGame.id);
-        $.ajax({
-            url: '/scripts/generate_bracket.php',
-            method: 'POST',
-            dataType: 'json',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
+    $.ajax({
+        url: '/scripts/get_tournament_active_players.php',
+        method: 'GET',
+        dataType: 'json',
+        data: { id: tournamentGame.tournament_id },
+        success: function(response) {
+            console.log(response.activePlayers.length / tournamentGame.team_size);
+            console.log((tournamentGame.teams_per_match/tournamentGame.winners_per_match) * tournamentGame.teams_per_match);
+            if((tournamentGame.teams_per_match/tournamentGame.winners_per_match) * tournamentGame.teams_per_match > response.activePlayers.length){
+                console.log("Not enough Players");
+                $('#invalid-configuration-banner').html("Not enough players for this configuration");
+                showBanner('#invalid-configuration-banner');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('tournament_id', tournamentGame.tournament_id);
+            formData.append('tournament_game_id', tournamentGame.id);
+            formData.append('players_per_team', tournamentGame.team_size);
+            formData.append('status', 1);
+
+            if (tournamentGame.type === 'bracket') {
                 $.ajax({
-                    url: '/scripts/generate_points.php',
+                    url: '/scripts/generate_teams.php',
                     method: 'POST',
                     dataType: 'json',
                     data: formData,
                     processData: false,
                     contentType: false,
                     success: function(response) {
-                        console.log(response)
+                        $.ajax({
+                            url: '/scripts/generate_bracket.php',
+                            method: 'POST',
+                            dataType: 'json',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function(response) {
+                                // console.log(response);
+                            }
+                        });
                     }
                 });
             }
-        });
-    } else {
-        const formData = new FormData();
-        formData.append('id', tournamentGame.id);
-        $.ajax({
-            url: '/scripts/generate_points.php',
-            method: 'POST',
-            dataType: 'json',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                console.log(response)
-            }
-        });
-    }
 
-    const formData = new FormData();
-    formData.append('id', tournamentGame.id);
-    formData.append('status', 1);
-    $.ajax({
-        url: '/scripts/update_tournament_game_status.php',
-        method: 'POST',
-        dataType: 'json',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            if (response.success) {
-                loadTournamentGames();
-                $('#start-game-confirm').hide();
-                $('#tournament-games').show();
-                showBanner('#game-started-banner');
-            }
+            $.ajax({
+                url: '/scripts/generate_points.php',
+                method: 'POST',
+                dataType: 'json',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    $.ajax({
+                        url: '/scripts/update_tournament_game_status.php',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            if (response.success) {
+                                loadTournamentGames();
+                                $('#start-game-confirm').hide();
+                                $('#tournament-games').show();
+                                showBanner('#game-started-banner');
+                            }
+                        }
+                    });
+                }
+            });
+        },
+        error: function() {
+            console.error("Failed to fetch bracket data.");
         }
     });
+
 }
 
 function openBracket(button) {
     const tournamentGame = JSON.parse(button.getAttribute('data-game'));
+    $('#tournamentGameInfo').val(button.getAttribute('data-game'));
     console.log(tournamentGame);
 
     $.ajax({
@@ -727,58 +755,83 @@ function openBracket(button) {
     });
 }
 
+
 function renderBracket(bracketData) {
     console.log(bracketData);
+
     const bracketContainer = $('#add-winners-container');
     bracketContainer.empty();
 
-    // Iterate over each round
-    Object.keys(bracketData.rounds).forEach(roundIndex => {
-        const round = bracketData.rounds[roundIndex];
-        console.log(round);
+    // Step 1: Group bracket data by round and match number
+    const rounds = {};
+    bracketData.data.forEach(entry => {
+        // Create round if it doesn't exist
+        if (!rounds[entry.round]) {
+            rounds[entry.round] = {};
+        }
+
+        // Create match if it doesn't exist
+        if (!rounds[entry.round][entry.match_number]) {
+            rounds[entry.round][entry.match_number] = [];
+        }
+
+        // Add team entry to the respective match in the round
+        rounds[entry.round][entry.match_number].push(entry);
+    });
+
+    // Step 2: Render each round and match
+    Object.keys(rounds).forEach(roundIndex => {
+        const round = rounds[roundIndex];
 
         // Create a new page for each round
-        const bracketPage = $('<div>', { class: 'bracket-page', id: `bracket-page-${roundIndex - 1}` });
+        const bracketPage = $('<div>', { class: 'bracket-page', id: `bracket-page-${roundIndex}` });
+
+        if(parseInt(roundIndex) === 0){
+            bracketPage.append("<div class='round-header'><span>Round: Play-ins</span></div>");
+        } else {
+            bracketPage.append(`<div class='round-header'><span>Round: ${parseInt(roundIndex)}</span></div>`);
+        }
 
         // Iterate over each match within the round
-        Object.keys(round.matches).forEach(matchIndex => {
-            const match = round.matches[matchIndex];
-            console.log(match);
-            // Create a new group for each match
-            const bracketGroup = $('<div>', { class: 'bracket-group', onclick: `openBracketGroup(${roundIndex}, ${matchIndex})` });
+        Object.keys(round).forEach(matchIndex => {
+            const matchTeams = round[matchIndex];
+            // console.log(matchTeams);
 
-            // Iterate over each team within the match
-            Object.keys(match.teams).forEach(teamIndex => {
-                const team = match.teams[teamIndex];
+            // Create a new group for each match
+            const bracketGroup = $('<div>', { class: 'bracket-group', onclick: `openBracketGroup(${roundIndex}, ${matchIndex}, this)` });
+
+            // Render each team within the match
+            matchTeams.forEach(team => {
                 const bracketCard = $('<div>', { class: 'bracket-card with-line' });
 
-                if (team.players.length > 1) {
-                    // Team has multiple players (for example, if team size > 1)
+                if (Array.isArray(team.players) && team.players.length > 1) {
+                    // Team has multiple players
                     const doublePlayerContainer = $('<div>', { class: 'double-player-container' });
-                    team.players.forEach(player => {
+                    team.players.forEach((playerId) => {
+                        const playerInfo = team.players_info.find(info => info.id === playerId) || {};
                         const playerName = $('<span>', {
-                            class: `player-name-double ${player.result === 'LOSE' ? 'eliminated' : ''}`,
-                            text: player.name || '--'  // Show "--" if no name
+                            class: `player-name-double ${team.result === 'LOSE' ? 'eliminated' : ''}`,
+                            text: playerInfo.username || 'TBD'  // Show "--" if no name
                         });
                         doublePlayerContainer.append(playerName);
                     });
                     bracketCard.append(doublePlayerContainer);
 
                     // Add checkmark if there's a winner
-                    if (team.players.some(player => player.result === 'WIN')) {
+                    if (team.result === 'WIN') {
                         bracketCard.append($('<i>', { class: 'fas fa-check winner-checkmark' }));
                     }
-                } else {
+                } else if (Array.isArray(team.players) && team.players.length === 1) {
                     // Single player
-                    const player = team.players[0];
+                    const playerInfo = team.players_info[0] || {};
                     const playerName = $('<span>', {
-                        class: `player-name ${player.result === 'LOSE' ? 'eliminated' : ''}`,
-                        text: player.name || '--'
+                        class: `player-name ${team.result === 'LOSE' ? 'eliminated' : ''}`,
+                        text: playerInfo.username || 'TBD'
                     });
                     bracketCard.append(playerName);
 
                     // Add checkmark if the player is a winner
-                    if (player.result === 'WIN') {
+                    if (team.result === 'WIN') {
                         bracketCard.append($('<i>', { class: 'fas fa-check winner-checkmark' }));
                     }
                 }
@@ -792,8 +845,8 @@ function renderBracket(bracketData) {
         bracketContainer.append(bracketPage);
     });
 
-
-    let currentPage = 0;  // Start at the first page
+    // Initialize pagination controls and show the first page
+    let currentPage = 0;
     const totalPages = $('.bracket-page').length;
     showPage(currentPage);
 
@@ -819,53 +872,174 @@ function renderBracket(bracketData) {
     $('#tournament-games').hide();
     $('#add-winners').show();
 
-    
     function showPage(pageIndex) {
-        // Hide all pages
+        // Hide all pages and show the specific page
         $('.bracket-page').hide();
-        // Show the specific page
         $(`#bracket-page-${pageIndex}`).show();
 
         // Update button visibility based on page index
-        if (pageIndex === 0) {
-            $('.bracket-button:first-child').hide();  // Hide "Previous" button on first page
-        } else {
-            $('.bracket-button:first-child').show();  // Show "Previous" button
-        }
-
-        if (pageIndex === totalPages - 1) {
-            $('.bracket-button:last-child').hide();  // Hide "Next" button on last page
-        } else {
-            $('.bracket-button:last-child').show();  // Show "Next" button
-        }
+        $('.bracket-button:first-child').toggle(pageIndex > 0); // Hide "Previous" on first page
+        $('.bracket-button:last-child').toggle(pageIndex < totalPages - 1); // Hide "Next" on last page
     }
 }
-
 
 function cancelStartGame() {
     $('#start-game-confirm').hide();
     $('#tournament-games').show();
 }
 
-function openBracketGroup(groupNumber) {
-    $('.winning-group').removeClass('winning-group');
+let selectedWinners = [];
+let roundNumber = 0;
+let groupNumber = 0;
 
-    $('#add-winners').hide();
-    $('#add-winners-bracket-group').show();
+function openBracketGroup(round, group, button) {
+    $('.winning-group').removeClass('winning-group');
+    const tournamentGame = JSON.parse($('#tournamentGameInfo').val());
+    roundNumber = round;
+    groupNumber = group;
+    selectedWinners = [];
     $('#confirm-winner').hide();
+    
+    // Fetch players in the specified round and match group
+    $.ajax({
+        url: '/scripts/get_bracket_group.php',
+        method: 'POST',
+        data: { round: round, match_number: groupNumber, tournamentGameId: tournamentGame.id },
+        dataType: 'json',
+        success: function(players) {
+            $('#add-winners').hide();
+            $('#add-winners-bracket-group').show();
+            // Clear the container first
+            $('#bracket-group-container').empty();
+
+            // Generate bracket cards for each team
+            Object.keys(players).forEach(teamId => {
+                const team = players[teamId]; // Get team data
+                const teamNumber = team.team_number; // Extract team number
+                const playersByPosition = team.players; // Players grouped by position
+
+                // Construct the HTML for players within the team
+                let playerNamesHTML = '';
+                Object.keys(playersByPosition).forEach(position => {
+                    const positionPlayers = playersByPosition[position];
+                    positionPlayers.forEach(player => {
+                        playerNamesHTML += `<span class="player-name-double">${player.player_name || '--'}</span>`;
+                    });
+                });
+
+                // Create the bracket card for the team
+                const bracketCard = $(`
+                    <div class="bracket-card" onclick="selectWinner(this)" data-match='${JSON.stringify({id:parseInt(teamId),round:round,match: groupNumber})}'>
+                        <div class="double-player-container">
+                            ${playerNamesHTML}
+                        </div>
+                    </div>
+                `);
+
+                // Append the bracket card to the container
+                $('#bracket-group-container').append(bracketCard);
+            });
+
+        }
+    });
 }
 
-function selectWinner(winningGroup) {
-    $('.winning-group').removeClass('winning-group');
-    $(winningGroup).addClass('winning-group');
 
-    $('#confirm-winner').show();
+// Manage selected winners based on tournament settings
+
+
+function selectWinner(element) {
+    const teamMatchData = JSON.parse(element.getAttribute('data-match'));
+    const tournamentGameInfo = JSON.parse($('#tournamentGameInfo').val());
+    const teamNumber = teamMatchData.id;
+    const round = teamMatchData.round;
+    const maxWinners = round === 0 ? 1 : tournamentGameInfo.winners_per_match;
+
+    console.log(teamMatchData);
+
+    if ($(element).hasClass('winning-group')) {
+        // Deselect the player
+        $(element).removeClass('winning-group');
+        selectedWinners = selectedWinners.filter(id => id !== teamNumber);
+    } else if (selectedWinners.length < maxWinners) {
+        // Select the player if under the max winner limit
+        $(element).addClass('winning-group');
+        selectedWinners.push(teamNumber);
+    }
+
+    // Show or hide the confirm button based on selection count
+    $('#confirm-winner').toggle(selectedWinners.length === maxWinners);
 }
 
 function confirmWinner() {
-    $('#add-winners').show();
-    $('#add-winners-bracket-group').hide();
+    const tournamentGameInfo = JSON.parse($('#tournamentGameInfo').val());
+    const formData = new FormData();
+    formData.append('tournamentGameId', tournamentGameInfo.id);
+    formData.append('round', roundNumber);
+    formData.append('match_number', groupNumber);
+    formData.append('winners', JSON.stringify(selectedWinners));
+
+    $.ajax({
+        url: '/scripts/update_bracket_results.php',  // Script to save the results
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            console.log(response); // Log for debugging
+            $('#add-winners-bracket-group').hide();
+            $('#add-winners').show();
+
+            loadBracket();
+        }
+    });
 }
+
+function loadBracket() {
+    const tournamentGameInfo = JSON.parse($('#tournamentGameInfo').val());
+
+    $.ajax({
+        url: '/scripts/get_bracket.php',
+        method: 'GET',
+        dataType: 'json',
+        data: { gameId: tournamentGameInfo.id },
+        success: function(response) {
+            if (response.success) {
+                renderBracket(response.data);
+            } else {
+                console.error(response.error);
+            }
+        },
+        error: function() {
+            console.error("Failed to fetch bracket data.");
+        }
+    });
+}
+
+
+
+
+///////////////////////////////////////////////////////
+
+// function openBracketGroup(round, groupNumber) {
+//     $('.winning-group').removeClass('winning-group');
+
+//     $('#add-winners').hide();
+//     $('#add-winners-bracket-group').show();
+//     $('#confirm-winner').hide();
+// }
+
+// function selectWinner(winningGroup) {
+//     $('.winning-group').removeClass('winning-group');
+//     $(winningGroup).addClass('winning-group');
+
+//     $('#confirm-winner').show();
+// }
+
+// function confirmWinner() {
+//     $('#add-winners').show();
+//     $('#add-winners-bracket-group').hide();
+// }
 
 function openAddPoints() {
     $('#tournament-games').hide();

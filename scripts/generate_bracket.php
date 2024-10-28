@@ -1,97 +1,154 @@
 <?php
-// Include necessary repositories and configuration
-require_once '../config.php';
-require_once '../models/TournamentGame.php';
-require_once '../repos/TournamentUsersRepository.php';
-require_once '../repos/BracketRepository.php';
 
 header('Content-Type: application/json');
 
-// Get POST data
-$tournamentGameId = $_POST['id'] ?? null;
-
-if (!$tournamentGameId) {
-    echo json_encode(['error' => 'Invalid tournament or game ID']);
-    exit;
-}
+include_once '../models/TournamentGame.php';
+include_once '../repos/BracketRepository.php';
+include_once '../repos/TeamsRepository.php';
+include_once '../repos/TournamentUsersRepository.php';
 
 try {
-    // Fetch the tournament game settings
-    $tournamentGame = new TournamentGame($tournamentGameId);
 
-    if (!$tournamentGame) {
-        echo json_encode(['error' => 'Tournament game not found']);
+    // Instantiate repositories
+    $bracketRepo = new BracketRepository();
+    $teamsRepo = new TeamsRepository();
+
+    // Get parameters from AJAX
+    $tournament_id = isset($_POST['tournament_id']) ? (int)$_POST['tournament_id'] : null;
+    $tournament_game_id = isset($_POST['tournament_game_id']) ? (int)$_POST['tournament_game_id'] : null;
+
+    $tournamentGame = new TournamentGame($tournament_game_id);
+    $teamsPerMatch = $tournamentGame->getTeamsPerMatch();  // Teams per match from tournament config
+    $winnersPerMatch = $tournamentGame->getWinnersPerMatch();  // Winners per match from tournament config
+
+    if (!$tournament_id || !$tournament_game_id) {
+        echo json_encode(["error" => "Missing tournament or game ID"]);
         exit;
     }
 
-    // Retrieve settings
-    $teamSize = $tournamentGame->getTeamSize();
-    $teamsPerMatch = $tournamentGame->getTeamsPerMatch();
-    $winnersPerMatch = $tournamentGame->getWinnersPerMatch();
+    // Calculate total teams based on player count
+    $tournamentUsers = new TournamentUsersRepository();
+    $teams = $teamsRepo->getTeams($tournament_game_id); // Retrieve team data
+    $numberOfTeams = count($teams);
+    $perfectBracketNumber = $teamsPerMatch;
 
-    // Fetch active players in this tournament
-    $tournamentUsersRepo = new TournamentUsersRepository();
-    $activePlayers = $tournamentUsersRepo->getActivePlayersByTournamentId($tournamentGame->getTournamentId());
-
-    // Shuffle players for random team assignment
-    shuffle($activePlayers);
-
-    // Initialize Bracket Repository
-    $numPlayers = count($activePlayers);
-    $numTeams = ceil($numPlayers / $teamSize); // Initial number of teams based on team size
-    $round = 1;
-    $matchIndex = 1;
-
-    $bracketRepo = new BracketRepository();
-
-    // First Round: Populate with actual player teams
-    for ($i = 0; $i < $numTeams; $i += $teamsPerMatch) {
-        $teamsInMatch = array_slice($activePlayers, $i * $teamSize, $teamSize * $teamsPerMatch);
-
-        // Fill any empty spots with NPC players if there are fewer than required
-        while (count($teamsInMatch) < $teamSize * $teamsPerMatch) {
-            $teamsInMatch[] = ['id' => null];  // Use 'null' for NPC entries to avoid foreign key issues
+    $prelimMatches = 0;
+    while($perfectBracketNumber < $numberOfTeams) {
+        if(abs($perfectBracketNumber-$numberOfTeams) < $perfectBracketNumber) {
+            $prelimMatches = abs($perfectBracketNumber-$numberOfTeams);
+            break;
         }
-
-        // Insert each team in this match
-        $teamNum = 1; // Reset team number for each match
-        for ($j = 0; $j < count($teamsInMatch); $j += $teamSize) {
-            $playersInTeam = array_slice($teamsInMatch, $j, $teamSize);
-
-            // Insert each player in the current team
-            foreach ($playersInTeam as $player) {
-                $userId = $player['id'] ?? null;  // Set user ID to null if it's an NPC
-                $bracketRepo->insertBracketEntry($tournamentGameId, $round, $matchIndex, $teamNum, $userId);
-            }
-            $teamNum++; // Move to the next team within this match
-        }
-        $matchIndex++;
+        $perfectBracketNumber = ($perfectBracketNumber * $teamsPerMatch ) / $winnersPerMatch;
     }
 
-    // Populate subsequent rounds with placeholders until the number of teams reaches the final configuration
-    while ($numTeams > $teamsPerMatch) {  
+    shuffle($teams);
+
+    $numberOfMatches = $perfectBracketNumber / $teamsPerMatch;
+    $matchCount = 1;
+    $prelimMatchNumber = 1;
+    $roundOneMatches = [];
+    while($prelimMatches !== 0) {
+        for($i=1; $i <= 2; $i++){
+            $matchTeam = array_pop($teams);
+            $bracketRepo->createBracketEntry($tournament_game_id,
+                0,
+                $prelimMatchNumber,
+                $matchTeam['id'],
+                $matchCount,
+                json_encode([]),
+                $i
+            );
+        }
+
+        $blankFirstRoundPosition = !isset($roundOneMatches[$matchCount])
+            ? $blankFirstRoundPosition = 1
+            : $blankFirstRoundPosition = $roundOneMatches[$matchCount];
+
+        $fillMatch = ceil(($matchCount * $winnersPerMatch) / $teamsPerMatch);
+        $bracketRepo->createBracketEntry(
+            $tournament_game_id,
+            1,
+            $matchCount,
+            null,
+            $fillMatch,
+            json_encode([]),
+            $blankFirstRoundPosition
+        );
+        if (isset($roundOneMatches[$matchCount])) {
+            $roundOneMatches[$matchCount]++;
+        } else {
+            $roundOneMatches[$matchCount] = 2;
+        }
+
+        $prelimMatches--;
+        $prelimMatchNumber++;
+        if($matchCount === $numberOfMatches){
+            $matchCount = 1;
+        } else {
+            $matchCount++;
+        }
+    }
+
+    //Round 1 Population with gaps
+
+
+
+    //Round 1 population Remaining PLayers
+    $matchCount = 1;
+    while (isset($roundOneMatches[$matchCount])) {
+        while ($roundOneMatches[$matchCount] <= $teamsPerMatch) {
+            $fillMatch = ceil(($matchCount * $winnersPerMatch) / $teamsPerMatch);
+            $matchTeam = array_pop($teams);
+            $bracketRepo->createBracketEntry(
+                $tournament_game_id,
+                1,
+                $matchCount,
+                $matchTeam['id'],
+                $fillMatch,
+                json_encode([]),
+                $roundOneMatches[$matchCount]
+            );
+            $roundOneMatches[$matchCount]++;
+        }
+        $matchCount++;
+    }
+
+
+    //Empty TBD rounds
+    $numberOfMatchesInThisRound = floor(($winnersPerMatch * count($roundOneMatches)) /$teamsPerMatch);
+
+    $round = 2;
+
+    while ($numberOfMatchesInThisRound > 0) {
+        for($match=1; $match<=$numberOfMatchesInThisRound; $match++) {
+            for ($position=1; $position<=$teamsPerMatch; $position++) {
+                $fillMatch = $numberOfMatchesInThisRound == 1
+                    ? 0
+                    : ceil(($match * $winnersPerMatch) / $teamsPerMatch);
+                $bracketRepo->createBracketEntry(
+                    $tournament_game_id,
+                    $round,
+                    $match,
+                    null,
+                    $fillMatch,
+                    json_encode([]),
+                    $position
+                );
+            }
+        }
+        $numberOfMatchesInThisRound = floor(($winnersPerMatch * $numberOfMatchesInThisRound) / $teamsPerMatch);
         $round++;
-        $matchIndex = 1;  // Reset match index for each new round
-
-        // Calculate advancing teams based on winners per match
-        $numTeams = ceil(($numTeams * $winnersPerMatch) / $teamsPerMatch);
-
-        // Insert placeholders for each match in the round with "TBD" teams
-        for ($i = 0; $i < $numTeams; $i += $teamsPerMatch) {
-            $teamNum = 1;
-            for ($j = 0; $j < $teamsPerMatch; $j++) {
-                for ($k = 0; $k < $teamSize; $k++) {
-                    $bracketRepo->insertBracketEntry($tournamentGameId, $round, $matchIndex, $teamNum, null);  // null user_id for TBD
-                }
-                $teamNum++;
-            }
-            $matchIndex++;
-        }
     }
-
-
-
-    echo json_encode(['success' => 'Bracket generated successfully']);
+    echo json_encode([
+        "success" => true,
+        "variables" => get_defined_vars()
+    ]);
 } catch (Exception $e) {
-    echo json_encode(['error' => 'Error generating bracket: ' . $e->getMessage()]);
+    // Return error as JSON
+    echo json_encode([
+        "success" => false,
+        "error" => $e->getMessage(),
+        "file" => $e->getFile(),
+        "line" => $e->getLine()
+    ]);
 }
