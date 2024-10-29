@@ -1,6 +1,7 @@
 <?php
 
 require_once '../models/Model.php';
+require_once '../models/User.php';
 require_once '../models/TournamentGame.php';
 
 class TournamentGamesRepository extends Model {
@@ -27,7 +28,7 @@ class TournamentGamesRepository extends Model {
     }
 
     public function getGamesByTournamentId($tournamentId) {
-        // First query to get tournament games data
+        // Step 1: Retrieve game data with winner team numbers
         $gameQuery = "
             SELECT 
                 tg.*, 
@@ -47,86 +48,75 @@ class TournamentGamesRepository extends Model {
                 games g ON tg.game_id = g.id
             WHERE 
                 tg.tournament_id = ?
-                    ";
-        
+        ";
+    
         $stmt = $this->db->prepare($gameQuery);
-        
         if (!$stmt) {
             die('Prepare failed: ' . $this->db->error);
         }
-        
+    
         $stmt->bind_param("i", $tournamentId);
         $stmt->execute();
         $result = $stmt->get_result();
     
-        // Collect all games and winner team numbers
+        // Collect games with their winner team number for further processing
         $games = [];
         $winnerTeamNumbers = [];
         while ($game = $result->fetch_assoc()) {
-            $game['winner_usernames'] = '';  // Initialize empty string
-            $games[] = $game;  // Store each game directly as an indexed array element
+            $game['winner_name'] = '';  // Initialize empty winner name
+            $games[$game['id']] = $game; // Store game by its ID
             if (!empty($game['winner_team_number'])) {
                 $winnerTeamNumbers[$game['id']] = $game['winner_team_number'];
             }
         }
         $stmt->close();
     
-        // If no winner teams exist, return the games as is
-        if (empty($winnerTeamNumbers)) {
-            return $games;
-        }
-    
-        // Second query to get usernames for the winning teams only
-        $placeholders = implode(',', array_fill(0, count($winnerTeamNumbers), '?'));
-        $teamQuery = "
-            SELECT 
-                t.tournament_game_id, 
-                u.username 
-            FROM 
-                teams t
-            JOIN 
-                users u ON JSON_CONTAINS(t.players, CAST(u.id AS CHAR)) -- Assuming 'players' is JSON
-            WHERE 
-                t.tournament_game_id IN ($placeholders) 
-                AND t.team_number = ?
-        ";
-    
-        $stmt = $this->db->prepare($teamQuery);
-        if (!$stmt) {
-            die('Prepare failed: ' . $this->db->error);
-        }
-    
-        // Bind parameters dynamically for each game and team
-        $bindParams = [];
+        // Step 2: Loop through each winner team number, fetch players JSON, and get usernames
         foreach ($winnerTeamNumbers as $gameId => $teamNumber) {
-            $bindParams[] = $gameId;
-            $bindParams[] = $teamNumber;
-        }
-        $stmt->bind_param(str_repeat('ii', count($winnerTeamNumbers)), ...$bindParams);
-        $stmt->execute();
-        $result = $stmt->get_result();
+            $teamQuery = "
+                SELECT t.players 
+                FROM teams t
+                WHERE t.tournament_game_id = ? AND t.id = ?
+            ";
     
-        // Map usernames to the winning team for each tournament game
-        $usernamesByGame = [];
-        while ($row = $result->fetch_assoc()) {
-            $tournamentGameId = $row['tournament_game_id'];
-            $usernamesByGame[$tournamentGameId][] = $row['username'];
-        }
-        $stmt->close();
-    
-        // Integrate usernames back into the games array
-        foreach ($games as &$game) {
-            if (isset($usernamesByGame[$game['id']])) {
-                $game['winner_name'] = implode(', ', $usernamesByGame[$game['id']]);
+            $stmt = $this->db->prepare($teamQuery);
+            if (!$stmt) {
+                die('Prepare failed: ' . $this->db->error);
             }
+    
+            $stmt->bind_param("ii", $gameId, $teamNumber);
+            $stmt->execute();
+            $result = $stmt->get_result();
+    
+            if ($teamRow = $result->fetch_assoc()) {
+                $playerIds = json_decode($teamRow['players'], true);
+                $usernames = [];
+    
+                // Fetch usernames for each player in the winning team using the User model
+                foreach ($playerIds as $userId) {
+                    $user = new User($userId);
+                    $usernames[] = $user->getUsername();
+                }
+    
+                // Concatenate usernames and update the winner_name field in games array
+                $games[$gameId]['winner_name'] = implode(', ', $usernames);
+            }
+            $stmt->close();
         }
     
-        return $games;
+        return array_values($games); // Return games as an indexed array
     }
     
-    
-    
-    
+    public function updateWinnerTeamNumber($tournamentGameId, $teamNumber) {
+        $stmt = $this->db->prepare("
+            UPDATE tournament_games 
+            SET winner_team_number = ? 
+            WHERE id = ?
+        ");
+        $stmt->bind_param("ii", $teamNumber, $tournamentGameId);
+        $stmt->execute();
+        $stmt->close();
+    }
 
     public function getGamesByGameId($gameId) {
         $stmt = $this->db->prepare("SELECT * FROM $this->table WHERE game_id = ?");

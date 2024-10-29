@@ -40,10 +40,10 @@ class PointsRepository extends Model {
         return $result->fetch_assoc(); // Returns the record if found, or null if not
     }
     
-    public function addPointsToPlayer($tournamentGameId, $playerId){
+    public function addPointsToPlayer($tournamentGameId, $playerId, $additionalPoints = 0){
         $stmt = $this->db->prepare("
             UPDATE points
-            SET tournament_points = tournament_points + 1
+            SET tournament_points = tournament_points + 1 + $additionalPoints
             WHERE user_id = ? AND tournament_game_id = ?
         ");
         $stmt->bind_param("ii", $playerId, $tournamentGameId);
@@ -171,8 +171,93 @@ class PointsRepository extends Model {
             return false;
         }
     }
+
+    public function getTeamScoresByTournamentGameId($tournamentGameId) {
+        $teamsRepo = new TeamsRepository();
     
+        // Step 1: Fetch teams in the tournament game
+        $teamQuery = "
+            SELECT 
+                t.id AS team_id
+            FROM 
+                teams t
+            WHERE 
+                t.tournament_game_id = ?
+        ";
     
+        $stmt = $this->db->prepare($teamQuery);
+        $stmt->bind_param("i", $tournamentGameId);
+        $stmt->execute();
+        $result = $stmt->get_result();
     
+        $teamScores = [];
+    
+        // Step 2: Calculate team points by summing player points for each team
+        while ($teamRow = $result->fetch_assoc()) {
+            $teamId = $teamRow['team_id'];
+            $players = $teamsRepo->getPlayersOnTeam($teamId);
+    
+            $totalPoints = 0;
+            foreach ($players as $userId) {
+                // Fetch points for each player on the team in the tournament
+                $pointsQuery = "
+                    SELECT 
+                        points
+                    FROM 
+                        points
+                    WHERE 
+                        user_id = ? AND tournament_game_id = ?
+                ";
+    
+                $playerStmt = $this->db->prepare($pointsQuery);
+                $playerStmt->bind_param("ii", $userId, $tournamentGameId);
+                $playerStmt->execute();
+                $playerResult = $playerStmt->get_result()->fetch_assoc();
+    
+                // Accumulate the points for the team
+                $totalPoints += $playerResult['points'] ?? 0;
+                $playerStmt->close();
+            }
+    
+            $teamScores[] = [
+                'team_id' => $teamId,
+                'points' => $totalPoints
+            ];
+        }
+    
+        $stmt->close();
+    
+        // Sort team scores in descending order by points
+        usort($teamScores, function($a, $b) {
+            return $b['points'] - $a['points'];
+        });
+    
+        return $teamScores;
+    }
+    
+
+    public function updateTournamentPointsForTeams($teamScores, $tournamentGameId) {
+        $teamsRepo = new TeamsRepository();
+    
+        foreach ($teamScores as $team) {
+            $teamId = $team['team_id'];
+            $tournamentPoints = $team['tournament_points'];
+    
+            // Retrieve players on the team
+            $players = $teamsRepo->getPlayersOnTeam($teamId);
+    
+            foreach ($players as $userId) {
+                // Update tournament points for each player
+                $stmt = $this->db->prepare("
+                    UPDATE points 
+                    SET tournament_points = ? 
+                    WHERE user_id = ? AND tournament_game_id = ?
+                ");
+                $stmt->bind_param("iii", $tournamentPoints, $userId, $tournamentGameId);
+                $stmt->execute();
+                $stmt->close();
+            }
+        }
+    }
     
 }

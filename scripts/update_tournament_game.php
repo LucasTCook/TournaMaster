@@ -42,5 +42,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Helper function to create a dashed slug
 function generateSlug($string) {
-    return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $string)));
+    return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $string))) . '-custom';
 }
