@@ -40,13 +40,30 @@ try {
         }
         $perfectBracketNumber = ($perfectBracketNumber * $teamsPerMatch ) / $winnersPerMatch;
     }
-
+    
     shuffle($teams);
-
+    
     $numberOfMatches = $perfectBracketNumber / $teamsPerMatch;
     $matchCount = 1;
     $prelimMatchNumber = 1;
     $roundOneMatches = [];
+    for ($i=1; $i <= $numberOfMatches; $i++){
+        $roundOneMatches[$i] = 1;
+    }
+    
+    // echo json_encode(
+    //     [
+    //         $tournament_id,
+    //         $tournament_game_id,
+    //         $teamsPerMatch,
+    //         $winnersPerMatch,
+    //         $numberOfTeams,
+    //         $perfectBracketNumber,
+    //         $prelimMatches,
+    //         $numberOfMatches
+    //         $roundOneMatches
+    //     ]
+    // );
     while($prelimMatches !== 0) {
         for($i=1; $i <= 2; $i++){
             $matchTeam = array_pop($teams);
@@ -88,10 +105,6 @@ try {
             $matchCount++;
         }
     }
-
-    //Round 1 Population with gaps
-
-
 
     //Round 1 population Remaining PLayers
     $matchCount = 1;
