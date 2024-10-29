@@ -97,7 +97,7 @@ class PointsRepository extends Model {
         // Step 2: Fetch team data with players for the tournament game
         $stmt = $this->db->prepare("
             SELECT 
-                t.team_number,
+                t.id,
                 t.players  -- players JSON field
             FROM 
                 teams t
@@ -112,23 +112,29 @@ class PointsRepository extends Model {
         // Step 3: Map player names and points by team
         $leaderboard = [];
         foreach ($teamDataResult as $teamRow) {
-            $teamNumber = $teamRow['team_number'];
+            $teamId = $teamRow['id'];
             $playerIds = json_decode($teamRow['players'], true);
     
             // Initialize the array for storing player names and team points
             $playerNames = [];
             $totalPoints = 0;
+            $pointsSet = false;  // Flag to ensure points are set only once per team
     
             foreach ($playerIds as $userId) {
                 // Fetch player name
                 $user = $this->getUserById($userId);
                 $playerNames[] = $user['username'];
-                $totalPoints += $userPoints[$userId] ?? 0;
+                
+                // Set totalPoints only once per team
+                if (!$pointsSet && isset($userPoints[$userId])) {
+                    $totalPoints = $userPoints[$userId];
+                    $pointsSet = true;  // Set flag to true after assigning points
+                }
             }
     
             // Add team data to leaderboard array
             $leaderboard[] = [
-                'team_number' => $teamNumber,
+                'team_id' => $teamId,
                 'player_names' => $playerNames,  // Array of names instead of single concatenated string
                 'points' => $totalPoints
             ];
@@ -140,7 +146,7 @@ class PointsRepository extends Model {
         });
     
         return $leaderboard;
-    }    
+    }       
     
     // Helper function to get user by ID
     public function getUserById($userId) {
@@ -148,6 +154,22 @@ class PointsRepository extends Model {
         $stmt->bind_param("i", $userId);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
+    }
+
+    public function savePointsForPlayer($userId, $points, $tournamentGameId){
+        $stmt = $this->db->prepare("
+            UPDATE points
+            SET points = ?
+            WHERE user_id = ? AND tournament_game_id = ?
+        ");
+        $stmt->bind_param("iii", $points, $userId, $tournamentGameId);
+        
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            echo "Error updating points: " . $stmt->error;
+            return false;
+        }
     }
     
     

@@ -49,6 +49,94 @@ class User extends Model {
         $stmt->close();
     }
 
+    // ID
+    public function getId() {
+        return $this->id;
+    }
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    // Username
+    public function getUsername() {
+        return $this->username;
+    }
+    public function setUsername($username) {
+        $this->username = $username;
+    }
+
+    // Email
+    public function getEmail() {
+        return $this->email;
+    }
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+
+    // Password
+    public function getPassword() {
+        return $this->password;
+    }
+    public function setPassword($password) {
+        $this->password = $password;
+    }
+
+    // First Name
+    public function getFirstName() {
+        return $this->first_name;
+    }
+    public function setFirstName($first_name) {
+        $this->first_name = $first_name;
+    }
+
+    // Last Name
+    public function getLastName() {
+        return $this->last_name;
+    }
+    public function setLastName($last_name) {
+        $this->last_name = $last_name;
+    }
+
+    // Profile Image URL
+    public function getProfileImageUrl() {
+        return $this->profile_image_url;
+    }
+    public function setProfileImageUrl($profile_image_url) {
+        $this->profile_image_url = $profile_image_url;
+    }
+
+    // Bio
+    public function getBio() {
+        return $this->bio;
+    }
+    public function setBio($bio) {
+        $this->bio = $bio;
+    }
+
+    // Role
+    public function getRole() {
+        return $this->role;
+    }
+    public function setRole($role) {
+        $this->role = $role;
+    }
+
+    // Created At
+    public function getCreatedAt() {
+        return $this->created_at;
+    }
+    public function setCreatedAt($created_at) {
+        $this->created_at = $created_at;
+    }
+
+    // Updated At
+    public function getUpdatedAt() {
+        return $this->updated_at;
+    }
+    public function setUpdatedAt($updated_at) {
+        $this->updated_at = $updated_at;
+    }
+
     // Fetch user by username
     public function getByUsername($username) {
         $stmt = $this->db->prepare("SELECT * FROM $this->table WHERE username = ?");
