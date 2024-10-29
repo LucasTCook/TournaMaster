@@ -103,6 +103,14 @@ include '../../includes/header.php';
                 </div>
             </div>
 
+             <!-- Points specific fields -->
+             <div id="points-fields" class="hidden">
+                <div class="form-group">
+                    <label for="configure-team-size-points">Size of Teams</label>
+                    <input type="number" id="configure-team-size-points" name="configure-team-size-points" placeholder="Enter team size">
+                </div>
+            </div>
+
             <button id="submit-configure-game" class="success-btn save-configuration" onclick="saveGameConfiguration(this)">Save Configuration</button>
             <div class="delete-cancel-container">
                 <button id="cancel-configure-game" class="edit-btn">Cancel</button>
@@ -144,43 +152,7 @@ include '../../includes/header.php';
 </div>
 
 <div id="add-points" class="tournament-panel">
-    <div class="leaderboard-card first-place margin-bottom-sm" onclick="addPoints()">
-        <div>
-            <i class="fas fa-trophy gold-trophy"></i>
-            <span class="player-name">John Doe</span>
-        </div>
-        <span class="player-points">1200</span>
-    </div>
-
-    <div class="leaderboard-card second-place margin-bottom-sm" onclick="addPoints()">
-        <div>
-            <i class="fas fa-trophy silver-trophy"></i>
-            <span class="player-name">Jane Smith</span>
-        </div>
-        <span class="player-points">1100</span>
-    </div>
-
-    <div class="leaderboard-card third-place margin-bottom-sm" onclick="addPoints()">
-        <div>
-            <i class="fas fa-trophy bronze-trophy"></i>
-            <span class="player-name">Alex Roe</span>
-        </div>
-        <span class="player-points">1000</span>
-    </div>
-
-    <div class="leaderboard-card margin-bottom-sm" onclick="addPoints()">
-        <span class="player-name">Alex Roe</span>
-        <span class="player-points">900</span>
-    </div>
-
-    <div class="leaderboard-card margin-bottom-sm" onclick="addPoints()">
-        <span class="player-name">New Player</span>
-        <span class="player-points">--</span>
-    </div>
-    <div class="leaderboard-card margin-bottom-sm" onclick="addPoints()">
-        <span class="player-name">New Player</span>
-        <span class="player-points">--</span>
-    </div>
+    <div id="leaderboard-container"></div>
 </div>
 
 <div id="add-points-player" class="tournament-panel">
