@@ -315,6 +315,15 @@ function editTournamentInfo() {
 }
 
 function changePage(button_id, id) {
+    if (id === 'tournament-info') {
+        loadTounamentInfo();
+    }
+    if (id === 'tournament-games') {
+        loadTournamentGames();
+    }
+    if (id === 'tournament-players') {
+        loadTournamentPlayers();
+    }
     $('.manage-selection').removeClass('active');
     $('#'+button_id).addClass('active');
     $('.tournament-panel').hide();
@@ -418,7 +427,7 @@ function renderGameCard(game) {
                     <div class="winner-info">
                         <i class="fas fa-trophy winner-trophy"></i>
                         <div class="winner-names-container">
-                            <span>${game.winner_name}</span>
+                            <span>${game.winner_team_number === 0 ? 'TIE' : game.winner_name}</span>
                         </div>
                     </div>
                 </div>
@@ -440,7 +449,8 @@ function renderGameCard(game) {
                             <span><b>Players per team:</b> ${game.team_size}</span>
                         <div>
                         <div class="manage-game-buttons">
-                            <button class="success-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="openPointsPage(this)">Add Points</button>
+                            <button class="edit-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="openPointsPage(this)">Add Points</button>
+                            <button class="success-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="finishGame(this)">FINISH GAME</button>
                         </div>
                     </div>
                 </div>`;
@@ -743,15 +753,28 @@ function startGame(button) {
                             processData: false,
                             contentType: false,
                             success: function(response) {
-                                // console.log(response);
+                                
                             }
                         });
                     }
                 });
             }
+            if (tournamentGame.type === 'points') {
+                $.ajax({
+                    url: '/scripts/generate_teams.php',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        
+                    }
+                });
+            }
 
             $.ajax({
-                url: '/scripts/generate_teams.php',
+                url: '/scripts/generate_points.php',
                 method: 'POST',
                 dataType: 'json',
                 data: formData,
@@ -759,29 +782,19 @@ function startGame(button) {
                 contentType: false,
                 success: function(response) {
                     $.ajax({
-                        url: '/scripts/generate_points.php',
+                        url: '/scripts/update_tournament_game_status.php',
                         method: 'POST',
                         dataType: 'json',
                         data: formData,
                         processData: false,
                         contentType: false,
                         success: function(response) {
-                            $.ajax({
-                                url: '/scripts/update_tournament_game_status.php',
-                                method: 'POST',
-                                dataType: 'json',
-                                data: formData,
-                                processData: false,
-                                contentType: false,
-                                success: function(response) {
-                                    if (response.success) {
-                                        loadTournamentGames();
-                                        $('#start-game-confirm').hide();
-                                        $('#tournament-games').show();
-                                        showBanner('#game-started-banner');
-                                    }
-                                }
-                            });
+                            if (response.success) {
+                                loadTournamentGames();
+                                $('#start-game-confirm').hide();
+                                $('#tournament-games').show();
+                                showBanner('#game-started-banner');
+                            }
                         }
                     });
                 }
@@ -1085,7 +1098,7 @@ function finishGame(button){
     formData.append('tournament_game_id', gameData.id);
     formData.append('status', 2);
     $.ajax({
-        url: '/scripts/generate_points.php',
+        url: '/scripts/update_winner_points.php',
         method: 'POST',
         dataType: 'json',
         data: formData,
