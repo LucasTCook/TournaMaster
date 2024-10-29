@@ -504,6 +504,11 @@ tbody td:empty::before {
     margin-top: 10px;
 }
 
+.player-name-points-container{
+    display: flex;
+    flex-direction: column;
+}
+
 @media (max-width: 768px) {
     .add-tournament-form {
         position: fixed;

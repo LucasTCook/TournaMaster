@@ -22,8 +22,13 @@ $(document).ready(function() {
     $('#configure-game-type').on('change', function() {
         if ($(this).val() === 'bracket') {
             $('#bracket-fields').removeClass('hidden');
+            $('#points-fields').addClass('hidden');
+        } else if ($(this).val() === 'points') {
+            $('#bracket-fields').addClass('hidden');
+            $('#points-fields').removeClass('hidden');
         } else {
             $('#bracket-fields').addClass('hidden');
+            $('#points-fields').addClass('hidden');
         }
     });
 
@@ -405,7 +410,7 @@ function renderGameCard(game) {
                     ${game.type === 'bracket' ? `
                         <div class="tournament-info-display-card">
                             <span><b>Game Type:</b> Bracket</span>
-                            <span><b>Number of Teams:</b> ${game.team_count}</span>
+                            <span><b>Number of teams:</b> ${game.team_count}</span>
                             <span><b>Players per team:</b> ${game.team_size}</span>
                             <span><b>Teams per match:</b> ${game.teams_per_match}</span>
                             <span><b>Winners per match:</b> ${game.winners_per_match}</span>
@@ -431,6 +436,8 @@ function renderGameCard(game) {
                         </div>
                         <div class="tournament-info-display-card">
                             <span><b>Game Type:</b> Points</span>
+                            <span><b>Number of teams:</b> ${game.team_count}</span>
+                            <span><b>Players per team:</b> ${game.team_size}</span>
                         <div>
                         <div class="manage-game-buttons">
                             <button class="success-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="openAddPoints(this)">Add Points</button>
@@ -449,7 +456,7 @@ function renderGameCard(game) {
                         </div>
                         <div class="tournament-info-display-card">
                             <span><b>Game Type:</b> Bracket</span>
-                            <span><b>Number of Teams:</b> ${game.team_count}</span>
+                            <span><b>Number of teams:</b> ${game.team_count}</span>
                             <span><b>Players per team:</b> ${game.team_size}</span>
                             <span><b>Teams per match:</b> ${game.teams_per_match}</span>
                             <span><b>Winners per match:</b> ${game.winners_per_match}</span>
@@ -474,11 +481,16 @@ function renderGameCard(game) {
                         ${game.type === 'bracket' ? `
                             <div class="tournament-info-display-card">
                                 <span><b>Game Type:</b> Bracket</span>
-                                <span><b>Number of Teams:</b> ${game.team_count}</span>
+                                <span><b>Number of teams:</b> ${game.team_count}</span>
                                 <span><b>Players per team:</b> ${game.team_size}</span>
                                 <span><b>Teams per match:</b> ${game.teams_per_match}</span>
                                 <span><b>Winners per match:</b> ${game.winners_per_match}</span>
-                            </div>` : '<div class="tournament-info-display-card"><span><b>Game Type:</b> Points</span><div>' } 
+                            </div>`
+                            : `<div class="tournament-info-display-card">
+                                <span><b>Game Type:</b> Points</span>
+                                <span><b>Number of teams:</b> ${game.team_count}</span>
+                                <span><b>Players per team:</b> ${game.team_size}</span>
+                            <div>` } 
                         <div class="manage-game-buttons">
                             <button class="edit-btn small-font auto-width edit-game-button" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="configureGame(this)">Edit Game</button>
                             <button class="success-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="confirmStartGame(this)">START GAME</button>
@@ -514,6 +526,13 @@ function configureGame(button){
 
     if (tournamentGame.type === 'bracket') {
         $('#bracket-fields').removeClass('hidden');
+        $('#points-fields').addClass('hidden');
+    } else if (tournamentGame.type === 'points') {
+        $('#bracket-fields').addClass('hidden');
+        $('#points-fields').removeClass('hidden');
+    } else {
+        $('#bracket-fields').addClass('hidden');
+        $('#points-fields').addClass('hidden');
     }
 
     $('#configure-game-name').val(tournamentGame.game_name);
@@ -555,6 +574,11 @@ function saveGameConfiguration(button) {
         formData.append('sizeOfTeams', sizeOfTeams);
         formData.append('teamsPerMatch', teamsPerMatch);
         formData.append('winnersPerMatch', winnersPerMatch);
+    }
+
+    if (gameType === 'points') {
+        const sizeOfTeams = $('#configure-team-size-points').val();
+        formData.append('sizeOfTeams', sizeOfTeams);
     }
 
     formData.append('id', tournamentGameId);
@@ -620,9 +644,11 @@ function resetConfigFields() {
     $('#configure-game-name').val('');
     $('#configure-game-type').val('');
     $('#configure-team-size').val('');
+    $('#configure-team-size-points').val('');
     $('#configure-teams-per-match').val('');
     $('#configure-winners-per-match').val('');
     $('#bracket-fields').addClass('hidden');
+    $('#points-fields').addClass('hidden');
 }
 
 function showBanner(bannerId) {
@@ -683,13 +709,15 @@ function startGame(button) {
         dataType: 'json',
         data: { id: tournamentGame.tournament_id },
         success: function(response) {
-            $numberOfTeams = response.activePlayers.length / tournamentGame.team_size;
-            $playersNeeded = (tournamentGame.teams_per_match/tournamentGame.winners_per_match) * tournamentGame.teams_per_match;
-            if($playersNeeded > $numberOfTeams){
-                console.log("Not enough Players");
-                $('#invalid-configuration-banner').html("Not enough players for this configuration");
-                showBanner('#invalid-configuration-banner');
-                return;
+            if (tournamentGame.type === 'bracket') {
+                $numberOfTeams = response.activePlayers.length / tournamentGame.team_size;
+                $playersNeeded = (tournamentGame.teams_per_match/tournamentGame.winners_per_match) * tournamentGame.teams_per_match;
+                if($playersNeeded > $numberOfTeams){
+                    console.log("Not enough Players");
+                    $('#invalid-configuration-banner').html("Not enough players for this configuration");
+                    showBanner('#invalid-configuration-banner');
+                    return;
+                }
             }
 
             const formData = new FormData();
@@ -723,7 +751,7 @@ function startGame(button) {
             }
 
             $.ajax({
-                url: '/scripts/generate_points.php',
+                url: '/scripts/generate_teams.php',
                 method: 'POST',
                 dataType: 'json',
                 data: formData,
@@ -731,19 +759,29 @@ function startGame(button) {
                 contentType: false,
                 success: function(response) {
                     $.ajax({
-                        url: '/scripts/update_tournament_game_status.php',
+                        url: '/scripts/generate_points.php',
                         method: 'POST',
                         dataType: 'json',
                         data: formData,
                         processData: false,
                         contentType: false,
                         success: function(response) {
-                            if (response.success) {
-                                loadTournamentGames();
-                                $('#start-game-confirm').hide();
-                                $('#tournament-games').show();
-                                showBanner('#game-started-banner');
-                            }
+                            $.ajax({
+                                url: '/scripts/update_tournament_game_status.php',
+                                method: 'POST',
+                                dataType: 'json',
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                success: function(response) {
+                                    if (response.success) {
+                                        loadTournamentGames();
+                                        $('#start-game-confirm').hide();
+                                        $('#tournament-games').show();
+                                        showBanner('#game-started-banner');
+                                    }
+                                }
+                            });
                         }
                     });
                 }
@@ -1072,34 +1110,62 @@ function finishGame(button){
     });
 }
 
-
-
-///////////////////////////////////////////////////////
-
-// function openBracketGroup(round, groupNumber) {
-//     $('.winning-group').removeClass('winning-group');
-
-//     $('#add-winners').hide();
-//     $('#add-winners-bracket-group').show();
-//     $('#confirm-winner').hide();
-// }
-
-// function selectWinner(winningGroup) {
-//     $('.winning-group').removeClass('winning-group');
-//     $(winningGroup).addClass('winning-group');
-
-//     $('#confirm-winner').show();
-// }
-
-// function confirmWinner() {
-//     $('#add-winners').show();
-//     $('#add-winners-bracket-group').hide();
-// }
-
-function openAddPoints() {
+function openAddPoints(button) {
+    const gameData = JSON.parse(button.getAttribute('data-game'));
     $('#tournament-games').hide();
     $('#add-points').show();
+    const tournamentGame = JSON.parse(button.getAttribute('data-game'));
+    
+    // Fetch leaderboard data for the tournament game
+    $.ajax({
+        url: '/scripts/get_points_list.php',
+        method: 'GET',
+        dataType: 'json',
+        data: { tournament_game_id: tournamentGame.id },
+        success: function(response) {
+            if (response.success) {
+                renderLeaderboard(response.data);
+            } else {
+                console.error(response.error);
+            }
+        },
+        error: function() {
+            console.error("Failed to fetch leaderboard data.");
+        }
+    });
 }
+
+function renderLeaderboard(leaderboardData) {
+    const leaderboardContainer = $('#leaderboard-container');
+    leaderboardContainer.empty();
+
+    leaderboardData.forEach((team, index) => {
+        let trophyClass = '';
+        if (index === 0 && team.points !== 0) trophyClass = 'gold-trophy';
+        else if (index === 1 && team.points !== 0) trophyClass = 'silver-trophy';
+        else if (index === 2 && team.points !== 0) trophyClass = 'bronze-trophy';
+
+        // Generate individual spans for each player's name
+        const playerNameSpans = team.player_names.map(name => `<span class="player-name">${name}</span>`).join('');
+
+        const leaderboardCard = `
+            <div class="leaderboard-card ${index === 0 && team.points !== 0  ? 'first-place' : index === 1 && team.points !== 0 ? 'second-place' : index === 2 && team.points !== 0 ? 'third-place' : ''} margin-bottom-sm" onclick="addPoints(${team.team_number})">
+                <div>
+                    ${trophyClass ? `<i class="fas fa-trophy ${trophyClass}"></i>` : ''}
+                    <div class="player-name-points-container">
+                        ${playerNameSpans}
+                    </div>
+                </div>
+                <span class="player-points">${team.points ?? '--'}</span>
+            </div>
+        `;
+        
+        leaderboardContainer.append(leaderboardCard);
+    });
+}
+
+
+
 
 function addPoints() {
     $('#add-points').hide();

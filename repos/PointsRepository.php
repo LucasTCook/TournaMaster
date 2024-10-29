@@ -71,5 +71,86 @@ class PointsRepository extends Model {
             return false;
         }
     }
+
+    public function getLeaderboardDataByTournamentGameId($tournamentGameId) {
+        // Step 1: Fetch user points for the tournament game
+        $stmt = $this->db->prepare("
+            SELECT 
+                p.user_id,
+                COALESCE(p.points, 0) AS points
+            FROM 
+                points p
+            WHERE 
+                p.tournament_game_id = ?
+        ");
+        
+        $stmt->bind_param("i", $tournamentGameId);
+        $stmt->execute();
+        $userPointsResult = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    
+        // Map points by user ID
+        $userPoints = [];
+        foreach ($userPointsResult as $row) {
+            $userPoints[$row['user_id']] = $row['points'];
+        }
+    
+        // Step 2: Fetch team data with players for the tournament game
+        $stmt = $this->db->prepare("
+            SELECT 
+                t.team_number,
+                t.players  -- players JSON field
+            FROM 
+                teams t
+            WHERE 
+                t.tournament_game_id = ?
+        ");
+    
+        $stmt->bind_param("i", $tournamentGameId);
+        $stmt->execute();
+        $teamDataResult = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    
+        // Step 3: Map player names and points by team
+        $leaderboard = [];
+        foreach ($teamDataResult as $teamRow) {
+            $teamNumber = $teamRow['team_number'];
+            $playerIds = json_decode($teamRow['players'], true);
+    
+            // Initialize the array for storing player names and team points
+            $playerNames = [];
+            $totalPoints = 0;
+    
+            foreach ($playerIds as $userId) {
+                // Fetch player name
+                $user = $this->getUserById($userId);
+                $playerNames[] = $user['username'];
+                $totalPoints += $userPoints[$userId] ?? 0;
+            }
+    
+            // Add team data to leaderboard array
+            $leaderboard[] = [
+                'team_number' => $teamNumber,
+                'player_names' => $playerNames,  // Array of names instead of single concatenated string
+                'points' => $totalPoints
+            ];
+        }
+    
+        // Sort leaderboard by points in descending order
+        usort($leaderboard, function ($a, $b) {
+            return $b['points'] - $a['points'];
+        });
+    
+        return $leaderboard;
+    }    
+    
+    // Helper function to get user by ID
+    public function getUserById($userId) {
+        $stmt = $this->db->prepare("SELECT id, username FROM users WHERE id = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+    
+    
+    
     
 }
