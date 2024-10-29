@@ -498,6 +498,12 @@ tbody td:empty::before {
     width: 100px;
 }
 
+.winner-names-container {
+    font-weight: bold;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
 @media (max-width: 768px) {
     .add-tournament-form {
         position: fixed;

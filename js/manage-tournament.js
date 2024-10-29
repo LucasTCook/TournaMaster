@@ -402,9 +402,19 @@ function renderGameCard(game) {
                 <img src="${gameImage}" alt="Game Image" class="game-image">
                 <div class="game-info">
                     <span class="game-name">${game.game_name}</span>
+                    ${game.type === 'bracket' ? `
+                        <div class="tournament-info-display-card">
+                            <span><b>Game Type:</b> Bracket</span>
+                            <span><b>Number of Teams:</b> ${game.team_count}</span>
+                            <span><b>Players per team:</b> ${game.team_size}</span>
+                            <span><b>Teams per match:</b> ${game.teams_per_match}</span>
+                            <span><b>Winners per match:</b> ${game.winners_per_match}</span>
+                        </div>` : '<div class="tournament-info-display-card"><span><b>Game Type:</b> Points</span><div>' } 
                     <div class="winner-info">
-                        <span>${game.winner_name}</span>
                         <i class="fas fa-trophy winner-trophy"></i>
+                        <div class="winner-names-container">
+                            <span>${game.winner_name}</span>
+                        </div>
                     </div>
                 </div>
             </div>`;
@@ -419,6 +429,9 @@ function renderGameCard(game) {
                             <span>In Progress</span>
                             <i class="fas fa-spinner in-progress"></i>
                         </div>
+                        <div class="tournament-info-display-card">
+                            <span><b>Game Type:</b> Points</span>
+                        <div>
                         <div class="manage-game-buttons">
                             <button class="success-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="openAddPoints(this)">Add Points</button>
                         </div>
@@ -435,12 +448,15 @@ function renderGameCard(game) {
                             <i class="fas fa-spinner in-progress"></i>
                         </div>
                         <div class="tournament-info-display-card">
+                            <span><b>Game Type:</b> Bracket</span>
+                            <span><b>Number of Teams:</b> ${game.team_count}</span>
                             <span><b>Players per team:</b> ${game.team_size}</span>
                             <span><b>Teams per match:</b> ${game.teams_per_match}</span>
                             <span><b>Winners per match:</b> ${game.winners_per_match}</span>
                         </div>
                         <div class="manage-game-buttons">
-                            <button class="success-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="openBracket(this)">Add Winners</button>
+                            <button class="edit-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="openBracket(this)">Add Winners</button>
+                            ${game.winner_name ? `<button class="success-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="finishGame(this)">FINISH GAME</button>` : ''}
                         </div>
                     </div>
                 </div>`;
@@ -455,6 +471,14 @@ function renderGameCard(game) {
                         <div class="winner-info">
                             <span>Not Yet Started</span>
                         </div>
+                        ${game.type === 'bracket' ? `
+                            <div class="tournament-info-display-card">
+                                <span><b>Game Type:</b> Bracket</span>
+                                <span><b>Number of Teams:</b> ${game.team_count}</span>
+                                <span><b>Players per team:</b> ${game.team_size}</span>
+                                <span><b>Teams per match:</b> ${game.teams_per_match}</span>
+                                <span><b>Winners per match:</b> ${game.winners_per_match}</span>
+                            </div>` : '<div class="tournament-info-display-card"><span><b>Game Type:</b> Points</span><div>' } 
                         <div class="manage-game-buttons">
                             <button class="edit-btn small-font auto-width edit-game-button" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="configureGame(this)">Edit Game</button>
                             <button class="success-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="confirmStartGame(this)">START GAME</button>
@@ -1016,6 +1040,37 @@ function loadBracket() {
     });
 }
 
+
+function finishGame(button){
+    const gameData = JSON.parse(button.getAttribute('data-game'));
+    const formData = new FormData();
+    formData.append('tournament_game_id', gameData.id);
+    formData.append('status', 2);
+    $.ajax({
+        url: '/scripts/generate_points.php',
+        method: 'POST',
+        dataType: 'json',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            $.ajax({
+                url: '/scripts/update_tournament_game_status.php',
+                method: 'POST',
+                dataType: 'json',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.success) {
+                        loadTournamentGames();
+                        showBanner('#game-finished-banner');
+                    }
+                }
+            });
+        }
+    });
+}
 
 
 

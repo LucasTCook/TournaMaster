@@ -208,75 +208,6 @@ include '../../includes/header.php';
     <div id="add-winners-container"></div>
     <input type="hidden" id="tournamentGameInfo">
     <input type="hidden" id="round-number">
-    <!-- <div id="bracket-page-0" class="bracket-page">
-        <div class="bracket-group" onclick="openBracketGroup(0)">
-            <div class="bracket-card with-line">
-                <div class="double-player-container">
-                    <span class="player-name-double eliminated">Francisco Juarez-Martinez</span>
-                    <span class="player-name-double">Alexander Fahrenholz</span>
-                </div>
-                <i class="fas fa-check winner-checkmark"></i>
-            </div>
-            <div class="bracket-card">
-                <span class="player-name eliminated">John Doe</span>
-                <div class="points">0</div>
-            </div>
-        </div>
-        <div class="bracket-group" onclick="openBracketGroup(0)">
-            <div class="bracket-card with-line">
-                <div class="double-player-container">
-                    <span class="player-name-double eliminated">Francisco Juarez-Martinez</span>
-                    <span class="player-name-double">Alexander Fahrenholz</span>
-                </div>
-                <i class="fas fa-check winner-checkmark"></i>
-            </div>
-            <div class="bracket-card">
-                <span class="player-name eliminated">John Doe</span>
-                <div class="points">0</div>
-            </div>
-        </div>
-        <div class="bracket-group" onclick="openBracketGroup(0)">
-            <div class="bracket-card with-line">
-                <div class="double-player-container">
-                    <span class="player-name-double eliminated">Francisco Juarez-Martinez</span>
-                    <span class="player-name-double">Alexander Fahrenholz</span>
-                </div>
-                <i class="fas fa-check winner-checkmark"></i>
-            </div>
-            <div class="bracket-card">
-                <span class="player-name eliminated">John Doe</span>
-                <div class="points">0</div>
-            </div>
-        </div>
-        <div class="bracket-group" onclick="openBracketGroup(0)">
-            <div class="bracket-card with-line">
-                <div class="double-player-container">
-                    <span class="player-name-double eliminated">Francisco Juarez-Martinez</span>
-                    <span class="player-name-double">Alexander Fahrenholz</span>
-                </div>
-                <i class="fas fa-check winner-checkmark"></i>
-            </div>
-            <div class="bracket-card">
-                <span class="player-name eliminated">John Doe</span>
-                <div class="points">0</div>
-            </div>
-        </div>
-    </div>
-    <div id="bracket-page-1" class="bracket-page">
-        <div class="bracket-group" onclick="openBracketGroup(1)">
-            <div class="bracket-card with-line">
-                <div>
-                    <span class="player-name">TBD</span>
-                    <i class="fas fa-trophy gold-trophy bracket-winner-trophey"></i>
-                </div>
-            </div>
-            <div class="bracket-card">
-                <div>
-                    <span class="player-name">TBD</span>
-                </div>
-            </div>
-        </div>
-    </div> -->
 </div>
 
 <div id="add-winners-bracket-group" class="tournament-panel">
@@ -289,22 +220,6 @@ include '../../includes/header.php';
         </div>
         <button id="confirm-winner" class="success-btn" onclick="confirmWinner()">Confirm Winner</button>
     </div>
-
-    <!-- <div class="bracket-group-container">
-        <div class="bracket-card" onclick="selectWinner(this)">
-            <div class="double-player-container">
-                <span class="player-name-double">Francisco Juarez-Martinez</span>
-                <span class="player-name-double">Alexander Fahrenholz</span>
-            </div>
-        </div>
-        <div class="bracket-card" onclick="selectWinner(this)">
-            <div class="double-player-container">
-                <span class="player-name-double">Francisco Juarez-Martinez</span>
-                <span class="player-name-double">Alexander Fahrenholz</span>
-            </div>
-        </div>
-        <button id="confirm-winner" class="success-btn" onclick="confirmWinner()">Confirm Winner</buttonid>
-    </div> -->
 </div>
 
 <div id="tournament-players" class="tournament-panel">
@@ -324,6 +239,7 @@ include '../../includes/header.php';
 <div id="save-error-banner" class="save-banner error">Tournament Info Save Error</div>
 <div id="game-added-banner" class="save-banner">Game Added</div>
 <div id="game-started-banner" class="save-banner">Game Started!</div>
+<div id="game-finished-banner" class="save-banner">Game Finished!</div>
 <div id="game-configured-banner" class="save-banner">Game Successfully Configured</div>
 <div id="invalid-configuration-banner" class="save-banner error">Configuration Invalid</div>
 <div id="game-deleted-banner" class="save-banner error">Game Deleted</div>
