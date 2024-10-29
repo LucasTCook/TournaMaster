@@ -40,6 +40,36 @@ class PointsRepository extends Model {
         return $result->fetch_assoc(); // Returns the record if found, or null if not
     }
     
+    public function addPointsToPlayer($tournamentGameId, $playerId){
+        $stmt = $this->db->prepare("
+            UPDATE points
+            SET tournament_points = tournament_points + 1
+            WHERE user_id = ? AND tournament_game_id = ?
+        ");
+        $stmt->bind_param("ii", $playerId, $tournamentGameId);
+        
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            echo "Error updating points: " . $stmt->error;
+            return false;
+        }
+    }
 
+    public function removePoints($tournamentGameId, $playerId){
+        $stmt = $this->db->prepare("
+            UPDATE points
+            SET tournament_points = tournament_points - 1
+            WHERE user_id = ? AND tournament_game_id = ?
+        ");
+        $stmt->bind_param("ii", $playerId, $tournamentGameId);
+        
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            echo "Error updating points: " . $stmt->error;
+            return false;
+        }
+    }
     
 }
