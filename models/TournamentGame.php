@@ -13,6 +13,7 @@ class TournamentGame extends Model
     protected $teams_per_match;
     protected $winners_per_match;
     protected $status;
+    protected $winner_team_number;
     public $created_at;
     public $updated_at;
 
@@ -45,6 +46,7 @@ class TournamentGame extends Model
             $this->status = $data['status'];
             $this->created_at = $data['created_at'];
             $this->updated_at = $data['updated_at'];
+            $this->winner_team_number = $data['winner_team_number'];
     
             return $this; // Return the populated object
         } else {
@@ -125,6 +127,14 @@ class TournamentGame extends Model
         $this->status = $status;
     }
 
+    public function getWinnerTeamNumber() {
+        return $this->winner_team_number;
+    }
+
+    public function setWinnerTeamNumber($winner_team_number) {
+        $this->winner_team_number = $winner_team_number;
+    }
+
     // Created At
     public function getCreatedAt() {
         return $this->created_at;
@@ -167,8 +177,8 @@ class TournamentGame extends Model
 
     public function update() {
         if ($this->id) {
-            $stmt = $this->db->prepare("UPDATE $this->table SET tournament_id = ?, game_id = ?, type = ?, team_size = ?, teams_per_match = ?, winners_per_match = ?, status = ?, updated_at = NOW() WHERE id = ?");
-            $stmt->bind_param("iisiiiis", $this->tournament_id, $this->game_id, $this->type, $this->team_size, $this->teams_per_match, $this->winners_per_match, $this->status, $this->id);
+            $stmt = $this->db->prepare("UPDATE $this->table SET tournament_id = ?, game_id = ?, type = ?, team_size = ?, teams_per_match = ?, winners_per_match = ?, winner_team_number = ?, status = ?, updated_at = NOW() WHERE id = ?");
+            $stmt->bind_param("iisiiiiis", $this->tournament_id, $this->game_id, $this->type, $this->team_size, $this->teams_per_match, $this->winners_per_match, $this->winner_team_number, $this->status, $this->id);
 
             // Execute and return success status
             return $stmt->execute();

@@ -76,4 +76,9 @@ class TournamentGamesRepository extends Model {
         $tournamentGame->update();
     }
     
+    function setTournamentGameWinningTeam($tournamentGameId, $teamId) {
+        $tournamentGame = new TournamentGame($tournamentGameId);
+        $tournamentGame->setWinnerTeamNumber($teamId);
+        $tournamentGame->update();
+    }
 }
