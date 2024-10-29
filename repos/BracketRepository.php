@@ -1,6 +1,9 @@
 <?php 
 require_once '../models/Model.php';
 require_once '../models/TournamentGame.php';
+require_once '../repos/TeamsRepository.php';
+require_once '../repos/PointsRepository.php';
+
 class BracketRepository extends Model {
 
     private $table = 'brackets';
@@ -209,6 +212,7 @@ class BracketRepository extends Model {
         // Check if any rows were deleted
         if ($stmt->affected_rows > 0) {
             echo "Player result successfully deleted for team ID {$teamId} in round {$nextRound}, match number {$fillMatch}.";
+            $this->removePointsFromPlayer($tournamentGameId, $teamId);
         } else {
             echo "No matching player result found to delete.";
         }
@@ -225,7 +229,8 @@ class BracketRepository extends Model {
 
         if($result === 'WIN') {
             $fillMatch = $this->getFillMatch($round, $matchNumber, $teamId);
-            $this->updateBracketWithTeam($fillMatch, $round, $teamId);
+            $this->updateBracketWithTeam($fillMatch, $round, $teamId,$tournamentGameId);
+            $this->addPointsToBracketWinner($tournamentGameId, $teamId);
         }
 
     }
@@ -244,7 +249,7 @@ class BracketRepository extends Model {
         return $result ? $result['fill_match'] : null;
     }
 
-    public function updateBracketWithTeam($fillMatch, $round, $teamId) {
+    public function updateBracketWithTeam($fillMatch, $round, $teamId, $tournamentGameId) {
         // Increment the round for the next match
         $nextRound = $round + 1;
     
@@ -286,9 +291,40 @@ class BracketRepository extends Model {
         if ($stmt->affected_rows > 0) {
             echo "Bracket updated successfully with team ID {$teamId} in round {$nextRound}.";
         } else {
-            echo "No available bracket row found for update.";
+            $this->setWinner($teamId, $tournamentGameId, $round);
+            echo 'Winner Set';
         }
     
         $stmt->close();
+    }
+
+    function addPointsToBracketWinner($tournamentGameId, $teamId) {
+        $teamRepo = new TeamsRepository();
+        $pointRepo = new PointsRepository();
+        $players = $teamRepo->getPlayersOnTeam($teamId);
+
+        foreach($players as $playerId) {
+            $pointRepo->addPointsToPlayer($tournamentGameId, $playerId);
+        }
+    }
+
+    function removePointsFromPlayer($tournamentGameId, $teamId) {
+        $teamRepo = new TeamsRepository();
+        $pointRepo = new PointsRepository();
+        $players = $teamRepo->getPlayersOnTeam($teamId);
+
+        foreach($players as $playerId) {
+            $pointRepo->removePoints($tournamentGameId, $playerId);
+        }
+    }
+
+    function setWinner($teamId, $tournamentGameId, $round) {
+        $teamRepo = new TeamsRepository();
+        $pointRepo = new PointsRepository();
+        $players = $teamRepo->getPlayersOnTeam($teamId);
+
+        foreach($players as $playerId) {
+            $pointRepo->addPointsToPlayer($tournamentGameId, $playerId);
+        }
     }
 }

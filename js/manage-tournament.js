@@ -659,9 +659,9 @@ function startGame(button) {
         dataType: 'json',
         data: { id: tournamentGame.tournament_id },
         success: function(response) {
-            console.log(response.activePlayers.length / tournamentGame.team_size);
-            console.log((tournamentGame.teams_per_match/tournamentGame.winners_per_match) * tournamentGame.teams_per_match);
-            if((tournamentGame.teams_per_match/tournamentGame.winners_per_match) * tournamentGame.teams_per_match > response.activePlayers.length){
+            $numberOfTeams = response.activePlayers.length / tournamentGame.team_size;
+            $playersNeeded = (tournamentGame.teams_per_match/tournamentGame.winners_per_match) * tournamentGame.teams_per_match;
+            if($playersNeeded > $numberOfTeams){
                 console.log("Not enough Players");
                 $('#invalid-configuration-banner').html("Not enough players for this configuration");
                 showBanner('#invalid-configuration-banner');

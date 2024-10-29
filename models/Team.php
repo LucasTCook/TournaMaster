@@ -33,7 +33,7 @@ class Team extends Model
     public function getId() { return $this->id; }
     public function getTournamentGameId() { return $this->tournamentGameId; }
     public function getTeamNumber() { return $this->teamNumber; }
-    public function getPlayers() { return json_decode($this->players, true); }
+    public function getPlayers() { return $this->players; }
     public function getCreatedAt() { return $this->createdAt; }
     public function getUpdatedAt() { return $this->updatedAt; }
 

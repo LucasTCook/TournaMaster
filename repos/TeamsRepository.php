@@ -1,5 +1,6 @@
 <?php 
 require_once '../models/Model.php';
+require_once '../models/Team.php';
 
 class TeamsRepository extends Model {
     protected $table = 'teams';
@@ -32,5 +33,10 @@ class TeamsRepository extends Model {
 
         $stmt->close();
         return $teams;
+    }
+
+    function getPlayersOnTeam($team_id) {
+        $team = new Team($team_id);
+        return $team->getPlayers();
     }
 }

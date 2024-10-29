@@ -37,8 +37,8 @@ try {
             $points = new Points();
             $points->setTournamentGameId($tournamentGameId);
             $points->setUserId($userId);
-            $points->setPoints(null);           // Initialize points to null
-            $points->setTournamentPoints(null); // Initialize tournament_points to null
+            $points->setPoints(0);           // Initialize points to null
+            $points->setTournamentPoints(0); // Initialize tournament_points to null
             $points->save();
         }
     }
