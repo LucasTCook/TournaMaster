@@ -440,7 +440,7 @@ function renderGameCard(game) {
                             <span><b>Players per team:</b> ${game.team_size}</span>
                         <div>
                         <div class="manage-game-buttons">
-                            <button class="success-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="openAddPoints(this)">Add Points</button>
+                            <button class="success-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="openPointsPage(this)">Add Points</button>
                         </div>
                     </div>
                 </div>`;
@@ -1110,13 +1110,15 @@ function finishGame(button){
     });
 }
 
-function openAddPoints(button) {
-    const gameData = JSON.parse(button.getAttribute('data-game'));
+function openPointsPage(button) {
+    $('#tournamentGameInfo').val(button.getAttribute('data-game'));
     $('#tournament-games').hide();
     $('#add-points').show();
-    const tournamentGame = JSON.parse(button.getAttribute('data-game'));
-    
-    // Fetch leaderboard data for the tournament game
+    loadPointsList();
+}
+
+function loadPointsList() {
+    const tournamentGame = JSON.parse($('#tournamentGameInfo').val());
     $.ajax({
         url: '/scripts/get_points_list.php',
         method: 'GET',
@@ -1124,7 +1126,7 @@ function openAddPoints(button) {
         data: { tournament_game_id: tournamentGame.id },
         success: function(response) {
             if (response.success) {
-                renderLeaderboard(response.data);
+                renderPointsList(response.data, tournamentGame.id);
             } else {
                 console.error(response.error);
             }
@@ -1135,7 +1137,7 @@ function openAddPoints(button) {
     });
 }
 
-function renderLeaderboard(leaderboardData) {
+function renderPointsList(leaderboardData, tournamentGameId) {
     const leaderboardContainer = $('#leaderboard-container');
     leaderboardContainer.empty();
 
@@ -1149,7 +1151,15 @@ function renderLeaderboard(leaderboardData) {
         const playerNameSpans = team.player_names.map(name => `<span class="player-name">${name}</span>`).join('');
 
         const leaderboardCard = `
-            <div class="leaderboard-card ${index === 0 && team.points !== 0  ? 'first-place' : index === 1 && team.points !== 0 ? 'second-place' : index === 2 && team.points !== 0 ? 'third-place' : ''} margin-bottom-sm" onclick="addPoints(${team.team_number})">
+            <div class="leaderboard-card ${
+                    index === 0 && team.points !== 0
+                        ? 'first-place'
+                        : index === 1 && team.points !== 0
+                            ? 'second-place'
+                            : index === 2 && team.points !== 0
+                                ? 'third-place'
+                                : ''
+                } margin-bottom-sm" onclick="addPoints(${team.team_id}, ${tournamentGameId}, ${team.points})">
                 <div>
                     ${trophyClass ? `<i class="fas fa-trophy ${trophyClass}"></i>` : ''}
                     <div class="player-name-points-container">
@@ -1165,15 +1175,62 @@ function renderLeaderboard(leaderboardData) {
 }
 
 
+function addPoints(teamId, tournamentGameId, points) {
+    // Fetch team players by teamId
+    $.ajax({
+        url: '/scripts/get_team_players.php',  // Assume this script fetches players by team ID
+        method: 'GET',
+        dataType: 'json',
+        data: { teamId: teamId },
+        success: function(response) {
+            if (response.success) {
+                const playerNamesContainer = $('#points-input-players'); // Clear previous players
+                playerNamesContainer.empty();
 
-
-function addPoints() {
-    $('#add-points').hide();
-    $('#add-points-player').show();
+                // Populate players in add-points-player
+                response.players.forEach(player => {
+                    playerNamesContainer.append(`
+                        <span class="player-name">${player.username}</span>
+                    `);
+                });
+                playerNamesContainer.append(`
+                    <div class="form-group margin-top">
+                        <label for="points-input">Number of Points:</label>
+                        <input type="number" id="points-input-${teamId}" class="points-input" name="points-input" placeholder="0" value="${points}" required>
+                    </div>
+                    <button id="confirm-points" class="success-btn" onclick="confirmPoints(${teamId}, ${tournamentGameId})">Confirm Points</buttonid>`
+                );
+                $('#add-points').hide();
+                $('#add-points-player').show();
+            }
+        },
+        error: function() {
+            console.error("Failed to fetch team players.");
+        }
+    });
 }
 
-function confirmPoints() {
-    $('#points-input').val('');
-    $('#add-points').show();
-    $('#add-points-player').hide();
+
+function confirmPoints(teamId, tournamentGameId) {
+    const points = $(`#points-input-${teamId}`).val();
+    
+    $.ajax({
+        url: '/scripts/save_points.php',
+        method: 'POST',
+        dataType: 'json',
+        data: { points: points, teamId: teamId, tournamentGameId: tournamentGameId },
+        success: function(response) {
+            if (response.success) {
+                loadPointsList();
+                $('#points-input').val(''); // Clear input fields
+                $('#add-points').show();    // Show the main points screen
+                $('#add-points-player').hide();  // Hide the input screen
+            } else {
+                console.error(response.error);
+            }
+        },
+        error: function() {
+            console.error("Failed to save points.");
+        }
+    });
 }

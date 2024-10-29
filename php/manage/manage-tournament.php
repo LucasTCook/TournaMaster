@@ -157,14 +157,7 @@ include '../../includes/header.php';
 
 <div id="add-points-player" class="tournament-panel">
     <div class="game-card">
-        <div class="points-input-container">
-            <span class="player-name">John Doe</span>
-            <div class="form-group margin-top">
-                <label for="points-input">Number of Points:</label>
-                <input type="number" id="points-input" name="points-input" placeholder="0" required>
-            </div>
-            <button id="confirm-points" class="success-btn" onclick="confirmPoints()">Confirm Points</buttonid>
-        </div>
+        <div id="points-input-players" class="points-input-container"></div>
     </div>
 </div>
 
