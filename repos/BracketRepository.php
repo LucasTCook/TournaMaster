@@ -3,6 +3,7 @@ require_once '../models/Model.php';
 require_once '../models/TournamentGame.php';
 require_once '../repos/TeamsRepository.php';
 require_once '../repos/PointsRepository.php';
+require_once '../repos/TournamentGamesRepository.php';
 
 class BracketRepository extends Model {
 
@@ -191,6 +192,7 @@ class BracketRepository extends Model {
     }
     
     public function removePlayerResult($tournamentGameId, $round, $matchNumber, $teamId) {
+        echo(json_encode([$tournamentGameId, $round, $matchNumber, $teamId]));
         $fillMatch = $this->getFillMatch($round, $matchNumber, $teamId);
         $nextRound = $round + 1;
         // Prepare the DELETE statement
@@ -212,7 +214,7 @@ class BracketRepository extends Model {
         // Check if any rows were deleted
         if ($stmt->affected_rows > 0) {
             echo "Player result successfully deleted for team ID {$teamId} in round {$nextRound}, match number {$fillMatch}.";
-            $this->removePointsFromPlayer($tournamentGameId, $teamId);
+            // $this->removePointsFromPlayer($tournamentGameId, $teamId);
         } else {
             echo "No matching player result found to delete.";
         }
@@ -223,6 +225,18 @@ class BracketRepository extends Model {
 
     public function updatePlayerResult($tournamentGameId, $round, $matchNumber, $teamId, $result) {
         // echo json_encode([$tournamentGameId, $round, $matchNumber, $teamId, $result]);
+        $stmt = $this->db->prepare("SELECT COUNT(*) as count FROM $this->table 
+                                WHERE tournament_game_id = ? AND round = ? AND match_number = ? AND team_id = ? AND result = 'WIN'");
+        $stmt->bind_param("iiii", $tournamentGameId, $round, $matchNumber, $teamId);
+        $stmt->execute();
+        $stmt->bind_result($count);
+        $stmt->fetch();
+        $stmt->close();
+        
+        // Step 2: Decide to update or handle based on existence
+        if ($count > 0) {
+            $this->removePointsFromPlayer($tournamentGameId, $teamId);
+        }
         $stmt = $this->db->prepare("UPDATE $this->table SET result = ? WHERE tournament_game_id = ? AND round = ? AND match_number = ? AND team_id = ?");
         $stmt->bind_param("siiii", $result, $tournamentGameId, $round, $matchNumber, $teamId);
         $stmt->execute();
@@ -291,7 +305,7 @@ class BracketRepository extends Model {
         if ($stmt->affected_rows > 0) {
             echo "Bracket updated successfully with team ID {$teamId} in round {$nextRound}.";
         } else {
-            $this->setWinner($teamId, $tournamentGameId, $round);
+            $this->setWinner($teamId, $tournamentGameId);
             echo 'Winner Set';
         }
     
@@ -318,13 +332,8 @@ class BracketRepository extends Model {
         }
     }
 
-    function setWinner($teamId, $tournamentGameId, $round) {
-        $teamRepo = new TeamsRepository();
-        $pointRepo = new PointsRepository();
-        $players = $teamRepo->getPlayersOnTeam($teamId);
-
-        foreach($players as $playerId) {
-            $pointRepo->addPointsToPlayer($tournamentGameId, $playerId);
-        }
+    function setWinner($teamId, $tournamentGameId) {
+        $tournamentGameRepo = new TournamentGamesRepository();
+        $tournamentGameRepo->setTournamentGameWinningTeam($tournamentGameId, $teamId);
     }
 }
