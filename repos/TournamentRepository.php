@@ -25,4 +25,41 @@ class TournamentRepository extends Model {
         
         return $result;
     }
+
+    public function getTournamentsByUserAndType($userId, $type) {
+        // Determine whether to fetch current or past tournaments based on today's date
+        $dateCondition = ($type === 'current') ? ">= CURDATE()" : "< CURDATE()";
+        
+        // SQL query to fetch tournaments with the specified type
+        $query = "
+            SELECT 
+                t.id,
+                t.name AS tournament_name,
+                u.username as tournament_creator,
+                DATE_FORMAT(t.date, '%m/%d/%Y') AS date
+            FROM 
+                tournaments t
+            JOIN 
+                tournament_users tu ON t.id = tu.tournament_id
+            JOIN 
+                users u ON t.creator_id = u.id
+            WHERE 
+                tu.user_id = ? 
+                AND t.date $dateCondition
+            ORDER BY 
+                t.date DESC
+        ";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $tournaments = [];
+        while ($row = $result->fetch_assoc()) {
+            $tournaments[] = $row;
+        }
+
+        return $tournaments;
+    }
 }
