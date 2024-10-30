@@ -301,4 +301,45 @@ class PointsRepository extends Model {
         // If no points record exists, return 0 or null based on preference
         return 0; // or return null;
     }    
+
+    public function getAllUserPointsByTournamentId($tournamentId) {
+        $query = "
+            SELECT 
+                u.id AS user_id,
+                u.username,
+                COALESCE(SUM(p.tournament_points), 0) AS total_points
+            FROM 
+                users u
+            JOIN 
+                tournament_users tu ON u.id = tu.user_id AND tu.tournament_id = ?
+            LEFT JOIN 
+                points p ON p.user_id = u.id
+            WHERE 
+                p.tournament_game_id IN (
+                    SELECT id 
+                    FROM tournament_games 
+                    WHERE tournament_id = ?
+                )
+            GROUP BY 
+                u.id
+            ORDER BY 
+                total_points DESC
+        ";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("ii", $tournamentId, $tournamentId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $players = [];
+        while ($row = $result->fetch_assoc()) {
+            $players[] = [
+                'user_id' => $row['user_id'],
+                'username' => $row['username'],
+                'total_points' => (int)$row['total_points']
+            ];
+        }
+
+        return $players;
+    }
 }
