@@ -9,19 +9,7 @@ include '../../includes/header.php';
 <script src="/js/game.js"></script>
 <script src="/js/bracket.js"></script>
 
-<div class="game-header-container">
-    <div class="back-to-games" onclick="window.location.href='/tournament/1'"><</div>
-    <img src="/images/game-placeholder.jpg" alt="game Picture" class="game-pic">
-    <h2 class="game-name">Mario Kart 64: Electric Boogaloo</h2>
-    <div class="games-header-buttons">
-        <div id="game-bracket-button" class="games-selection active">
-            <span class="games-selection-title">View Bracket</span>
-        </div>
-        <div id="game-leaderboard-button" class="games-selection">
-            <span class="games-selection-title">Leaderboard</span>
-        </div>
-    </div>
-</div>
+<div id="game-header-container" class="game-header-container"></div>
 
 <div id="bracket" class="bracket-container">
     <div class="bracket-button-container">

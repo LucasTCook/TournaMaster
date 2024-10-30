@@ -136,4 +136,38 @@ class TournamentGamesRepository extends Model {
         $tournamentGame->setWinnerTeamNumber($teamId);
         $tournamentGame->update();
     }
+
+    public function getGameDetailsById($tournamentGameId) {
+        $stmt = $this->db->prepare("
+            SELECT 
+                tg.id AS tournament_game_id,
+                tg.tournament_id,
+                tg.type,
+                tg.status,
+                tg.team_size,
+                tg.teams_per_match,
+                tg.winners_per_match,
+                g.name AS game_name,
+                g.image_url AS game_image_url,
+                g.release_year AS game_release_year,
+                g.platform AS game_platform
+            FROM 
+                $this->table tg
+            JOIN 
+                games g ON tg.game_id = g.id
+            WHERE 
+                tg.id = ?
+        ");
+        
+        $stmt->bind_param("i", $tournamentGameId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc();
+        }
+    
+        return null;
+    }
+    
 }
