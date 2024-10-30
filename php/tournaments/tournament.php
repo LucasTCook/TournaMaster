@@ -21,7 +21,7 @@ include '../../includes/header.php';
     </div>
 </div>
 
-<div id="games" class="games-container">
+<div id="user-tournament-games-list" class="games-container">
     <div class="game-card" onclick="window.location.href='/game/1/1'">
         <img src="\images\game-placeholder.jpg" alt="Game Image" class="game-image">
         <div class="game-info">
