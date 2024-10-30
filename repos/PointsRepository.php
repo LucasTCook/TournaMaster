@@ -259,5 +259,46 @@ class PointsRepository extends Model {
             }
         }
     }
+
+    public function getUserPointsByTournamentGameId($userId, $tournamentGameId) {
+        $stmt = $this->db->prepare("
+            SELECT points
+            FROM points
+            WHERE user_id = ? AND tournament_game_id = ?
+            ORDER BY points DESC
+            LIMIT 1
+        ");
+        
+        $stmt->bind_param("ii", $userId, $tournamentGameId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        // Check if there’s a record for this user in the tournament game
+        if ($row = $result->fetch_assoc()) {
+            return $row['points'];
+        }
+        
+        // If no points record exists, return 0 or null based on preference
+        return 0; // or return null;
+    }
     
+    public function getMaxPointsByTournamentGameId($tournamentGameId) {
+        $stmt = $this->db->prepare("
+            SELECT MAX(points) AS max_points
+            FROM points
+            WHERE tournament_game_id = ?
+        ");
+        
+        $stmt->bind_param("i", $tournamentGameId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        // Check if there’s a max points record for this tournament game
+        if ($row = $result->fetch_assoc()) {
+            return $row['max_points'];
+        }
+        
+        // If no points record exists, return 0 or null based on preference
+        return 0; // or return null;
+    }    
 }
