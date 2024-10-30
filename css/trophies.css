@@ -8,6 +8,10 @@
     text-align: center;
     width: 100%;
     z-index: 1000;
+    height: 145px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .trophies-header-buttons {
@@ -57,65 +61,6 @@
     overflow-y: scroll;
 }
 
-.trophies-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Default size */
-    gap: 20px;
-    justify-items: center;
-    padding: 20px;
-}
-
-.trophy {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    background-color: var(--white);
-    border-radius: 50%;
-    box-shadow: 0 4px 8px var(--box-shadow);
-    transition: transform 0.3s;
-    overflow: visible; /* Allow elements to overflow */
-    margin-bottom: 30px; /* Space for the game title */
-}
-
-/* Bottom Bar (Game Title) */
-.trophy .bottom-bar {
-    position: absolute;
-    top: 55px;
-    left: 0;
-    right: 0;
-    background-color: var(--gold); /* Adjust based on trophy color */
-    color: var(--white);
-    padding: 3px;
-    font-size: 8px;
-    text-align: center;
-    font-weight: bold;
-    border-radius: 5px;
-    z-index: 2; /* Ensure it's visible above other elements */
-}
-
-/* Grid (Ensure alignment and centering) */
-.trophies-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Flexible grid */
-    gap: 20px;
-    justify-items: center;
-}
-
-/* Gold, Silver, and Bronze variants */
-.gold-border .bottom-bar {
-    background-color: var(--gold);
-    color: var(--white);
-}
-
-.silver-border .bottom-bar {
-    background-color: var(--silver);
-    color: var(--white);
-}
-
-.bronze-border .bottom-bar {
-    background-color: var(--bronze);
-    color: var(--white);
-}
 
 /* Hover Effect */
 .trophy:hover {
@@ -125,58 +70,151 @@
 /* Grid (Ensure alignment and centering) */
 .trophies-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Flexible grid */
+    grid-template-columns: repeat(auto-fill, minmax(40vw, 1fr));
     gap: 20px;
     justify-items: center;
-}
-
-/* Increase trophy size for larger screens */
-@media (min-width: 768px) {
-    .trophies-grid {
-        grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); /* Increase size */
-    }
-
-    .trophy {
-        width: 175px;
-        height: 175px;
-    }
-
-    .trophy .bottom-bar {
-        top: 115px;
-        font-size: 12px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .trophies-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Even larger */
-    }
-
-    .trophy {
-        width: 250px;
-        height: 250px;
-    }
-
-    .trophy .bottom-bar {
-        top: 165px;
-        font-size: 16px;
-    }
-}
-
-/* Category Badge Border Styles */
-.gold-border {
-    border: 4px solid var(--gold); /* Gold badge border */
-}
-
-.silver-border {
-    border: 4px solid var(--silver); /* Silver badge border */
-}
-
-.bronze-border {
-    border: 4px solid var(--bronze); /* Bronze badge border */
 }
 
 /* Hidden Class (for hiding other categories) */
 .hidden {
     display: none;
+}
+
+
+.trophy-container {
+    position: relative;
+    margin-bottom: 70px;
+}
+
+.golden-border {
+    width: 75vw;
+    height: auto;
+    rotate: 12deg;
+}
+
+.trophy {
+    position: absolute;
+    top: 49%;
+    left: 50%;
+    width: 65vw;
+    border-radius: 50%;
+    height: 65vw;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.tournament-info {
+    position: absolute;
+    top: 108%; /* Adjust vertical positioning */
+    width: 100%;
+    text-align: center;
+    z-index: 1; /* Ensure it sits above the trophy image */
+    color: white;
+    font-size: 1.2vh;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Optional shadow for readability */
+}
+
+.game-name-container {
+    position: absolute;
+    top: 99%; /* Adjust vertical positioning */
+    width: 100%;
+    text-align: center;
+    z-index: 1; /* Ensure it sits above the trophy image */
+    color: white;
+    font-size: 1.2vh;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Optional shadow for readability */
+}
+
+.game-name {
+    display: block;
+    font-size: 5vw;
+    margin: auto;
+    line-height: 1;
+}
+
+.tournament-name {
+    display: block;
+    font-size: 3.7vw;
+    margin: auto;
+    line-height: 1;
+}
+
+.tournament-date {
+    display: block;
+    font-size: 3vw; /* Slightly smaller font for the date */
+}
+
+.trophies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(75vw, 1fr)); /* Default size */
+    gap: 20px;
+    justify-items: center;
+    padding: 20px;
+}
+
+/* Increase trophy size for larger screens */
+@media (min-width: 768px) {
+
+    .trophies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(40vw, 1fr)); /* Default size */
+    }
+
+    .golden-border {
+        width: 40vw;
+        height: auto;
+    
+    }
+    
+    .trophy {
+        width: 35vw;
+        height: 35vw;
+    }
+
+    .tournament-name {
+        display: block;
+        font-size: 2vw;
+    }
+    
+    .tournament-date {
+        display: block;
+        font-size: 1.3vw; /* Slightly smaller font for the date */
+    }
+
+    .game-name {
+        font-size: 3vw;
+    }
+    
+}
+
+@media (min-width: 1024px) {
+    .trophies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(25vw, 1fr)); /* Default size */
+    }
+    
+    .golden-border {
+        width: 25vw;
+        height: auto;
+    
+    }
+    
+    .trophy {
+        width: 20vw;
+        height: 20vw;
+    }
+
+    .tournament-name {
+        display: block;
+        font-size: 1.2vw;
+    }
+    
+    .tournament-date {
+        display: block;
+        font-size: 0.8vw; /* Slightly smaller font for the date */
+    }
+
+    .game-name {
+        font-size: 1.8vw;
+    }
 }
