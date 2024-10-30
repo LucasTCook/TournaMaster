@@ -1,6 +1,10 @@
 <?php 
     // Start the session at the top of your PHP files if it's not already started
     @session_start(); 
+    if (!isset($_SESSION['user_id']) && basename($_SERVER['PHP_SELF']) !== 'login.php') {
+        header('Location: /login');
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>
