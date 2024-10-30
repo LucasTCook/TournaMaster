@@ -1,6 +1,8 @@
 $(document).ready(function() {
     loadTournamentGames();
+    loadLeaderboard();
     $('#leaderboard-button').click(function(event) {
+        loadLeaderboard();
         $('#games-button').removeClass('active');
         $('#user-tournament-games-list').addClass('hidden');
         $('#leaderboard-button').addClass('active');
@@ -139,7 +141,65 @@ function renderGameCard(game) {
                 </div>`;
         }
     }
-
     // Append to the tournament-games-list container
     $('#user-tournament-games-list').append(gameCardHtml);
+}
+
+function loadLeaderboard() {
+    const urlPath = window.location.pathname.split('/');
+    const tournamentId = urlPath[urlPath.length - 1];
+    $.ajax({
+        url: '/scripts/get_all_users_points.php',
+        method: 'GET',
+        dataType: 'json',
+        data: { tournament_id: tournamentId },
+        success: function(response) {
+            if (response.success) {
+                renderLeaderboard(response.leaderboard);
+            } else {
+                console.error(response.error);
+            }
+        },
+        error: function() {
+            console.error('Failed to fetch leaderboard data');
+        }
+    });
+}
+
+function renderLeaderboard(leaderboard) {
+    const leaderboardContainer = $('#leaderboard');
+    leaderboardContainer.empty();
+
+    if (leaderboard.length === 0) {
+        return;
+    }
+
+    leaderboard.forEach((player, index) => {
+        let trophyClass = '';
+        let trophyIcon = '';
+
+        if (index === 0) {
+            trophyClass = 'first-place';
+            trophyIcon = '<i class="fas fa-trophy gold-trophy"></i>';
+        } else if (index === 1) {
+            trophyClass = 'second-place';
+            trophyIcon = '<i class="fas fa-trophy silver-trophy"></i>';
+        } else if (index === 2) {
+            trophyClass = 'third-place';
+            trophyIcon = '<i class="fas fa-trophy bronze-trophy"></i>';
+        }
+
+        const playerPoints = player.total_points > 0 ? player.total_points : '--';
+        const leaderboardCardHtml = `
+            <div class="leaderboard-card ${trophyClass}">
+                <div>
+                    ${trophyIcon}
+                    <span class="player-name">${player.username}</span>
+                </div>
+                <span class="player-points">${playerPoints}</span>
+            </div>
+        `;
+
+        leaderboardContainer.append(leaderboardCardHtml);
+    });
 }

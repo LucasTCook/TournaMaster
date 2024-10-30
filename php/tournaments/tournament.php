@@ -21,37 +21,7 @@ include '../../includes/header.php';
     </div>
 </div>
 
-<div id="user-tournament-games-list" class="games-container">
-    <div class="game-card" onclick="window.location.href='/game/1/1'">
-        <img src="\images\game-placeholder.jpg" alt="Game Image" class="game-image">
-        <div class="game-info">
-            <span class="game-name">Super Mario Bros</span>
-            <div class="winner-info">
-                <span>John Doe</span>
-                <i class="fas fa-trophy winner-trophy"></i>
-            </div>
-        </div>
-    </div>
-    <div class="game-card" onclick="window.location.href='/game/1/1'">
-        <img src="\images\game-placeholder.jpg" alt="Game Image" class="game-image">
-        <div class="game-info">
-            <span class="game-name">Super Mario Bros 2</span>
-            <div class="winner-info">
-                <span>In Progress</span>
-                <i class="fas fa-spinner in-progress"></i>
-            </div>
-        </div>
-    </div>
-    <div class="game-card" onclick="window.location.href='/game/1/1'">
-        <img src="\images\game-placeholder.jpg" alt="Game Image" class="game-image">
-        <div class="game-info">
-            <span class="game-name">Super Mario Bros 3</span>
-            <div class="winner-info">
-                <span>Not Yet Started</span>
-            </div>
-        </div>
-    </div>
-</div>
+<div id="user-tournament-games-list" class="games-container"></div>
 
 <div id="leaderboard" class="leaderboard-container hidden">
     <div class="leaderboard-card first-place">
