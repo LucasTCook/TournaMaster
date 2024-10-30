@@ -72,3 +72,35 @@
 .hidden {
     display: none !important;
 }
+
+.tournament-info-display-card {
+    display: flex;
+    font-size: 12px;
+    color: var(--neutral-color);
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+.round-header {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.bracket-group-buttons {
+    margin-bottom: 35px;
+    width: 100px;
+}
+
+.winner-names-container {
+    font-weight: bold;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.player-name-points-container{
+    display: flex;
+    flex-direction: column;
+}
