@@ -278,7 +278,7 @@ label {
 
 /* Player Name Styling */
 .player-name {
-    font-size: 18px;
+    font-size: 12px;
     font-weight: bold;
     color: var(--default-color);
 }

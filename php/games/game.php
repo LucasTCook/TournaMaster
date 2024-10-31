@@ -6,6 +6,7 @@ include '../../includes/header.php';
 
 <link rel="stylesheet" href="/css/game.css">
 <link rel="stylesheet" href="/css/bracket.css">
+<link rel="stylesheet" href="/css/tournament.css">
 <script src="/js/game.js"></script>
 <script src="/js/bracket.js"></script>
 
@@ -20,36 +21,7 @@ include '../../includes/header.php';
             <span>Next ></Nex></span>
         </div>
     </div>
-    <div id="bracket-page-0" class="bracket-page">
-        <div class="bracket-group">
-            <div class="bracket-card with-line">
-                <div class="double-player-container">
-                    <span class="player-name-double eliminated">Francisco Juarez-Martinez</span>
-                    <span class="player-name-double">Alexander Fahrenholz</span>
-                </div>
-                <i class="fas fa-check winner-checkmark"></i>
-            </div>
-            <div class="bracket-card">
-                <span class="player-name eliminated">John Doe</span>
-                <div class="points">0</div>
-            </div>
-        </div>
-    </div>
-    <div id="bracket-page-1" class="bracket-page">
-        <div class="bracket-group">
-            <div class="bracket-card with-line">
-                <div>
-                    <span class="player-name">TBD</span>
-                    <i class="fas fa-trophy gold-trophy bracket-winner-trophey"></i>
-                </div>
-            </div>
-            <div class="bracket-card">
-                <div>
-                    <span class="player-name">TBD</span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="player-view-bracket"></div>
 </div>
 
 <div id="leaderboard" class="leaderboard-container hidden">

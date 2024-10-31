@@ -13,7 +13,7 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-bottom: 40px
+    margin-bottom: 30px
 }
 
 .bracket-card {
@@ -21,7 +21,7 @@
     justify-content: space-between;
     align-items: center;
     background-color: var(--white);
-    padding: 15px 20px;
+    padding: 5px 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px var(--box-shadow);
     transition: transform 0.3s ease;
@@ -35,7 +35,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: 10px;
-    height: 50%;
+    height: 100%;
     background-color: var(--neutral-color);
     top: -25px; /* Half of the gap between cards */
     z-index: -1;
@@ -54,7 +54,7 @@
     justify-content: space-around;
     align-items: center;
     margin: auto;
-    margin-bottom: 40px;
+    margin-bottom: 25px;
 }
 
 .bracket-button {
@@ -115,7 +115,7 @@
 }
 
 .player-name-double {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
 }
 
