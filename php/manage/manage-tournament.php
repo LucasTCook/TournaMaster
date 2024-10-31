@@ -24,7 +24,7 @@ include '../../includes/header.php';
         <div id="tournament-players-button" class="manage-selection" onclick="changePage(this.id, 'tournament-players')">
             <span class="manage-selection-title">Players</span>
         </div>
-        <div id="tournament-leaderbaord-button" class="manage-selection leaderboard" onclick="window.location.href='/leaderboard'">
+        <div id="tournament-leaderbaord-button" class="manage-selection leaderboard" onclick="goToLeaderboard()">
             <span class="manage-selection-title">Leaderboard</span>
         </div>
     </div>
