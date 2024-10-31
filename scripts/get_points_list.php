@@ -17,7 +17,7 @@ try {
     $teamsRepo = new TeamsRepository();
 
     // Fetch players with their points and team info for the leaderboard
-    $leaderboardData = $pointsRepo->getLeaderboardDataByTournamentGameId($tournamentGameId);
+    $leaderboardData = $pointsRepo->getLeaderboardPointsByTournamentGameId($tournamentGameId);
 
     // Sort by points in descending order to prepare for top 3 logic
     usort($leaderboardData, fn($a, $b) => $b['points'] <=> $a['points']);

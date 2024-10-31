@@ -72,7 +72,7 @@ class PointsRepository extends Model {
         }
     }
 
-    public function getLeaderboardDataByTournamentGameId($tournamentGameId) {
+    public function getLeaderboardPointsByTournamentGameId($tournamentGameId) {
         // Step 1: Fetch user points for the tournament game
         $stmt = $this->db->prepare("
             SELECT 
@@ -146,7 +146,83 @@ class PointsRepository extends Model {
         });
     
         return $leaderboard;
-    }       
+    }  
+    
+    public function getLeaderboardTournamentPointsByTournamentGameId($tournamentGameId) {
+        // Step 1: Fetch user points for the tournament game
+        $stmt = $this->db->prepare("
+            SELECT 
+                p.user_id,
+                COALESCE(p.tournament_points, 0) AS points
+            FROM 
+                points p
+            WHERE 
+                p.tournament_game_id = ?
+        ");
+        
+        $stmt->bind_param("i", $tournamentGameId);
+        $stmt->execute();
+        $userPointsResult = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    
+        // Map points by user ID
+        $userPoints = [];
+        foreach ($userPointsResult as $row) {
+            $userPoints[$row['user_id']] = $row['points'];
+        }
+    
+        // Step 2: Fetch team data with players for the tournament game
+        $stmt = $this->db->prepare("
+            SELECT 
+                t.id,
+                t.players  -- players JSON field
+            FROM 
+                teams t
+            WHERE 
+                t.tournament_game_id = ?
+        ");
+    
+        $stmt->bind_param("i", $tournamentGameId);
+        $stmt->execute();
+        $teamDataResult = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    
+        // Step 3: Map player names and points by team
+        $leaderboard = [];
+        foreach ($teamDataResult as $teamRow) {
+            $teamId = $teamRow['id'];
+            $playerIds = json_decode($teamRow['players'], true);
+    
+            // Initialize the array for storing player names and team points
+            $playerNames = [];
+            $totalPoints = 0;
+            $pointsSet = false;  // Flag to ensure points are set only once per team
+    
+            foreach ($playerIds as $userId) {
+                // Fetch player name
+                $user = $this->getUserById($userId);
+                $playerNames[] = $user['username'];
+                
+                // Set totalPoints only once per team
+                if (!$pointsSet && isset($userPoints[$userId])) {
+                    $totalPoints = $userPoints[$userId];
+                    $pointsSet = true;  // Set flag to true after assigning points
+                }
+            }
+    
+            // Add team data to leaderboard array
+            $leaderboard[] = [
+                'team_id' => $teamId,
+                'player_names' => $playerNames,  // Array of names instead of single concatenated string
+                'points' => $totalPoints
+            ];
+        }
+    
+        // Sort leaderboard by points in descending order
+        usort($leaderboard, function ($a, $b) {
+            return $b['points'] - $a['points'];
+        });
+    
+        return $leaderboard;
+    }    
     
     // Helper function to get user by ID
     public function getUserById($userId) {

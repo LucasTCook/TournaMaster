@@ -509,6 +509,13 @@ tbody td:empty::before {
     flex-direction: column;
 }
 
+.points-names-container {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+}
+
 @media (max-width: 768px) {
     .add-tournament-form {
         position: fixed;

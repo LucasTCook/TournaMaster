@@ -1173,7 +1173,7 @@ function renderPointsList(leaderboardData, tournamentGameId) {
                                 ? 'third-place'
                                 : ''
                 } margin-bottom-sm" onclick="addPoints(${team.team_id}, ${tournamentGameId}, ${team.points})">
-                <div>
+                <div class="points-names-container">
                     ${trophyClass ? `<i class="fas fa-trophy ${trophyClass}"></i>` : ''}
                     <div class="player-name-points-container">
                         ${playerNameSpans}

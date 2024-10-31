@@ -84,10 +84,6 @@ function renderGameCard(game) {
                             <span><b>Number of teams:</b> ${game.team_count}</span>
                             <span><b>Players per team:</b> ${game.team_size}</span>
                         <div>
-                        <div class="manage-game-buttons">
-                            <button class="edit-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="openPointsPage(this)">Add Points</button>
-                            <button class="success-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="finishGame(this)">FINISH GAME</button>
-                        </div>
                     </div>
                 </div>`;
         } else if (game.type === 'bracket') {

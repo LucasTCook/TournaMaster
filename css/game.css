@@ -188,3 +188,10 @@
     padding: 10px;
     font-weight: bold;
 }
+
+.points-names-container {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+}

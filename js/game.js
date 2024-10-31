@@ -61,6 +61,7 @@ function loadGame() {
                     $('#game-leaderboard-button').addClass('active');
                     $('#leaderboard').removeClass('hidden');
                 });
+                loadGameLeaderboard(game.tournament_game_id, game.type);
 
             } else {
                 console.error("Failed to load game details.");
@@ -217,4 +218,61 @@ function renderBracket(bracketData) {
         $('.bracket-button:first-child').toggle(pageIndex > 0); // Hide "Previous" on first page
         $('.bracket-button:last-child').toggle(pageIndex < totalPages - 1); // Hide "Next" on last page
     }
+}
+
+
+function loadGameLeaderboard(tournamentGameId) {
+    $.ajax({
+        url: '/scripts/get_game_leaderboard.php',
+        method: 'GET',
+        dataType: 'json',
+        data: { tournament_game_id: tournamentGameId },
+        success: function(response) {
+            if (response.success) {
+                renderGameLeaderboard(response.data);
+            } else {
+                console.error(response.error);
+            }
+        },
+        error: function() {
+            console.error("Failed to fetch leaderboard data.");
+        }
+    });
+}
+
+function renderGameLeaderboard(leaderboardData) {
+    const leaderboardContainer = $('#leaderboard');
+    leaderboardContainer.empty();
+
+    leaderboardData.forEach((team, index) => {
+        let trophyClass = '';
+        if (index === 0 && team.points !== 0) trophyClass = 'gold-trophy';
+        else if (index === 1 && team.points !== 0) trophyClass = 'silver-trophy';
+        else if (index === 2 && team.points !== 0) trophyClass = 'bronze-trophy';
+
+        // Generate individual spans for each player's name
+        const playerNameSpans = team.player_names.map(name => `<span class="player-name">${name}</span>`).join('');
+
+        const leaderboardCard = `
+            <div class="leaderboard-card ${
+                    index === 0 && team.points !== 0
+                        ? 'first-place'
+                        : index === 1 && team.points !== 0
+                            ? 'second-place'
+                            : index === 2 && team.points !== 0
+                                ? 'third-place'
+                                : ''
+                } margin-bottom-sm">
+                <div class="points-names-container">
+                    ${trophyClass ? `<i class="fas fa-trophy ${trophyClass}"></i>` : ''}
+                    <div class="player-name-points-container">
+                        ${playerNameSpans}
+                    </div>
+                </div>
+                <span class="player-points">${team.points ?? '--'}</span>
+            </div>
+        `;
+        
+        leaderboardContainer.append(leaderboardCard);
+    });
 }
