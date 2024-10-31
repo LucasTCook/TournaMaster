@@ -418,4 +418,45 @@ class PointsRepository extends Model {
 
         return $players;
     }
+
+    public function getPlayersTournamentPointsByTournamentId($tournamentId) {
+        // Query to retrieve points for each user in each game within the tournament
+        $query = "
+            SELECT 
+                p.user_id,
+                u.username,
+                p.tournament_game_id AS game_id,
+                COALESCE(p.tournament_points, 0) AS points
+            FROM 
+                points p
+            JOIN 
+                users u ON p.user_id = u.id
+            JOIN 
+                tournament_games tg ON p.tournament_game_id = tg.id
+            WHERE 
+                tg.tournament_id = ?
+            ORDER BY 
+                game_id, points DESC
+        ";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $tournamentId);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        
+        $playersPoints = [];
+        while ($row = $result->fetch_assoc()) {
+            $playersPoints[] = [
+                'user_id' => $row['user_id'],
+                'username' => $row['username'],
+                'game_id' => $row['game_id'],
+                'points' => (int) $row['points']
+            ];
+        }
+
+        $stmt->close();
+
+        return $playersPoints;
+    }
 }

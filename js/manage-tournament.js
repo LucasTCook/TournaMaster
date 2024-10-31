@@ -472,7 +472,7 @@ function renderGameCard(game) {
                             <span><b>Winners per match:</b> ${game.winners_per_match}</span>
                         </div>
                         <div class="manage-game-buttons">
-                            <button class="edit-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="openBracket(this)">Add Winners</button>
+                            <button class="edit-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="openBracket(this);">Add Winners</button>
                             ${game.winner_name ? `<button class="success-btn small-font auto-width" data-game='${JSON.stringify(game).replace(/'/g, "&apos;")}' onclick="finishGame(this)">FINISH GAME</button>` : ''}
                         </div>
                     </div>
@@ -722,11 +722,15 @@ function startGame(button) {
             if (tournamentGame.type === 'bracket') {
                 $numberOfTeams = response.activePlayers.length / tournamentGame.team_size;
                 $playersNeeded = (tournamentGame.teams_per_match/tournamentGame.winners_per_match) * tournamentGame.teams_per_match;
-                if($playersNeeded > $numberOfTeams){
-                    console.log("Not enough Players");
-                    $('#invalid-configuration-banner').html("Not enough players for this configuration");
-                    showBanner('#invalid-configuration-banner');
-                    return;
+                console.log($numberOfTeams);
+                console.log($playersNeeded);
+                if($numberOfTeams != tournamentGame.teams_per_match){
+                    if($playersNeeded > $numberOfTeams){
+                        console.log("Not enough Players");
+                        $('#invalid-configuration-banner').html("Not enough players for this configuration");
+                        showBanner('#invalid-configuration-banner');
+                        return;
+                    }
                 }
             }
 
@@ -921,15 +925,18 @@ function renderBracket(bracketData) {
     });
 
     // Initialize pagination controls and show the first page
-    let currentPage = 0;
+    let currentPage = Object.keys(rounds)[0];
+    let lowestPage = currentPage;
     const totalPages = $('.bracket-page').length;
-    showPage(currentPage);
+    console.log(totalPages);
+    // console.log();
+    showPage(currentPage, lowestPage);
 
     // Next button click
     $('.bracket-button:last-child').on('click', function() {
-        if (currentPage < totalPages - 1) {
+        if (currentPage < totalPages) {
             currentPage++;
-            showPage(currentPage);
+            showPage(currentPage, lowestPage);
         }
     });
 
@@ -937,24 +944,24 @@ function renderBracket(bracketData) {
     $('.bracket-button:first-child').on('click', function() {
         if (currentPage > 0) {
             currentPage--;
-            showPage(currentPage);
+            showPage(currentPage, lowestPage);
         }
     });
 
     // Show the first bracket page initially
     $('.bracket-page').hide();
-    $('#bracket-page-0').show();
+    $(`#bracket-page-${currentPage}`).show();
     $('#tournament-games').hide();
     $('#add-winners').show();
 
-    function showPage(pageIndex) {
+    function showPage(pageIndex, lowestPage) {
         // Hide all pages and show the specific page
         $('.bracket-page').hide();
         $(`#bracket-page-${pageIndex}`).show();
 
         // Update button visibility based on page index
-        $('.bracket-button:first-child').toggle(pageIndex > 0); // Hide "Previous" on first page
-        $('.bracket-button:last-child').toggle(pageIndex < totalPages - 1); // Hide "Next" on last page
+        $('.bracket-button:first-child').toggle(pageIndex > lowestPage); // Hide "Previous" on first page
+        $('.bracket-button:last-child').toggle(lowestPage == 0 ? pageIndex < totalPages - 1 : pageIndex < totalPages); // Hide "Next" on last page
     }
 }
 
@@ -1246,4 +1253,11 @@ function confirmPoints(teamId, tournamentGameId) {
             console.error("Failed to save points.");
         }
     });
+}
+
+
+function goToLeaderboard() {
+    const urlPath = window.location.pathname.split('/');
+    const tournamentId = urlPath[urlPath.length - 1];
+    window.location.href=`/leaderboard/${tournamentId}`;
 }

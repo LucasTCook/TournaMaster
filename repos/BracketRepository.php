@@ -36,7 +36,7 @@ class BracketRepository extends Model {
             FROM 
                 brackets b
             LEFT JOIN 
-                teams t ON b.team_id = t.id
+                teams t ON b.team_id = t.id AND t.tournament_game_id = b.tournament_game_id
             WHERE 
                 b.tournament_game_id = ?
         ";
@@ -193,7 +193,7 @@ class BracketRepository extends Model {
     
     public function removePlayerResult($tournamentGameId, $round, $matchNumber, $teamId) {
         echo(json_encode([$tournamentGameId, $round, $matchNumber, $teamId]));
-        $fillMatch = $this->getFillMatch($round, $matchNumber, $teamId);
+        $fillMatch = $this->getFillMatch($round, $matchNumber, $teamId, $tournamentGameId);
         $nextRound = $round + 1;
         // Prepare the DELETE statement
         $stmt = $this->db->prepare("
@@ -224,7 +224,7 @@ class BracketRepository extends Model {
     }
 
     public function updatePlayerResult($tournamentGameId, $round, $matchNumber, $teamId, $result) {
-        // echo json_encode([$tournamentGameId, $round, $matchNumber, $teamId, $result]);
+        echo json_encode([$tournamentGameId, $round, $matchNumber, $teamId, $result]);
         $stmt = $this->db->prepare("SELECT COUNT(*) as count FROM $this->table 
                                 WHERE tournament_game_id = ? AND round = ? AND match_number = ? AND team_id = ? AND result = 'WIN'");
         $stmt->bind_param("iiii", $tournamentGameId, $round, $matchNumber, $teamId);
@@ -242,21 +242,21 @@ class BracketRepository extends Model {
         $stmt->execute();
 
         if($result === 'WIN') {
-            $fillMatch = $this->getFillMatch($round, $matchNumber, $teamId);
+            $fillMatch = $this->getFillMatch($round, $matchNumber, $teamId, $tournamentGameId);
             $this->updateBracketWithTeam($fillMatch, $round, $teamId,$tournamentGameId);
             $this->addPointsToBracketWinner($tournamentGameId, $teamId);
         }
 
     }
 
-    private function getFillMatch($round, $matchNumber, $teamId) {
+    private function getFillMatch($round, $matchNumber, $teamId,$tournamentGameId) {
         $stmt = $this->db->prepare("
             SELECT fill_match 
             FROM brackets
-            WHERE round = ? AND match_number = ? AND team_id = ?
+            WHERE round = ? AND match_number = ? AND team_id = ? AND tournament_game_id = ?
         ");
         
-        $stmt->bind_param("iii", $round, $matchNumber, $teamId);
+        $stmt->bind_param("iiii", $round, $matchNumber, $teamId, $tournamentGameId);
         $stmt->execute();
         $result = $stmt->get_result()->fetch_assoc();
         
@@ -271,16 +271,16 @@ class BracketRepository extends Model {
         $checkStmt = $this->db->prepare("
             SELECT COUNT(*) as team_exists 
             FROM brackets 
-            WHERE round = ? AND team_id = ?
+            WHERE round = ? AND team_id = ? AND tournament_game_id = ?
         ");
-        $checkStmt->bind_param("ii", $nextRound, $teamId);
+        $checkStmt->bind_param("iii", $nextRound, $teamId, $tournamentGameId);
         $checkStmt->execute();
         $checkResult = $checkStmt->get_result()->fetch_assoc();
         $checkStmt->close();
     
         // If the team is already in the round, skip the update
         if ($checkResult['team_exists'] > 0) {
-            echo "Team ID {$teamId} is already populated in round {$nextRound}.";
+            echo "\nTeam ID {$teamId} is already populated in round {$nextRound}.";
             return;
         }
     
@@ -291,12 +291,13 @@ class BracketRepository extends Model {
             WHERE match_number = ? 
               AND round = ? 
               AND team_id IS NULL
+              AND tournament_game_id = ?
             ORDER BY position ASC
             LIMIT 1
         ");
         
         // Bind the parameters
-        $stmt->bind_param("iii", $teamId, $fillMatch, $nextRound);
+        $stmt->bind_param("iiii", $teamId, $fillMatch, $nextRound, $tournamentGameId);
     
         // Execute the update
         $stmt->execute();

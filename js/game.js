@@ -262,7 +262,7 @@ function renderGameLeaderboard(leaderboardData) {
                             : index === 2 && team.points !== 0
                                 ? 'third-place'
                                 : ''
-                } margin-bottom-sm">
+                }">
                 <div class="points-names-container">
                     ${trophyClass ? `<i class="fas fa-trophy ${trophyClass}"></i>` : ''}
                     <div class="player-name-points-container">
