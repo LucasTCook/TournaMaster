@@ -526,6 +526,16 @@ tbody td:empty::before {
     background-color: #f7f7f7;
 }
 
+.random-player-container {
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    font-weight: bold;
+    margin-top: -20px;
+    margin-bottom: 20px;
+    display:none;
+}
+
 @media (max-width: 768px) {
     .add-tournament-form {
         position: fixed;

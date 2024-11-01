@@ -192,7 +192,17 @@ include '../../includes/header.php';
         <i class="fas fa-qrcode"></i>
         Add Player
     </button>
-    <span class="bold">Number of players: </span><span id="number-of-players"></span>
+    <button id="roll-player" class="edit-btn add-game-button">
+        <i class="fas fa-dice"></i>
+        Roll Random Active Player
+    </button>
+    <div id="random-player-container" class="random-player-container">
+        <span id="random-player"></span>
+    </div>
+    <span class="bold">Total players: </span><span id="number-of-players"></span>
+    <br>
+    <span class="bold">Active players: </span><span id="number-of-active-players"></span>
+
     <div id="players-container" class="players-container"></div>
 </div>
 
