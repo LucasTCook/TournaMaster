@@ -835,7 +835,7 @@ function openBracket(button) {
 }
 
 
-function renderBracket(bracketData) {
+function renderBracket(bracketData, round = null) {
     console.log(bracketData);
 
     const bracketContainer = $('#add-winners-container');
@@ -925,8 +925,8 @@ function renderBracket(bracketData) {
     });
 
     // Initialize pagination controls and show the first page
-    let currentPage = Object.keys(rounds)[0];
-    let lowestPage = currentPage;
+    let currentPage = round != null ? round : Object.keys(rounds)[0];
+    let lowestPage =round != null ? Object.keys(rounds)[0] : currentPage;
     const totalPages = $('.bracket-page').length;
     console.log(totalPages);
     // console.log();
@@ -950,7 +950,11 @@ function renderBracket(bracketData) {
 
     // Show the first bracket page initially
     $('.bracket-page').hide();
-    $(`#bracket-page-${currentPage}`).show();
+    if(round != null) {
+        $(`#bracket-page-${round}`).show();
+    } else {
+        $(`#bracket-page-${currentPage}`).show();
+    }
     $('#tournament-games').hide();
     $('#add-winners').show();
 
@@ -1076,12 +1080,12 @@ function confirmWinner() {
             $('#add-winners-bracket-group').hide();
             $('#add-winners').show();
 
-            loadBracket();
+            loadBracket(roundNumber);
         }
     });
 }
 
-function loadBracket() {
+function loadBracket(round = null) {
     const tournamentGameInfo = JSON.parse($('#tournamentGameInfo').val());
 
     $.ajax({
@@ -1091,7 +1095,7 @@ function loadBracket() {
         data: { gameId: tournamentGameInfo.id },
         success: function(response) {
             if (response.success) {
-                renderBracket(response.data);
+                renderBracket(response.data, round);
             } else {
                 console.error(response.error);
             }
