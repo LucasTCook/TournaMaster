@@ -1,6 +1,6 @@
 <?php
 
-require '../models/user.php';  // Include the User model
+require '../models/User.php';  // Include the User model
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

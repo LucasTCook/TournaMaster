@@ -1,5 +1,5 @@
 <?php
-require '../models/user.php';  // Include User model
+require '../models/User.php';  // Include User model
 
 session_start();
 

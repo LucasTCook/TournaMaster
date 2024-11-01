@@ -1,6 +1,6 @@
 <?php
 
-require '../models/tournament.php';  // Include the Tournament model
+require '../models/Tournament.php';  // Include the Tournament model
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
