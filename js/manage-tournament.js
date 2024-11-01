@@ -50,64 +50,74 @@ $(document).ready(function() {
     $('#add-player').on('click', async function() {
         $('#tournament-players').hide();
         $('#tournament-players-form').show();
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-        video.srcObject = stream;
-
-        let qrProcessed = false;  // Flag to prevent multiple AJAX calls
-
-        video.addEventListener("play", () => {
-            const captureFrame = () => {
-                if (video.readyState === video.HAVE_ENOUGH_DATA && !qrProcessed) {
-                    const canvas = document.createElement("canvas");
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    const context = canvas.getContext("2d");
-                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                    // Process the frame with jsQR
-                    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-                    const code = jsQR(imageData.data, imageData.width, imageData.height);
-
-                    if (code && !qrProcessed) {
-                        qrProcessed = true;  // Set flag to prevent further processing
-                        
-                        // AJAX request
-                        const formData = new FormData();
-                        formData.append('id', code.data);
-
-                        const urlPath = window.location.pathname.split('/');
-                        const tournamentId = urlPath[urlPath.length - 1];
-                        formData.append('tournamentId', tournamentId);
-
-                        $.ajax({
-                            url: '/scripts/add_player_to_tournament.php',
-                            method: 'POST',
-                            dataType: 'json',
-                            data: formData,
-                            processData: false,
-                            contentType: false,
-                            success: function(response) {
-                                stream.getTracks().forEach(track => track.stop()); // Stop the video stream
-                                $('#tournament-players').show();
-                                $('#tournament-players-form').hide();
-                                loadTournamentPlayers();
-                                // Check for success or error in the response to show the appropriate banner
-                                if (response.success) {
-                                    showBanner('#player-added-banner');
-                                } else if (response.error) {
-                                    showBanner('#duplicate-player-banner');
+    
+        // Attempt to access the camera with error handling
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            video.srcObject = stream;
+            
+            let qrProcessed = false;  // Flag to prevent multiple AJAX calls
+    
+            video.addEventListener("play", () => {
+                const captureFrame = () => {
+                    if (video.readyState === video.HAVE_ENOUGH_DATA && !qrProcessed) {
+                        const canvas = document.createElement("canvas");
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        const context = canvas.getContext("2d");
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+                        // Process the frame with jsQR
+                        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                        const code = jsQR(imageData.data, imageData.width, imageData.height);
+    
+                        if (code && !qrProcessed) {
+                            qrProcessed = true;  // Set flag to prevent further processing
+                            
+                            // AJAX request
+                            const formData = new FormData();
+                            formData.append('id', code.data);
+    
+                            const urlPath = window.location.pathname.split('/');
+                            const tournamentId = urlPath[urlPath.length - 1];
+                            formData.append('tournamentId', tournamentId);
+    
+                            $.ajax({
+                                url: '/scripts/add_player_to_tournament.php',
+                                method: 'POST',
+                                dataType: 'json',
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                success: function(response) {
+                                    stream.getTracks().forEach(track => track.stop()); // Stop the video stream
+                                    $('#tournament-players').show();
+                                    $('#tournament-players-form').hide();
+                                    loadTournamentPlayers();
+                                    // Check for success or error in the response to show the appropriate banner
+                                    if (response.success) {
+                                        showBanner('#player-added-banner');
+                                    } else if (response.error) {
+                                        showBanner('#duplicate-player-banner');
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
-                }
-                if (!qrProcessed) {
-                    requestAnimationFrame(captureFrame);  // Continue only if not yet processed
-                }
-            };
-            captureFrame();
-        });
+                    if (!qrProcessed) {
+                        requestAnimationFrame(captureFrame);  // Continue only if not yet processed
+                    }
+                };
+                captureFrame();
+            });
+        } catch (error) {
+            console.error("Camera access error: ", error);
+            alert("Unable to access the camera. Please ensure camera permissions are enabled.");
+            $('#tournament-players').show();
+            $('#tournament-players-form').hide();
+        }
     });
+    
 
     $("#bracket-group-back-button").on('click', function(e){
         $('#add-winners').show();
