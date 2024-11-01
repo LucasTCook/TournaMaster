@@ -113,7 +113,37 @@ $(document).ready(function() {
         $('#add-winners').show();
         $('#add-winners-bracket-group').hide();
     });
+
+    $('#roll-player').on('click', function(e){
+        $('#roll-player').attr('disabled',true);
+        $('#random-player').html(getRandomPlayerCard());
+        $('#random-player-container')
+            .css({ opacity: 0, visibility: 'visible' })
+            .show()
+            .animate({ opacity: 1 }, 300);
+
+        // Automatically hide the banner after a delay
+        setTimeout(function () {
+            $('#random-player-container').animate({ opacity: 0 }, 300, function () {
+                $(this).css('visibility', 'hidden').hide();
+            });
+            $('#roll-player').attr('disabled',false);
+        }, 5000);
+    });
 });
+
+function getRandomPlayerCard() {
+    // Select all `.player-card` elements with a `.player-name` and `.delete-icon`
+    const playerCards = $('#players-container .player-card').has('.player-name').has('.delete-icon');
+    
+    // If there are any matching player cards, get a random one
+    if (playerCards.length > 0) {
+        const randomIndex = Math.floor(Math.random() * playerCards.length);
+        return playerCards.eq(randomIndex).find('.player-name').text();  // Return the random player card element
+    } else {
+        return null;  // Return null if no matching elements are found
+    }
+}
 
 function reinstatePlayerInTournament(userId) {
     const tournamentId = window.location.pathname.split('/').pop();
@@ -195,9 +225,12 @@ function loadTournamentPlayers() {
         success: function(response) {
             $('#players-container').empty();  // Clear existing players
             if (response.success) {
-
+                numberActive = 0;
                 // Iterate over each player and create a player card
                 response.players.forEach(player => {
+                    if (player.active) {
+                        numberActive = numberActive + 1;
+                    }
                     const playerCard = $(`
                         <div class="player-card ${!player.active ? 'inactive' : ''}" data-user-id="${player.id}">
                             <span class="player-name">${player.username}</span>
@@ -217,6 +250,7 @@ function loadTournamentPlayers() {
                     $('#players-container').append(playerCard);
                 });
                 $('#number-of-players').html($('.player-card').length);
+                $('#number-of-active-players').html(numberActive);
             } else {
                 $('#number-of-players').html(0);
             }
