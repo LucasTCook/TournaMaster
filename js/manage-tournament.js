@@ -1035,7 +1035,11 @@ function selectWinner(element) {
     const tournamentGameInfo = JSON.parse($('#tournamentGameInfo').val());
     const teamNumber = teamMatchData.id;
     const round = teamMatchData.round;
-    const maxWinners = round === 0 ? 1 : tournamentGameInfo.winners_per_match;
+    const maxWinners = round === 0
+        ? 1
+        : $('#bracket-group-container .bracket-card').length === tournamentGameInfo.winners_per_match
+            ? 1
+            : tournamentGameInfo.winners_per_match;
 
     console.log(teamMatchData);
 

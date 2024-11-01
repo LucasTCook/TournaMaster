@@ -39,6 +39,7 @@ class BracketRepository extends Model {
                 teams t ON b.team_id = t.id AND t.tournament_game_id = b.tournament_game_id
             WHERE 
                 b.tournament_game_id = ?
+            ORDER BY b.round, b.match_number, b.position
         ";
         
         $stmt = $this->db->prepare($bracketQuery);
@@ -126,7 +127,7 @@ class BracketRepository extends Model {
                 AND b.round = ? 
                 AND b.match_number = ?
             ORDER BY 
-                b.team_id, b.position
+                b.position
         ");
         
         $stmt->bind_param("iii", $tournamentGameId, $round, $matchNumber);
@@ -146,7 +147,8 @@ class BracketRepository extends Model {
             if (!isset($teams[$teamId])) {
                 $teams[$teamId] = [
                     'team_id' => $teamId,
-                    'players' => []
+                    'players' => [],
+                    'position' =>$position
                 ];
             }
     

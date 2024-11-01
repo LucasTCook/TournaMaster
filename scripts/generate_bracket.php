@@ -135,9 +135,7 @@ try {
     while ($numberOfMatchesInThisRound > 0) {
         for($match=1; $match<=$numberOfMatchesInThisRound; $match++) {
             for ($position=1; $position<=$teamsPerMatch; $position++) {
-                $fillMatch = $numberOfMatchesInThisRound == 1
-                    ? 0
-                    : ceil(($match * $winnersPerMatch) / $teamsPerMatch);
+                $fillMatch = ceil(($match * $winnersPerMatch) / $teamsPerMatch);
                 $bracketRepo->createBracketEntry(
                     $tournament_game_id,
                     $round,
@@ -152,6 +150,20 @@ try {
         $numberOfMatchesInThisRound = floor(($winnersPerMatch * $numberOfMatchesInThisRound) / $teamsPerMatch);
         $round++;
     }
+
+    //Final match
+    for ($position=1; $position<=$winnersPerMatch; $position++) {
+        $bracketRepo->createBracketEntry(
+            $tournament_game_id,
+            $round,
+            1,
+            null,
+            0,
+            json_encode([]),
+            $position
+        );
+    }
+
     echo json_encode([
         "success" => true,
         "variables" => get_defined_vars()
